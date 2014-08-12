@@ -27,7 +27,7 @@ namespace :deploy do
 
   task :stop do                
     on roles(:app) do          
-      execute "sudo kill -QUIT $(cat #{unicorn_pid)})"
+      execute "sudo kill -QUIT $(cat #{unicorn_pid})"
     end
   end
 
