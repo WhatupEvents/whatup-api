@@ -2,7 +2,7 @@
 lock '3.2.1'
 
 set :application, 'whatsup'
-set :repo_url, 'git@github.com:fellou89/whatsup.git'
+set :repo_url, 'git@github.com:fellou89/whatsup-api.git'
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
@@ -34,7 +34,7 @@ set :log_level, :debug
 # Default value for keep_releases is 5
 set :keep_releases, 3
 
-set :ssh_options, keys: ['~/.ssh/id_rsa'], forward_agent: true, user: 'root'
+set :ssh_options, keys: ['~/.ssh/id_rsa'], forward_agent: true, user: 'ubuntu'
 
 namespace :deploy do
 

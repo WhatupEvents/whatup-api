@@ -1,4 +1,5 @@
-host = 'staging.whatsup.com'
+host = 'www.dainbramaged.me'
+directory = 'staging.whatsup.com'
 environment = 'staging'
 
 role :app, [host]
@@ -13,23 +14,27 @@ set :default_environment, 'RAILS_ENV' => environment
 set :application, host
 set :deploy_to, "/srv/www/#{host}"
 
+deploy_to = "/srv/www/#{directory}"
+unicorn_pid = "#{deploy_to}/unicorn.pid"
+unicorn_conf = "/etc/unicorn/#{directory}.rb"
+
 namespace :deploy do
   task :start do               
     on roles(:app) do          
       execute "cd /srv/www/#{host}/current && "\
-      "bundle exec unicorn -E #{environment} -c /etc/unicorn/#{host}.rb -D"
+      "unicorn_rails -E #{environment} -c #{unicorn_conf} -D"
     end
   end
 
   task :stop do                
     on roles(:app) do          
-      execute "kill -QUIT $(cat /srv/www/#{host}/unicorn.pid)"
+      execute "sudo kill -QUIT $(cat #{unicorn_pid)})"
     end
   end
 
   task :restart do             
     on roles(:app) do          
-      execute "kill -USR2 $(cat /srv/www/#{host}/unicorn.pid)"
+      execute "kill -USR2 $(cat /srv/www/#{directory}/unicorn.pid)"
     end
   end
 end
