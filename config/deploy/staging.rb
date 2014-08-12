@@ -12,7 +12,6 @@ set :stage, environment
 
 set :default_environment, 'RAILS_ENV' => environment
 set :application, host
-set :deploy_to, "/srv/www/#{host}"
 
 deploy_to = "/srv/www/#{directory}"
 unicorn_pid = "#{deploy_to}/unicorn.pid"
@@ -21,7 +20,7 @@ unicorn_conf = "/etc/unicorn/#{directory}.rb"
 namespace :deploy do
   task :start do               
     on roles(:app) do          
-      execute "cd /srv/www/#{host}/current && "\
+      execute "cd #{deploy_to}/current && "\
       "unicorn_rails -E #{environment} -c #{unicorn_conf} -D"
     end
   end
