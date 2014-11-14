@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 
 gem 'rails', '4.1.1'
 
@@ -6,7 +6,6 @@ gem 'rails', '4.1.1'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'mysql2'
-
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -22,11 +21,8 @@ end
 
 gem 'jquery-rails'
 
-# To use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
-
-# To use Jbuilder templates for JSON
-# gem 'jbuilder'
+gem 'rails-api', '~> 0.2.1'
+gem 'active_model_serializers', '~> 0.9.0.alpha1'
 
 # Use unicorn as the app server
 gem 'unicorn'
@@ -34,5 +30,14 @@ gem 'unicorn'
 # Deploy with Capistrano
 gem 'capistrano'
 
+# Oauth api authentication
+gem 'doorkeeper', '~> 1.4.0'
+
 # To use debugger
-gem 'pry'
+gem 'pry-byebug'
+gem 'pry-rails'
+gem 'pry-stack_explorer'
+
+group :development, :staging do
+  gem 'faker', '~> 1.4.3'
+end
