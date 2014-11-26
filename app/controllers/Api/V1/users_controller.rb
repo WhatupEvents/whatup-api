@@ -25,9 +25,15 @@ module Api
                status: :ok
       end
 
+      def gcm_register
+        current_device = Device.find_by_uuid(device_params[:uuid])
+        current_device.update_attributes(device_params.permit(:registration_id))
+      end
+
       private
 
       def render_me(status)
+        Device.find_or_create_by(device_params.merge(user_id: @current_user.id))
         render json: current_me,
                serializer: Api::V1::MeSerializer,
                status: status
@@ -35,6 +41,10 @@ module Api
 
       def current_me
         Me.new(@current_user, process_access_token)
+      end
+
+      def device_params
+        params.require(:device).permit(:uuid, :registration_id)
       end
 
       def user_params

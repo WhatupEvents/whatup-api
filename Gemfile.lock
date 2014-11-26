@@ -59,7 +59,13 @@ GEM
     execjs (2.2.1)
     faker (1.4.3)
       i18n (~> 0.5)
+    gcm (0.0.9)
+      httparty
+      json
     hike (1.2.3)
+    httparty (0.13.3)
+      json (~> 1.8)
+      multi_xml (>= 0.5.2)
     i18n (0.6.11)
     jquery-rails (3.1.1)
       railties (>= 3.0, < 5.0)
@@ -73,6 +79,7 @@ GEM
     mime-types (1.25.1)
     minitest (5.4.0)
     multi_json (1.10.1)
+    multi_xml (0.5.5)
     mysql2 (0.3.16)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
@@ -158,6 +165,7 @@ DEPENDENCIES
   coffee-rails
   doorkeeper (~> 1.4.0)
   faker (~> 1.4.3)
+  gcm
   jquery-rails
   mysql2
   pry-byebug

@@ -6,6 +6,8 @@ class User < ActiveRecord::Base
     class_name: 'Doorkeeper::AccessToken',
     dependent: :destroy
 
+  has_many :devices
+
   has_many :statuses
 
   has_many :friend_relationships_in,
