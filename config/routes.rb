@@ -7,7 +7,8 @@ Whatsup::Application.routes.draw do
         post 'gcm_register', to: 'users#gcm_register', as: 'users_gcm_register'
       end
       resources :statuses, only: [:create]
-      post 'message', to: 'gcm#message', as: 'gcm_message'
+      resources :messages, only: [:index]
+      post 'gcm_message', to: 'gcm#message', as: 'gcm_message'
     end
   end
 end
