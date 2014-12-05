@@ -7,16 +7,19 @@ module Api
 
       def message
         #TODO: add resque to send messages asynchronously from server
-        #TODO: add Message model to be able to pull down for messages view
-        device = Device.find_by_uuid(message_params[:uuid])
-        gcm = GCM.new("AIzaSyD0Xlx-LARgUIaJKGB-VuG3TrbSoIIVjhs")
-        gcm_response = gcm.send([device.registration_id], data: { message_id: SecureRandom.uuid })
+        Message.create(sender_id: current_user.id, 
+                       recipient_id: message_params[:friend_id], 
+                       text: message_params[:text])
+        
+        GCM.new("AIzaSyD0Xlx-LARgUIaJKGB-VuG3TrbSoIIVjhs").send(
+          Device.where(user_id: message_params[:friend_id]).map(&:registration_id), 
+          data: { message_id: SecureRandom.uuid })
       end
       
       private
 
       def message_params
-        params.require(:message).permit(:uuid)
+        params.require(:message).permit(:uuid, :friend_id, :text)
       end
     end
   end

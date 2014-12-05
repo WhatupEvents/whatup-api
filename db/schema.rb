@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141123205750) do
+ActiveRecord::Schema.define(version: 20141204042209) do
 
   create_table "devices", force: true do |t|
     t.integer "user_id"
@@ -30,6 +30,14 @@ ActiveRecord::Schema.define(version: 20141123205750) do
 
   add_index "friend_relationships", ["friend_id"], name: "index_friend_relationships_on_friend_id", using: :btree
   add_index "friend_relationships", ["person_id"], name: "index_friend_relationships_on_person_id", using: :btree
+
+  create_table "messages", force: true do |t|
+    t.integer  "sender_id"
+    t.integer  "recipient_id"
+    t.string   "text"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "oauth_access_grants", force: true do |t|
     t.integer  "resource_owner_id", null: false
