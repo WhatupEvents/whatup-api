@@ -4,8 +4,7 @@ module Api
       doorkeeper_for :all
 
       def index
-        messages = Message.where(sender_id: [message_params[:my_id], message_params[:friend_id]],
-                                 recipient_id: [message_params[:my_id], message_params[:friend_id]])
+        messages = Message.where(event_id: message_params[:event_id])
         if messages.present?
           render json: messages,
                  each_serializer: Api::V1::MessageSerializer,
@@ -18,7 +17,7 @@ module Api
       end
 
       def message_params
-        params.permit(:my_id, :friend_id)
+        params.permit(:my_id, :event_id)
       end
     end
   end

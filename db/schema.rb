@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141206021511) do
+ActiveRecord::Schema.define(version: 20141209042633) do
 
   create_table "devices", force: true do |t|
     t.integer "user_id"
@@ -20,6 +20,16 @@ ActiveRecord::Schema.define(version: 20141206021511) do
   end
 
   add_index "devices", ["user_id"], name: "index_devices_on_user_id", using: :btree
+
+  create_table "event_relationships", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "event_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "event_relationships", ["event_id"], name: "index_event_relationships_on_event_id", using: :btree
+  add_index "event_relationships", ["user_id"], name: "index_event_relationships_on_user_id", using: :btree
 
   create_table "events", force: true do |t|
     t.string   "name"
@@ -39,6 +49,7 @@ ActiveRecord::Schema.define(version: 20141206021511) do
 
   create_table "messages", force: true do |t|
     t.integer  "sender_id"
+    t.integer  "event_id"
     t.integer  "recipient_id"
     t.string   "text"
     t.datetime "created_at"

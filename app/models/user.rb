@@ -19,4 +19,7 @@ class User < ActiveRecord::Base
            foreign_key: :person_id
 
   has_many :friends, through: :friend_relationships_out
+
+  has_many :event_relationships
+  has_many :events, through: :event_relationships
 end
