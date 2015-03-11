@@ -25,6 +25,12 @@ module Api
                status: :ok
       end
 
+      def friend_groups
+        render json: current_user.friend_groups,
+               each_serializer: Api::V1::FriendGroupSerializer,
+               status: :ok
+      end
+
       def gcm_register
         current_device = Device.find_by_uuid(device_params[:uuid])
         current_device.update_attributes(device_params.permit(:registration_id))

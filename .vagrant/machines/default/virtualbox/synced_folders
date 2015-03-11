@@ -1,0 +1,1 @@
+{"virtualbox":{"/srv/whatsup":{"guestpath":"/srv/whatsup","hostpath":"/Users/alfredouribe/other/apis/whatsup","disabled":false},"/vagrant":{"guestpath":"/vagrant","hostpath":"/Users/alfredouribe/other/apis/whatsup","disabled":false}}}

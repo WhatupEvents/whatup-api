@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141209042633) do
+ActiveRecord::Schema.define(version: 20150308031603) do
 
   create_table "devices", force: true do |t|
     t.integer "user_id"
@@ -36,6 +36,26 @@ ActiveRecord::Schema.define(version: 20141209042633) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "friend_group_memberships", force: true do |t|
+    t.integer  "friend_group_id"
+    t.integer  "member_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "friend_group_memberships", ["friend_group_id"], name: "index_friend_group_memberships_on_friend_group_id", using: :btree
+  add_index "friend_group_memberships", ["member_id"], name: "index_friend_group_memberships_on_member_id", using: :btree
+
+  create_table "friend_groups", force: true do |t|
+    t.integer  "user_id"
+    t.string   "name"
+    t.boolean  "default"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "friend_groups", ["user_id"], name: "index_friend_groups_on_user_id", using: :btree
 
   create_table "friend_relationships", force: true do |t|
     t.integer  "person_id"

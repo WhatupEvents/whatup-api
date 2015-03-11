@@ -22,4 +22,16 @@ class User < ActiveRecord::Base
 
   has_many :event_relationships
   has_many :events, through: :event_relationships
+
+  has_many :friend_groups
+
+  after_create :default_friend_groups
+
+  def default_friend_groups
+    self.friend_groups |= [
+      FriendGroup.find_or_create_by(user_id: self.id, name: 'Fave', default: true),
+      FriendGroup.find_or_create_by(user_id: self.id,name: 'School', default: true),
+      FriendGroup.find_or_create_by(user_id: self.id,name: 'Work', default: true)
+    ]
+  end
 end
