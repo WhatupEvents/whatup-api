@@ -8,7 +8,7 @@ Whatsup::Application.routes.draw do
       end
       resources :statuses, only: [:create]
       resources :messages, only: [:index]
-      resources :events, only: [:index]
+      resources :events, only: [:index, :create]
       post 'gcm_message', to: 'gcm#message', as: 'gcm_message'
     end
   end
