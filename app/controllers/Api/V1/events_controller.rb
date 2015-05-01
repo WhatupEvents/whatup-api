@@ -19,8 +19,17 @@ module Api
         head :bad_request
       end
 
+      def destroy
+        Event.find(params[:id]).destroy
+        head :ok
+      rescue
+        head :bad_resquest
+      end
+
+      private
+
       def event_params
-        params.require(:event).permit(:name, :description, :symbol_id, :start_time, :address, :public)
+        params.require(:event).permit(:name, :description, :symbol_id, :start_time, :address, :public, :created_by_id)
       end
     end
   end

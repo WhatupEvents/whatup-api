@@ -1,4 +1,4 @@
-host = 'www.dainbramaged.me'
+host = '52.10.245.12'
 directory = 'staging.whatsup.com'
 environment = 'staging'
 

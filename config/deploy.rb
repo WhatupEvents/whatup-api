@@ -1,7 +1,7 @@
 # config valid only for Capistrano 3.1
 lock '3.2.1'
 
-set :application, 'whatsup'
+set :application, 'whatup'
 set :repo_url, 'git@github.com:fellou89/whatsup-api.git'
 
 # Default branch is :master
@@ -34,7 +34,7 @@ set :log_level, :debug
 # Default value for keep_releases is 5
 set :keep_releases, 3
 
-set :ssh_options, keys: ['~/.ssh/id_rsa'], forward_agent: true, user: 'ubuntu'
+set :ssh_options, keys: ['~/.ssh/whatup.pem'], forward_agent: true, user: 'ec2-user'
 
 namespace :deploy do
 

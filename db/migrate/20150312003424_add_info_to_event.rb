@@ -1,5 +1,6 @@
 class AddInfoToEvent < ActiveRecord::Migration
   def change
+    add_column :events, :created_by_id, :integer
     add_column :events, :description, :string
     add_column :events, :address, :string
     add_column :events, :symbol_id, :integer

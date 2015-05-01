@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(version: 20150312004246) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "created_by_id"
     t.string   "description"
     t.string   "address"
     t.integer  "symbol_id"
