@@ -18,6 +18,12 @@ test:
   pool: 5
   timeout: 5000
 
+staging:
+  adapter: mysql2
+  database: db/staging.mysql2
+  pool: 5
+  timeout: 5000
+
 production:
   adapter: mysql2
   database: db/production.mysql2

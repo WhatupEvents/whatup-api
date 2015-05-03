@@ -32,6 +32,7 @@ gem 'unicorn'
 gem 'capistrano'
 gem 'capistrano-unicorn-nginx', '~> 3.2.0'
 gem 'capistrano-safe-deploy-to', '~> 1.1.1'
+gem 'capistrano-bundler', '~> 1.1.2'
 
 # Oauth api authentication
 gem 'doorkeeper', '~> 1.4.0'
