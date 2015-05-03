@@ -20,7 +20,7 @@ test:
 
 staging:
   adapter: mysql2
-  database: db/staging.mysql2
+  database: whatup_staging
   pool: 5
   timeout: 5000
   host: ec2-52-11-163-139.us-west-2.compute.amazonaws.com
