@@ -30,6 +30,8 @@ gem 'unicorn'
 
 # Deploy with Capistrano
 gem 'capistrano'
+gem 'capistrano-unicorn-nginx', '~> 3.2.0'
+gem 'capistrano-safe-deploy-to', '~> 1.1.1'
 
 # Oauth api authentication
 gem 'doorkeeper', '~> 1.4.0'

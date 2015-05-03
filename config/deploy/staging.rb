@@ -1,5 +1,5 @@
-host = '52.10.245.12'
-directory = 'staging.whatsup.com'
+host = '52.11.163.139'
+directory = 'staging.whatup.com'
 environment = 'staging'
 
 role :app, [host]
@@ -15,7 +15,7 @@ set :application, host
 
 deploy_to = "/srv/www/#{directory}"
 unicorn_pid = "#{deploy_to}/unicorn.pid"
-unicorn_conf = "/etc/unicorn/#{directory}.rb"
+unicorn_conf = "#{deploy_to}/config/unicorn.rb"
 
 namespace :deploy do
   task :start do               
@@ -33,7 +33,7 @@ namespace :deploy do
 
   task :restart do             
     on roles(:app) do          
-      execute "kill -USR2 $(cat /srv/www/#{directory}/unicorn.pid)"
+      execute "kill -USR2 $(cat #{deploy_to}/current/unicorn.pid)"
     end
   end
 end
