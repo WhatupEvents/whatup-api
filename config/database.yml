@@ -25,7 +25,6 @@ staging:
   timeout: 5000
   user: root
   password: root
-  host: ec2-52-11-163-139.us-west-2.compute.amazonaws.com
 
 production:
   adapter: mysql2
