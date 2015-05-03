@@ -3,7 +3,7 @@ module Api
     class FriendGroupSerializer < ActiveModel::Serializer
       attributes :id, :name
 
-      has_many :members, serializer: MemberSerializer
+      has_many :members, serializer: Api::V1::MemberSerializer
     end
   end
 end
