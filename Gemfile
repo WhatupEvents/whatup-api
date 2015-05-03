@@ -30,6 +30,7 @@ gem 'unicorn'
 
 # Deploy with Capistrano
 gem 'capistrano'
+gem 'capistrano-rails', '~> 1.1.0'
 gem 'capistrano-unicorn-nginx', '~> 3.2.0'
 gem 'capistrano-safe-deploy-to', '~> 1.1.1'
 gem 'capistrano-bundler', '~> 1.1.2'
