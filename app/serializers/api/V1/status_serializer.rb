@@ -1,3 +1,7 @@
-class Api::V1::StatusSerializer < ActiveModel::Serializer
-  attributes :text, :created_at
+module Api
+  module V1
+    class StatusSerializer < ActiveModel::Serializer
+      attributes :text, :created_at
+    end
+  end
 end

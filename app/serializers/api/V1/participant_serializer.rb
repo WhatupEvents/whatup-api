@@ -1,3 +1,7 @@
-class Api::V1::ParticipantSerializer < ActiveModel::Serializer
-  attributes :id
+module Api
+  module V1
+    class ParticipantSerializer < ActiveModel::Serializer
+      attributes :id
+    end
+  end
 end
