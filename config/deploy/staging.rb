@@ -14,8 +14,9 @@ set :default_environment, 'RAILS_ENV' => environment
 set :application, host
 
 deploy_to = "/srv/www/#{directory}"
-unicorn_pid = "#{deploy_to}/unicorn.pid"
-unicorn_conf = "#{deploy_to}/config/unicorn.rb"
+why_here = "/var/www/#{host}"
+unicorn_pid = "#{why_here}/current/tmp/pids/unicorn.pid"
+unicorn_conf = "#{why_here}/shared/config/unicorn.rb"
 
 namespace :deploy do
   task :start do               
@@ -33,7 +34,7 @@ namespace :deploy do
 
   task :restart do             
     on roles(:app) do          
-      execute "kill -USR2 $(cat #{deploy_to}/current/unicorn.pid)"
+      execute "kill -USR2 $(cat #{unicorn_pid})"
     end
   end
 end
