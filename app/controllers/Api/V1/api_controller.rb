@@ -23,6 +23,10 @@ module Api
       def current_user
         @current_user ||= User.find(doorkeeper_token.resource_owner_id)
       end
+
+      # def doorkeeper_unauthorized_render_options
+      #   {:json => {:error => "Not authorized"}}
+      # end
     end
   end
 end

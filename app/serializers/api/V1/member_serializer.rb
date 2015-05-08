@@ -1,3 +1,3 @@
-class MemberSerializer < ActiveModel::Serializer
+class Api::V1::MemberSerializer < ActiveModel::Serializer
   attributes :id
 end

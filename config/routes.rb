@@ -3,7 +3,7 @@ Whatsup::Application.routes.draw do
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
       resources :users, only: [:create] do
-        post 'friends', to: 'users#friends', as: 'users_friends'
+        get 'friends', to: 'users#friends', as: 'users_friends'
         post 'gcm_register', to: 'users#gcm_register', as: 'users_gcm_register'
       end
       resources :statuses, only: [:create]

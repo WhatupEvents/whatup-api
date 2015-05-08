@@ -11,8 +11,7 @@ module Api
         else
           render_me :ok
         end
-      rescue Exception => e  
-        puts e.message  
+      rescue
         head :bad_request
       end
 
@@ -41,6 +40,7 @@ module Api
 
       def render_me(status)
         Device.find_or_create_by(device_params.merge(user_id: @current_user.id))
+
         render json: current_me,
                serializer: Api::V1::MeSerializer,
                status: status
