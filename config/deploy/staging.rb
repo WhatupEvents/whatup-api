@@ -21,7 +21,8 @@ unicorn_conf = "#{why_here}/shared/config/unicorn.rb"
 namespace :deploy do
   task :start do               
     on roles(:app) do          
-      execute "cd #{deploy_to}/current && "\
+      # execute "cd #{deploy_to}/current && "\
+      execute "cd #{why_here}/current && "\
       "unicorn_rails -E #{environment} -c #{unicorn_conf} -D"
     end
   end

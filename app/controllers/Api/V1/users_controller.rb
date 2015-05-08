@@ -11,7 +11,8 @@ module Api
         else
           render_me :ok
         end
-      rescue
+      rescue Exception => e  
+        puts e.message  
         head :bad_request
       end
 
