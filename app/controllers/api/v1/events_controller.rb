@@ -13,14 +13,16 @@ class Api::V1::EventsController < Api::V1::ApiController
     render json: event,
            serializer: Api::V1::EventSerializer,
            status: :created
-  rescue
+  rescue Exception => e
+    Rails.logger.info e.to_s
     head :bad_request
   end
 
   def destroy
     Event.find(params[:id]).destroy
     head :ok
-  rescue
+  rescue Exception => e
+    Rails.logger.info e.to_s
     head :bad_resquest
   end
 

@@ -4,7 +4,8 @@ class Api::V1::StatusesController < Api::V1::ApiController
   def create
     Status.create! status_params
     head :created
-  rescue
+  rescue Exception => e
+    Rails.logger.info e.to_s
     head :bad_request
   end
 
