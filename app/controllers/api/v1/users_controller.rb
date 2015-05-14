@@ -46,7 +46,7 @@ class Api::V1::UsersController < Api::V1::ApiController
   end
 
   def current_me
-    Me.new(@current_user, process_access_token)
+    Api::V1::Me.new(@current_user, process_access_token)
   end
 
   def device_params
