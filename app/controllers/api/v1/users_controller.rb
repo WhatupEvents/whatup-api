@@ -10,7 +10,7 @@ class Api::V1::UsersController < Api::V1::ApiController
       render_me :ok
     end
   rescue Exception => e
-    Rails.logger.info describe(e)
+    Rails.logger.info e.to_s
     head :bad_request
   end
 

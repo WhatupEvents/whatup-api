@@ -15,7 +15,7 @@ group :assets do
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer', :platforms => :ruby
-  gem 'therubyracer', '0.10.1', platforms: :ruby
+  # gem 'therubyracer', '0.10.1', platforms: :ruby
 
   gem 'uglifier', '>= 1.3.0'
 end
