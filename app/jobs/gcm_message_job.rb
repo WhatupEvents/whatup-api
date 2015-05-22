@@ -6,10 +6,13 @@ class GcmMessageJob
     @sender = sender
   end
 
-  def self.perform
+  def self.perform(message_params, sender_id)
+    @message_params = message_params
+    @sender = User.find(sender_id)
+
     message = Message.create(sender_id: @sender.id, 
-                             event_id: @message_params[:event_id], 
-                             text: @message_params[:text])
+                             event_id: @message_params["event_id"], 
+                             text: @message_params["text"])
 
     recipient_ids = (message.event.participants - [@sender]).map(&:id)
     GCM.new("AIzaSyBLDCdpQ9XBB9e-ecMI8OIQ_0pRJtd_kjg").send(
