@@ -11,10 +11,11 @@ class Api::V1::MessagesController < Api::V1::ApiController
       head :not_found
     end
   rescue Exception => e
+    Rails.logger.info e.to_s
     head :bad_request
   end
 
   def message_params
-    params.permit(:my_id, :event_id)
+    params.require(:messages).permit(:my_id, :event_id)
   end
 end

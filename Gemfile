@@ -5,6 +5,7 @@ gem 'rails', '4.1.1'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
+gem 'sshkit', '1.3.0'
 gem 'mysql2'
 
 # Gems used only for assets and not required
@@ -36,6 +37,10 @@ gem 'capistrano-unicorn-nginx', '~> 3.2.0'
 gem 'capistrano-safe-deploy-to', '~> 1.1.1'
 gem 'capistrano-bundler', '~> 1.1.2'
 
+gem "capistrano-resque", "~> 0.2.2", require: false
+gem 'resque'
+gem 'resque-scheduler'
+
 # Oauth api authentication
 gem 'doorkeeper', '~> 1.4.0'
 
@@ -43,6 +48,7 @@ gem 'doorkeeper', '~> 1.4.0'
 gem 'pry-byebug'
 gem 'pry-rails'
 gem 'pry-stack_explorer'
+gem 'foreman'
 
 group :development, :staging do
   gem 'faker', '~> 1.4.3'

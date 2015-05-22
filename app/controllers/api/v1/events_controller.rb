@@ -8,6 +8,7 @@ class Api::V1::EventsController < Api::V1::ApiController
   end
 
   def create
+    # need to pass participant ids to add them to event
     event = Event.create! event_params
     current_user.events << event
     render json: event,

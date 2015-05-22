@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150312004246) do
+ActiveRecord::Schema.define(version: 20150517203143) do
 
   create_table "devices", force: true do |t|
     t.integer "user_id"
@@ -38,7 +38,7 @@ ActiveRecord::Schema.define(version: 20150312004246) do
     t.integer  "created_by_id"
     t.string   "description"
     t.string   "address"
-    t.integer  "symbol_id"
+    t.integer  "symbol_id",     null: false
     t.datetime "start_time"
     t.boolean  "public"
   end

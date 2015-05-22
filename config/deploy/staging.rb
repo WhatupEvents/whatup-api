@@ -4,11 +4,14 @@ environment = 'staging'
 
 role :app, [host]
 role :web, [host]
-role :db,  [host]
+role :db,  host
 
 set :branch, environment
 set :rails_env, environment
 set :stage, environment
+
+role :resque_worker, [ host ]
+role :resque_scheduler, [ host ]
 
 set :default_environment, 'RAILS_ENV' => environment
 set :application, host
@@ -23,7 +26,7 @@ namespace :deploy do
     on roles(:app) do          
       # execute "cd #{deploy_to}/current && "\
       execute "cd #{why_here}/current && "\
-      "unicorn_rails -E #{environment} -c #{unicorn_conf} -D"
+      "bundle exec unicorn_rails -E #{environment} -c #{unicorn_conf} -D"
     end
   end
 
