@@ -5,7 +5,7 @@ gem 'rails', '4.1.1'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'sshkit', '1.3.0'
+# gem 'sshkit', '1.3.0'
 gem 'mysql2'
 
 # Gems used only for assets and not required
