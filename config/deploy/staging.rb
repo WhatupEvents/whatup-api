@@ -1,5 +1,5 @@
 host = '52.11.163.139'
-directory = 'staging.whatup.com'
+# directory = 'staging.whatup.com'
 environment = 'staging'
 
 role :app, [host]
@@ -12,11 +12,12 @@ set :stage, environment
 
 role :resque_worker, [ host ]
 role :resque_scheduler, [ host ]
+set :workers, { messages: 1 }
 
 set :default_environment, 'RAILS_ENV' => environment
 set :application, host
 
-deploy_to = "/srv/www/#{directory}"
+# deploy_to = "/srv/www/#{directory}"
 why_here = "/var/www/#{host}"
 unicorn_pid = "#{why_here}/current/tmp/pids/unicorn.pid"
 unicorn_conf = "#{why_here}/shared/config/unicorn.rb"

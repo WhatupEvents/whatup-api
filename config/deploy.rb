@@ -4,7 +4,6 @@ lock '3.2.1'
 set :application, 'whatup'
 set :repo_url, 'git@github.com:fellou89/whatup-api.git'
 
-set :workers, { messages: 1 }
 set :resque_environment_task, true
 
 # Default branch is :master
