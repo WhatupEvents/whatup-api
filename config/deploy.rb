@@ -5,7 +5,7 @@ set :application, 'whatup'
 set :repo_url, 'git@github.com:fellou89/whatup-api.git'
 
 set :resque_environment_task, true
-set :workers, { messages: 1 }
+set :workers, messages: 1
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
