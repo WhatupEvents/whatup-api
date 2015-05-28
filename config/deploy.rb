@@ -59,6 +59,6 @@ namespace :deploy do
       # end
     end
   end
-
-  after "restart", "resque:restart"
 end
+
+after "deploy", "resque:restart"

@@ -1,5 +1,10 @@
+require 'resque_web'
+
 Whatsup::Application.routes.draw do
   use_doorkeeper
+
+  mount ResqueWeb::Engine => 'resque/web'
+
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
       resources :users, only: [:create] do

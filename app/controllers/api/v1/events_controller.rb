@@ -24,7 +24,7 @@ class Api::V1::EventsController < Api::V1::ApiController
     head :ok
   rescue Exception => e
     Rails.logger.info e.to_s
-    head :bad_resquest
+    head :bad_request
   end
 
   private
