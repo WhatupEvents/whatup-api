@@ -12,7 +12,8 @@ class GcmMessageJob
 
     message = Message.create(sender_id: @sender.id, 
                              event_id: @message_params["event_id"], 
-                             text: @message_params["text"])
+                             text: Resque.redis.namespace)
+#                             text: @message_params["text"])
 
     recipient_ids = (message.event.participants - [@sender]).map(&:id)
     GCM.new("AIzaSyBLDCdpQ9XBB9e-ecMI8OIQ_0pRJtd_kjg").send(

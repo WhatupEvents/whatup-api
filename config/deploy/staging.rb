@@ -12,7 +12,6 @@ set :stage, environment
 
 role :resque_worker, [ host ]
 role :resque_scheduler, [ host ]
-set :workers, { messages: 1 }
 
 set :default_environment, 'RAILS_ENV' => environment
 set :application, host

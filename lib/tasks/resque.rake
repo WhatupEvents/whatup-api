@@ -15,7 +15,7 @@ Resque.before_fork = Proc.new {
     # Activate file synchronization
     logfile.sync = true
 
-    Resque.redis.namespace = "resque:stuff:#{Rails.env}"
+    Resque.redis.namespace = "resque:#{Rails.env}"
 
     # Create a new buffered logger
     Resque.logger = ActiveSupport::Logger.new(logfile)
