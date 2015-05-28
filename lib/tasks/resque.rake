@@ -15,7 +15,7 @@ task 'resque:setup' => :environment do
     # Activate file synchronization
     logfile.sync = true
 
-    Resque.redis.namespace = "resque:#{Rails.env}"
+    # Resque.redis.namespace = "resque:#{Rails.env}"
 
     # Create a new buffered logger
     Resque.logger = ActiveSupport::Logger.new(logfile)
