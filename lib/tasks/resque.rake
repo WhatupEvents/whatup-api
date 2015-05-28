@@ -6,7 +6,7 @@ task 'resque:setup' => :environment do
     Rails.application.eager_load!
   }
 
-Resque.before_fork = Proc.new { 
+  Resque.before_fork = Proc.new { 
     ActiveRecord::Base.establish_connection
 
     # Open the new separate log file
@@ -22,4 +22,9 @@ Resque.before_fork = Proc.new {
     Resque.logger.level = Logger::INFO
     Resque.logger.formatter = Logger::Formatter.new
   }
+end
+
+Resque.after_fork do |job|
+  ActionDispatch::Reloader.cleanup!
+  ActionDispatch::Reloader.prepare!
 end
