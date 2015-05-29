@@ -8,6 +8,8 @@ development:
   database: whatup_development
   pool: 5
   timeout: 5000
+  encoding: utf8mb4
+  collation: utf8mb4_bin
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -25,6 +27,8 @@ staging:
   timeout: 5000
   user: root
   password: root
+  encoding: utf8mb4
+  collation: utf8mb4_bin
 
 production:
   adapter: mysql2
