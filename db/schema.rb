@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150529212554) do
+ActiveRecord::Schema.define(version: 20150531222220) do
 
   create_table "devices", force: true do |t|
     t.integer "user_id"
@@ -79,6 +79,8 @@ ActiveRecord::Schema.define(version: 20150529212554) do
     t.string   "text"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "media"
+    t.string   "source"
   end
 
   create_table "oauth_access_grants", force: true do |t|
