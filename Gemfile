@@ -43,6 +43,7 @@ gem 'resque-web', require: 'resque_web'
 
 # Oauth api authentication
 gem 'doorkeeper', '~> 1.4.0'
+gem "paperclip", "~> 4.2"
 
 # To use debugger
 gem 'pry-byebug'
