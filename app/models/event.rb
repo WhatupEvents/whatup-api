@@ -1,6 +1,7 @@
 class Event < ActiveRecord::Base
   validates :name, presence: true
 
+  # TODO: dependent destroy?
   has_many :messages
 
   has_many :participant_relationships

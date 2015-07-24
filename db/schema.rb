@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150531233220) do
+ActiveRecord::Schema.define(version: 20150714033744) do
 
   create_table "devices", force: true do |t|
     t.integer "user_id"
@@ -36,11 +36,12 @@ ActiveRecord::Schema.define(version: 20150531233220) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "created_by_id"
-    t.string   "description"
-    t.string   "address"
+    t.string   "details"
+    t.string   "location"
     t.integer  "symbol_id",     null: false
     t.datetime "start_time"
     t.boolean  "public"
+    t.integer  "category_id"
   end
 
   create_table "friend_group_memberships", force: true do |t|

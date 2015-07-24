@@ -17,7 +17,7 @@ class Api::V1::UsersController < Api::V1::ApiController
   def friends
     User.where('fb_id in (?)',JSON.parse(params['friends_fb_ids'])).each do |friend|
       FriendRelationship.find_or_create_by(person_id: current_user.id, friend_id: friend.id)
-      FriendRelationship.find_or_create_by(friend_id: current_user.id, person_id: friend.id)
+      FriendRelationship.find_or_create_by(person_id: friend.id, friend_id: current_user.id)
     end
     render json: current_user.friends,
            each_serializer: Api::V1::FriendSerializer,
