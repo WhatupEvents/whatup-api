@@ -3,7 +3,7 @@ class CreateFriendGroup < ActiveRecord::Migration
     create_table :friend_groups do |t|
       t.integer :user_id
       t.string :name
-      t.boolean :default
+      t.boolean :default, default: false
 
       t.timestamps
 

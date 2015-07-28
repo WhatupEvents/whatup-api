@@ -46,9 +46,6 @@ class Api::V1::EventsController < Api::V1::ApiController
     Event.find(params[:id]).destroy
     render json: {},
            status: :ok
-  rescue Exception => e
-    Rails.logger.info e.to_s
-    head :bad_request
   end
 
   private
