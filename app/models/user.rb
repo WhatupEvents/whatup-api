@@ -28,11 +28,9 @@ class User < ActiveRecord::Base
   after_create :default_friend_groups
 
   def default_friend_groups
-    [FriendGroup.find_or_create_by(user_id: self.id, name: 'All', default: true, symbol_id: 0),
-     FriendGroup.find_or_create_by(user_id: self.id, name: 'Favorites', default: true, symbol_id: 0),
-     FriendGroup.find_or_create_by(user_id: self.id, name: 'School', default: true, symbol_id: 0),
-     FriendGroup.find_or_create_by(user_id: self.id, name: 'Work', default: true, symbol_id: 0)].each do |group|
-      FriendGroupMembership.find_or_create_by(member: self, friend_group: group)
-    end
+    FriendGroup.find_or_create_by(user_id: self.id, name: 'All', default: true, symbol_id: 0)
+    FriendGroup.find_or_create_by(user_id: self.id, name: 'Favorites', default: true, symbol_id: 0)
+    FriendGroup.find_or_create_by(user_id: self.id, name: 'School', default: true, symbol_id: 0)
+    FriendGroup.find_or_create_by(user_id: self.id, name: 'Work', default: true, symbol_id: 0)
   end
 end
