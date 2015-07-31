@@ -33,4 +33,9 @@ class User < ActiveRecord::Base
     FriendGroup.find_or_create_by(user_id: self.id, name: 'School', default: true, symbol_id: 0)
     FriendGroup.find_or_create_by(user_id: self.id, name: 'Work', default: true, symbol_id: 0)
   end
+
+  def current_events
+    # TODO: decide whether we want to delete events and archive any data
+    events.where('events.created_at > ?', Time.now-2.days)
+  end
 end
