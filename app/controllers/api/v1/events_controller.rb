@@ -22,14 +22,16 @@ class Api::V1::EventsController < Api::V1::ApiController
   def update
     event = Event.find(params[:id])
 
-    friend_ids = event_params[:friend_ids]
-    if friend_ids
-      params[:event].delete(:friend_ids)
-      participants = User.where('id in (?)', JSON.parse(friend_ids))
-      if participants.empty?
-        event.participants = []
-      else
-        event.participants |= participants
+    if event_params[:friend_ids]
+      friend_ids = JSON.parse(event_params[:friend_ids])
+      if friend_ids
+        params[:event].delete(:friend_ids)
+        participants = User.where('id in (?)', friend_ids)
+        if participants.empty?
+          event.participants = []
+        else
+          event.participants |= participants
+        end
       end
     end
 
