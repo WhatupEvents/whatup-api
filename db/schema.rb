@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150728013726) do
+ActiveRecord::Schema.define(version: 20150818013014) do
 
   create_table "devices", force: true do |t|
     t.integer "user_id"
@@ -42,6 +42,8 @@ ActiveRecord::Schema.define(version: 20150728013726) do
     t.datetime "start_time"
     t.boolean  "public"
     t.integer  "category_id"
+    t.string   "longitude"
+    t.string   "latitude"
   end
 
   create_table "friend_group_memberships", force: true do |t|

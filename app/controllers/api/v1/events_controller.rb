@@ -59,6 +59,8 @@ class Api::V1::EventsController < Api::V1::ApiController
       :symbol_id,
       :start_time,
       :location,
+      :latitude,
+      :longitude,
       :public,
       :created_by_id,
       :category_id,
