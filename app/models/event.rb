@@ -7,4 +7,6 @@ class Event < ActiveRecord::Base
   has_many :participant_relationships
   has_many :participants, through: :participant_relationships
 
+  has_attached_file :image
+  do_not_validate_attachment_file_type :image
 end
