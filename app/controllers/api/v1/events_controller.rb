@@ -22,8 +22,8 @@ class Api::V1::EventsController < Api::V1::ApiController
   def update
     event = Event.find(params[:id])
 
-    if update_event_params[:friend_ids]
-      friend_ids = JSON.parse(update_event_params[:friend_ids])
+    if create_event_params[:friend_ids]
+      friend_ids = JSON.parse(create_event_params[:friend_ids])
       if friend_ids
         params[:event].delete(:friend_ids)
         participants = User.where('id in (?)', friend_ids)
@@ -35,7 +35,7 @@ class Api::V1::EventsController < Api::V1::ApiController
       end
     end
 
-    event.update_attributes!(update_event_params)
+    event.update_attributes!(create_event_params)
     render json: event,
            serializer: Api::V1::EventSerializer,
            status: :ok
@@ -52,16 +52,12 @@ class Api::V1::EventsController < Api::V1::ApiController
 
   private
 
-  def update_event_params
-    params.require(:event).permit(:friend_ids, :symbol_id, :category_id)
-  end
-
   def create_event_params
     params.except(:format).permit(event_param_keys)
   end
   
   def event_param_keys
     [:name, :details, :created_by_id, :start_time, :symbol_id, :category_id,
-     :location, :latitude, :longitude, :public, :source, :image]
+     :location, :latitude, :longitude, :public, :source, :image, :friend_ids]
   end
 end
