@@ -7,7 +7,13 @@ class Api::V1::GcmController < Api::V1::ApiController
     sender = {sender_id: current_user.id}
     message = Message.create(sender.merge(message_params))
     recipient_ids = (message.event.participants - [current_user]).map(&:id)
-    Resque.enqueue(GcmMessageJob, message.event_id, recipient_ids)
+    if Rails.env != "development"
+      Resque.enqueue(
+        GcmMessageJob,
+        { event_id: message.event_id },
+        recipient_ids
+      )
+    end
   end
   
   private

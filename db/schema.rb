@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150819033446) do
+ActiveRecord::Schema.define(version: 20150829234201) do
 
   create_table "devices", force: true do |t|
     t.integer "user_id"
@@ -151,6 +151,7 @@ ActiveRecord::Schema.define(version: 20150819033446) do
     t.integer  "symbol_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "ups"
   end
 
   add_index "statuses", ["symbol_id"], name: "index_statuses_on_symbol_id", using: :btree
@@ -161,6 +162,16 @@ ActiveRecord::Schema.define(version: 20150819033446) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "uppings", force: true do |t|
+    t.integer  "status_id"
+    t.integer  "upped_by_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "uppings", ["status_id"], name: "index_uppings_on_status_id", using: :btree
+  add_index "uppings", ["upped_by_id"], name: "index_uppings_on_upped_by_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "user_name"

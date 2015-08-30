@@ -1,3 +1,21 @@
 class Api::V1::StatusSerializer < ActiveModel::Serializer
-  attributes :text, :created_at
+  attributes :text, :created_at, :upped_by
+
+  def text
+    if object.id.nil?
+      if Rails.env != "development" 
+        Resque.enqueue(
+          GcmMessageJob,
+          {},
+          object.user_id
+        )
+      end
+      return "no status yet"
+    end
+    object.text
+  end
+
+  def upped_by
+    object.upped_by.map(&:id)
+  end
 end

@@ -13,6 +13,7 @@ Whatsup::Application.routes.draw do
       end
       resources :friend_groups, only: [:index, :create, :update, :destroy]
       resources :statuses, only: [:create]
+      put :statuses, to: 'statuses#up', as: 'up_status'
       resources :messages, only: [:index]
       resources :events, only: [:index, :create, :update, :destroy]
       post 'gcm_message', to: 'gcm#message', as: 'gcm_message'
