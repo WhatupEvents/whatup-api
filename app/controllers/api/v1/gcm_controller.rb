@@ -20,6 +20,6 @@ class Api::V1::GcmController < Api::V1::ApiController
 
   def message_params
     # params.require(:message).permit(:uuid, :event_id, :text, :media, :source, :image)
-    params.permit(:uuid, :event_id, :text, :media, :source, :image)
+    params.permit(:event_id, :text, :media, :source, :image)
   end
 end
