@@ -8,9 +8,8 @@ class Api::V1::EventsController < Api::V1::ApiController
   end
 
   def create
-    # need to pass participant ids to add them to event
     event = Event.create! create_event_params
-    current_user.events << event
+    event.participants = [current_user]
     render json: event,
            serializer: Api::V1::EventSerializer,
            status: :created
@@ -24,18 +23,12 @@ class Api::V1::EventsController < Api::V1::ApiController
 
     if create_event_params[:friend_ids]
       friend_ids = JSON.parse(create_event_params[:friend_ids])
-      if friend_ids
-        params[:event].delete(:friend_ids)
-        participants = User.where('id in (?)', friend_ids)
-        if participants.empty?
-          event.participants = []
-        else
-          event.participants |= participants
-        end
-      end
+      participants = User.where(id: friend_ids + [create_event_params[:created_by_id]])
+      event.participants |= participants
+      params.delete("friend_ids")
     end
 
-    event.update_attributes!(create_event_params)
+    event.update_attributes! create_event_params
     render json: event,
            serializer: Api::V1::EventSerializer,
            status: :ok
@@ -53,7 +46,7 @@ class Api::V1::EventsController < Api::V1::ApiController
   private
 
   def create_event_params
-    params.except(:format).permit(event_param_keys)
+    params.except(:format, :id).permit(event_param_keys)
   end
   
   def event_param_keys

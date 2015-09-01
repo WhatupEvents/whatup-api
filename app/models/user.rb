@@ -20,9 +20,6 @@ class User < ActiveRecord::Base
 
   has_many :friends, through: :friend_relationships_out
 
-  has_many :event_relationships
-  has_many :events, through: :event_relationships
-
   has_many :friend_groups
 
   after_create :default_friend_groups
@@ -36,6 +33,7 @@ class User < ActiveRecord::Base
 
   def current_events
     # TODO: decide whether we want to delete events and archive any data
-    events.where('events.created_at > ?', Time.now-2.days)
+    Event.where('events.created_at > ?', Time.now-2.days)
+      .joins(:participants).where('users.id = ?', id)
   end
 end
