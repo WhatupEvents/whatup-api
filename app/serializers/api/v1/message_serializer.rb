@@ -1,9 +1,11 @@
 class Api::V1::MessageSerializer < ActiveModel::Serializer
-  attributes :sender_id, :event_id, :text, :media, :source, :created_at
-
-  has_one :url
+  attributes :sender, :event_id, :text, :media, :source, :created_at, :url
 
   def url
     object.image.url
+  end
+
+  def sender
+    User.find(object.sender_id).name
   end
 end

@@ -36,4 +36,8 @@ class User < ActiveRecord::Base
     Event.where('events.created_at > ?', Time.now-2.days)
       .joins(:participants).where('users.id = ?', id)
   end
+
+  def name
+    first_name + " " + last_name
+  end
 end
