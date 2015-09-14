@@ -10,7 +10,7 @@ class Api::V1::StatusSerializer < ActiveModel::Serializer
           object.user_id
         )
       end
-      return "no status yet"
+      return ""
     end
     object.text
   end
