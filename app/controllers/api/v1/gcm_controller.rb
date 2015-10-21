@@ -10,7 +10,9 @@ class Api::V1::GcmController < Api::V1::ApiController
     if Rails.env != "development"
       Resque.enqueue(
         GcmMessageJob,
-        { event_id: message.event_id },
+        { 
+          event_id: message.event_id,
+          event_name: message.event.name },
         recipient_ids
       )
     end
