@@ -1,5 +1,5 @@
 class Api::V1::UserSerializer < ActiveModel::Serializer
-  attributes :id, :user_name, :first_name, :last_name, :email, :fb_id
+  attributes :id, :user_name, :first_name, :last_name, :email, :role, :fb_id
   has_one :status, serializer: Api::V1::StatusSerializer
 
   def status

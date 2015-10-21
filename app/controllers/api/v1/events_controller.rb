@@ -2,7 +2,7 @@ class Api::V1::EventsController < Api::V1::ApiController
   doorkeeper_for :all
 
   def index
-    render json: current_user.current_events,
+    render json: current_user.current_events | Event.where(public: true).all,
            each_serializer: Api::V1::EventSerializer,
            status: :ok
   end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150901000354) do
+ActiveRecord::Schema.define(version: 20151006230447) do
 
   create_table "devices", force: true do |t|
     t.integer "user_id"
@@ -171,6 +171,7 @@ ActiveRecord::Schema.define(version: 20150901000354) do
     t.string   "fb_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "role"
   end
 
 end

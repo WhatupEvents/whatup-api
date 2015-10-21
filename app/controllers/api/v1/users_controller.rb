@@ -4,6 +4,7 @@ class Api::V1::UsersController < Api::V1::ApiController
   def create
     @current_user = User.find_or_initialize_by(user_params)
     if @current_user.new_record?
+      @current_user.role = 'User'
       @current_user.save
       render_me :created
     else
