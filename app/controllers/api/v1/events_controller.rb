@@ -43,6 +43,12 @@ class Api::V1::EventsController < Api::V1::ApiController
            status: :ok
   end
 
+  def leave
+    event = Event.find(params[:id])
+    event.participants.delete current_user
+    render json: {},
+           status: :ok
+  end
   private
 
   def create_event_params
