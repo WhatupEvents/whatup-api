@@ -15,6 +15,7 @@ Whatsup::Application.routes.draw do
       resources :statuses, only: [:create]
       put :statuses, to: 'statuses#up', as: 'up_status'
       resources :messages, only: [:index]
+      get :random_messages, to: 'messages#random'
       resources :events, only: [:index, :create, :update, :destroy]
       put 'leave_events/:id', to: 'events#leave'
       post 'gcm_message', to: 'gcm#message'
