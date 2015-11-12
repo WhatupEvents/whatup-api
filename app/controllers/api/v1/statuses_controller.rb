@@ -1,6 +1,15 @@
 class Api::V1::StatusesController < Api::V1::ApiController
   doorkeeper_for :all
 
+  def most_upped
+    most = Status.where(symbol_id: params[:cat_id]).sort_by(&:ups)
+    most = Status.all.sort_by(&:ups) unless most.present?
+
+    render json: most.last,
+           serializer: Api::V1::StatusSerializer,
+           status: :ok
+  end
+
   def create
     Status.create! status_params
     head :created

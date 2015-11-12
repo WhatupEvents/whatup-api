@@ -14,6 +14,7 @@ Whatsup::Application.routes.draw do
       resources :friend_groups, only: [:index, :create, :update, :destroy]
       resources :statuses, only: [:create]
       put :statuses, to: 'statuses#up', as: 'up_status'
+      get :most_upped, to: 'statuses#most_upped', as: 'most_upped'
       resources :messages, only: [:index]
       get :random_messages, to: 'messages#random'
       resources :events, only: [:index, :create, :update, :destroy]

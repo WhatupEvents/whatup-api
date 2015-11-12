@@ -1,5 +1,5 @@
 class Api::V1::StatusSerializer < ActiveModel::Serializer
-  attributes :text, :created_at, :upped_by
+  attributes :text, :created_at, :upped_by, :ups
 
   def text
     if object.id.nil?
