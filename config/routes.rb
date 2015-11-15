@@ -12,6 +12,7 @@ Whatsup::Application.routes.draw do
         post 'gcm_register', to: 'users#gcm_register', as: 'users_gcm_register'
       end
       resources :friend_groups, only: [:index, :create, :update, :destroy]
+      resources :shouts, only: [:create, :index]
       resources :statuses, only: [:create]
       put :statuses, to: 'statuses#up', as: 'up_status'
       get :most_upped, to: 'statuses#most_upped', as: 'most_upped'
