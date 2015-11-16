@@ -8,7 +8,12 @@ class Api::V1::ApiController < ActionController::API
       revoked_at: nil,
       expires_in: Doorkeeper.configuration.access_token_expires_in
     }
-    Doorkeeper::AccessToken.find_or_create_by(token_attributes)
+    token = Doorkeeper::AccessToken.find_or_create_by(token_attributes)
+    if token.expired?
+      current_user.doorkeeper_access_tokens.destroy_all
+      token = Doorkeeper::AccessToken.create(token_attributes)
+    end
+    return token
   end
 
   def current_application

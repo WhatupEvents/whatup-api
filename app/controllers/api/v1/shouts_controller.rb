@@ -2,12 +2,7 @@ class Api::V1::ShoutsController < Api::V1::ApiController
   doorkeeper_for :all
 
   def index
-    shouts = Shout.all
-    if shouts.present?
-      render_shouts
-    else
-      head :not_found
-    end
+    render_shouts
   end
 
   def create
@@ -21,9 +16,9 @@ class Api::V1::ShoutsController < Api::V1::ApiController
   private
 
   def render_shouts
-    shouts = Shout.all
+    shouts = Shout.where('created_at > ?', Date.today-1.day)
     if shouts.present?
-      render json: shouts,
+      render json: shouts.reverse,
              each_serializer: Api::V1::ShoutSerializer,
              status: :ok
     else
