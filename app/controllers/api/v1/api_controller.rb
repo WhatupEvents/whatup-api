@@ -1,6 +1,19 @@
 class Api::V1::ApiController < ActionController::API
   include ActionController::Serialization
 
+  before_action :geo_update
+
+  def geo_update
+    if request.env["HTTP_GEOLOCATION"].present? && 
+      request.env["HTTP_AUTHORIZATION"] != 'Bearer null'
+      geo = request.env["HTTP_GEOLOCATION"]
+      current_user.update_attributes(
+        longitude: geo.split(':')[0],
+        latitude: geo.split(':')[1]
+      )
+    end
+  end
+
   def process_access_token
     token_attributes = {
       application: current_application,
