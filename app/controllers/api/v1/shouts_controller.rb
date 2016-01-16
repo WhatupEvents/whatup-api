@@ -13,6 +13,14 @@ class Api::V1::ShoutsController < Api::V1::ApiController
     head :bad_request
   end
 
+  def udpate
+    shout = Shout.find(params[:id])
+    shout.update_attributes! shout_params
+    render json: shout,
+           serializer: Api::V1::ShoutSerializer,
+           status: :ok
+  end
+
   private
 
   def render_shouts
@@ -27,6 +35,6 @@ class Api::V1::ShoutsController < Api::V1::ApiController
   end
 
   def shout_params
-    params.require(:shouts).permit(:user_id, :text)
+    params.require(:shouts).permit(:user_id, :text, :source, :image, :event_id)
   end
 end
