@@ -13,7 +13,7 @@ class Api::V1::ShoutsController < Api::V1::ApiController
     head :bad_request
   end
 
-  def udpate
+  def update
     shout = Shout.find(params[:id])
     shout.update_attributes! shout_params
     render json: shout,
