@@ -22,5 +22,5 @@ class Event < ActiveRecord::Base
            current.longitude.to_f*(1.0-@@long_to_feet))
   end
 
-  scope :public, where(public: true)
+  scope :pub, where(public: true)
 end
