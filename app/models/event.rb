@@ -10,16 +10,17 @@ class Event < ActiveRecord::Base
   has_attached_file :image
   do_not_validate_attachment_file_type :image
 
-  def self.public
-    #TODO: make this into scope, account for hemispheres
-    lat_to_feet = 400.0/362778.0
-    long_to_feet = 400.0/365166.0
-    return Event.where(public: true)
-      .where('latitude > ? AND latitude < ? ', 
-             current_user.latitude.to_f*(1.0-lat_to_feet),
-             current_user.latitude.to_f*(1.0+lat_to_feet))
-      .where('longitude > ? AND longitude < ?',
-             current_user.longitude.to_f*(1.0+long_to_feet),
-             current_user.longitude.to_f*(1.0-long_to_feet)).all
+  self.lat_to_feet = 400.0/362778.0
+  self.long_to_feet = 400.0/365166.0
+
+  scope :with_user, lambda do |current|
+    where('latitude > ? AND latitude < ? ', 
+          current.latitude.to_f*(1.0-self.lat_to_feet),
+          current.latitude.to_f*(1.0+self.lat_to_feet))
+    .where('longitude > ? AND longitude < ?',
+           current.longitude.to_f*(1.0+self.long_to_feet),
+           current.longitude.to_f*(1.0-self.long_to_feet))
   end
+
+  scope :public, where(public: true)
 end
