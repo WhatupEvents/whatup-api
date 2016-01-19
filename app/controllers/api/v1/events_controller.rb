@@ -2,17 +2,7 @@ class Api::V1::EventsController < Api::V1::ApiController
   doorkeeper_for :all
 
   def index
-    lat_to_feet = 400.0/362778.0
-    long_to_feet = 400.0/365166.0
-    public_events = Event.where(public: true)
-      .where('latitude > ? AND latitude < ? ', 
-             current_user.latitude.to_f*(1.0-lat_to_feet),
-             current_user.latitude.to_f*(1.0+lat_to_feet))
-      .where('longitude > ? AND longitude < ?',
-             current_user.longitude.to_f*(1.0+long_to_feet),
-             current_user.longitude.to_f*(1.0-long_to_feet)).all
-      # need to account for hemispheres?
-    render json: current_user.current_events | public_events,
+    render json: current_user.current_events | Event.public,
            each_serializer: Api::V1::EventSerializer,
            status: :ok
   end
