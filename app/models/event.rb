@@ -13,7 +13,7 @@ class Event < ActiveRecord::Base
   @@lat_to_feet = 400.0/362778.0
   @@long_to_feet = 400.0/365166.0
 
-  scope :with_user, lambda do |current|
+  scope :with_user, ->(current) do
     where('latitude > ? AND latitude < ? ', 
           current.latitude.to_f*(1.0-@@lat_to_feet),
           current.latitude.to_f*(1.0+@@lat_to_feet))
