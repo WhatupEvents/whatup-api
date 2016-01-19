@@ -35,6 +35,6 @@ class Api::V1::ShoutsController < Api::V1::ApiController
   end
 
   def shout_params
-    params.require(:shouts).permit(:user_id, :text, :source, :image, :event_id)
+    params.except(:format, :id).permit(:user_id, :text, :source, :image, :event_id)
   end
 end
