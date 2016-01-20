@@ -10,16 +10,16 @@ class Event < ActiveRecord::Base
   has_attached_file :image
   do_not_validate_attachment_file_type :image
 
-  @@lat_to_feet = 15.0/68.70795454545454
-  @@long_to_feet = 15.0/69.16022727272727
+  @@fifteen_mile = 15.0/68.70795454545454
+  @@fifteen_to_mile = 15.0/69.16022727272727
 
   scope :with_user, ->(current) do
     where('latitude > ? AND latitude < ? ', 
-          current.latitude.to_f*(1.0-@@lat_to_feet),
-          current.latitude.to_f*(1.0+@@lat_to_feet))
+          current.latitude.to_f-@@fifteen_mile,
+          current.latitude.to_f+@@fifteen_mile)
     .where('longitude > ? AND longitude < ?',
-           current.longitude.to_f*(1.0+@@long_to_feet),
-           current.longitude.to_f*(1.0-@@long_to_feet))
+           current.longitude.to_f-@@fifteen_mile,
+           current.longitude.to_f+@@fifteen_mile)
   end
 
   scope :pub, -> { where(public: true) }
