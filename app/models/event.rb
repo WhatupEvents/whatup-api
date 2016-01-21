@@ -23,4 +23,6 @@ class Event < ActiveRecord::Base
   end
 
   scope :pub, -> { where(public: true) }
+
+  scope :current, -> { where('start_time < ?', Time.now+2.days).where('end_at > ?', Time.now-2.hours) }
 end

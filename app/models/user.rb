@@ -33,8 +33,7 @@ class User < ActiveRecord::Base
 
   def current_events
     # TODO: decide whether we want to delete events and archive any data
-    Event.where('events.created_at > ?', Time.now-2.days)
-      .joins(:participants).where('users.id = ?', id).order(:public)
+    Event.current.joins(:participants).where('users.id = ?', id)
   end
 
   def name

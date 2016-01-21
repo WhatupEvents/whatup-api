@@ -2,7 +2,7 @@ class Api::V1::EventsController < Api::V1::ApiController
   doorkeeper_for :all
 
   def index
-    render json: current_user.current_events | Event.with_user(current_user).pub,
+    render json: current_user.current_events | Event.pub.current.with_user(current_user),
            each_serializer: Api::V1::EventSerializer,
            status: :ok
   end
@@ -56,7 +56,7 @@ class Api::V1::EventsController < Api::V1::ApiController
   end
   
   def event_param_keys
-    [:name, :details, :created_by_id, :start_time, :symbol_id, :category_id,
+    [:name, :details, :created_by_id, :start_time, :end_time, :symbol_id, :category_id,
      :location, :latitude, :longitude, :public, :source, :image, :friend_ids]
   end
 end
