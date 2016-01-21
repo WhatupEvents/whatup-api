@@ -25,7 +25,7 @@ class Api::V1::ShoutsController < Api::V1::ApiController
 
   def render_shouts
     shouts = Shout.where('created_at > ?', Time.now-7.hour)
-      .where(event_id: Event.with_user(current_user).pub.map(&:id)).limit(50)
+      .where(event_id: Event.current.pub.with_user(current_user).map(&:id)).limit(50)
     if shouts.present?
       render json: shouts.reverse,
              each_serializer: Api::V1::ShoutSerializer,
