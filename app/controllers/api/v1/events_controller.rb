@@ -56,7 +56,7 @@ class Api::V1::EventsController < Api::V1::ApiController
   end
   
   def event_param_keys
-    [:name, :details, :created_by_id, :start_time, :end_time, :symbol_id, :category_id,
+    [:name, :details, :created_by_id, :start_time, :end_at, :symbol_id, :category_id,
      :location, :latitude, :longitude, :public, :source, :image, :friend_ids]
   end
 end
