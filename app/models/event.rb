@@ -13,7 +13,7 @@ class Event < ActiveRecord::Base
   @@fifteen_mile = 15.0/68.70795454545454
   @@fifteen_to_mile = 15.0/69.16022727272727
 
-  scope :with_user, ->(current) do
+  scope :near_user, ->(current) do
     where('latitude > ? AND latitude < ? ', 
           current.latitude.to_f-@@fifteen_mile,
           current.latitude.to_f+@@fifteen_mile)
