@@ -24,7 +24,8 @@ class Api::V1::EventsController < Api::V1::ApiController
     if create_event_params[:friend_ids]
       friend_ids = JSON.parse(create_event_params[:friend_ids])
       participants = User.where(id: friend_ids + [create_event_params[:created_by_id]])
-      event.participants |= participants
+      # event.participants |= participants
+      event.participants = participants
       params.delete("friend_ids")
     end
 
