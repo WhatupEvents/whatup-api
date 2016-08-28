@@ -35,7 +35,7 @@ class Api::V1::FriendGroupsController < Api::V1::ApiController
     if friend_ids_array.empty?
       @friend_group.members = []
     end
-    @friend_group.members |= User.where('id in (?)', friend_ids_array)
+    @friend_group.members = User.where('id in (?)', friend_ids_array)
 
     render_groups
   end
