@@ -37,7 +37,7 @@ class Api::V1::UsersController < Api::V1::ApiController
   def render_me(status)
     # Device.find_or_create_by(device_params.merge(user_id: @current_user.id))
     device = Device.find_or_initialize_by(user_id: @current_user.id, uuid: device_params[:uuid])
-    device.type = device_params[:type]
+    device.os = device_params[:os]
     device.registration_id = device_params[:registration_id]
     device.save
 
@@ -51,7 +51,7 @@ class Api::V1::UsersController < Api::V1::ApiController
   end
 
   def device_params
-    params.require(:device).permit(:uuid, :registration_id, :type)
+    params.require(:device).permit(:uuid, :registration_id, :os)
   end
 
   def user_params
