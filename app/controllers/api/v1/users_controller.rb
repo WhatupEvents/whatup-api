@@ -2,6 +2,8 @@ class Api::V1::UsersController < Api::V1::ApiController
   doorkeeper_for :all, except: [:create, :authenticate]
 
   def create
+    # when email is blank for whatever reason apple sends "" android sends nil
+    # and so I get two different slightly broken users
     @current_user = User.find_or_initialize_by(user_params)
     if @current_user.new_record?
       @current_user.role = 'User'
@@ -45,7 +47,7 @@ class Api::V1::UsersController < Api::V1::ApiController
   end
 
   def device_params
-    params.require(:device).permit(:uuid, :registration_id)
+    params.require(:device).permit(:uuid, :registration_id, :type)
   end
 
   def user_params
