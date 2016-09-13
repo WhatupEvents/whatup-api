@@ -35,7 +35,11 @@ class Api::V1::UsersController < Api::V1::ApiController
   private
 
   def render_me(status)
-    Device.find_or_create_by(device_params.merge(user_id: @current_user.id))
+    # Device.find_or_create_by(device_params.merge(user_id: @current_user.id))
+    device = Device.find_or_initialize_by(user_id: @corrent_user.id, uuid: device_params[:uuid])
+    device.type = device_params[:type]
+    device.registration_id = device_params[:registration_id]
+    device.save
 
     render json: current_me,
            serializer: Api::V1::MeSerializer,
