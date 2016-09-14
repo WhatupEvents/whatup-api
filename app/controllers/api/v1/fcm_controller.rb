@@ -1,6 +1,6 @@
-require 'gcm'
+require 'fcm'
 
-class Api::V1::GcmController < Api::V1::ApiController
+class Api::V1::FcmController < Api::V1::ApiController
   doorkeeper_for :all
 
   def message
@@ -9,7 +9,7 @@ class Api::V1::GcmController < Api::V1::ApiController
     recipient_ids = (message.event.participants - [current_user]).map(&:id)
     if Rails.env != "development"
       Resque.enqueue(
-        GcmMessageJob,
+        FcmMessageJob,
         { 
           event_id: message.event_id,
           event_name: message.event.name },

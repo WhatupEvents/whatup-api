@@ -9,7 +9,7 @@ Whatsup::Application.routes.draw do
     namespace :v1 do
       post 'friends', to: 'users#friends', as: 'users_friends'
       resources :users, only: [:create] do
-        post 'gcm_register', to: 'users#gcm_register', as: 'users_gcm_register'
+        post 'fcm_register', to: 'users#fcm_register', as: 'users_fcm_register'
       end
       resources :friend_groups, only: [:index, :create, :update, :destroy]
       resources :shouts, only: [:create, :index, :update]
@@ -20,7 +20,7 @@ Whatsup::Application.routes.draw do
       get :random_messages, to: 'messages#random'
       resources :events, only: [:index, :create, :update, :destroy]
       put 'leave_events/:id', to: 'events#leave'
-      post 'gcm_message', to: 'gcm#message'
+      post 'fcm_message', to: 'fcm#message'
     end
   end
 end

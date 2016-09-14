@@ -11,12 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151119035844) do
+ActiveRecord::Schema.define(version: 20160913050312) do
 
   create_table "devices", force: true do |t|
     t.integer "user_id"
     t.string  "registration_id"
     t.string  "uuid"
+    t.string  "os"
   end
 
   add_index "devices", ["user_id"], name: "index_devices_on_user_id", using: :btree
@@ -39,6 +40,7 @@ ActiveRecord::Schema.define(version: 20151119035844) do
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
     t.string   "source",             default: ""
+    t.datetime "end_at"
   end
 
   create_table "friend_group_memberships", force: true do |t|
@@ -140,6 +142,12 @@ ActiveRecord::Schema.define(version: 20151119035844) do
     t.string   "text"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "event_id"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
+    t.string   "source",             default: ""
   end
 
   create_table "statuses", force: true do |t|

@@ -26,7 +26,7 @@ gem 'jquery-rails'
 
 gem 'rails-api', '~> 0.2.1'
 gem 'active_model_serializers'
-gem 'gcm'
+gem 'fcm'
 
 # Use unicorn as the app server
 gem 'unicorn'

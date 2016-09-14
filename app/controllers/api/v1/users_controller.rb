@@ -27,7 +27,7 @@ class Api::V1::UsersController < Api::V1::ApiController
            status: :ok
   end
 
-  def gcm_register
+  def fcm_register
     current_device = Device.find_by_uuid(device_params[:uuid])
     current_device.update_attributes(device_params.permit(:registration_id))
   end
