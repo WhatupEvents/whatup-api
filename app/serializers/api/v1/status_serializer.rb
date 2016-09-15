@@ -5,7 +5,7 @@ class Api::V1::StatusSerializer < ActiveModel::Serializer
     if object.id.nil?
       if Rails.env != "development" 
         Resque.enqueue(
-          GcmMessageJob,
+          FcmMessageJob,
           {},
           object.user_id
         )
