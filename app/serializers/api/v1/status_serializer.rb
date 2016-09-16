@@ -4,6 +4,8 @@ class Api::V1::StatusSerializer < ActiveModel::Serializer
   def text
     if object.id.nil?
       if Rails.env != "development" 
+        #TODO: this is incomplete,
+        # not sure what it was supposed to do
         Resque.enqueue(
           FcmMessageJob,
           {},
