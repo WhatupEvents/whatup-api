@@ -6,15 +6,19 @@ class FcmMessageJob
 
     fcm = FCM.new("AIzaSyAlSPpjCGewFMOB58ExE8PmHxy7aje4D8w")
     # resp = fcm.send(
-    resp = fcm.send_with_notification_key(
-      Device.where(user_id: recipient_ids).map(&:registration_id),
-      {data: data})
-    Rails.logger.info resp.to_s
+    #   Device.where(user_id: recipient_ids).map(&:registration_id),
+    #   {data: data})
+    # Rails.logger.info resp.to_s
 
-    # Device.where(user_id: recipient_ids).map(&:registration_id).each do |reg_id|
-    #   resp = fcm.send_with_notification_key(reg_id, {data: data})
-    #   Rails.logger.info resp.to_s
-    # end
+    # resp = fcm.send_with_notification_key(
+    #   Device.where(user_id: recipient_ids).map(&:registration_id),
+    #   {data: data})
+    # Rails.logger.info resp.to_s
+
+    Device.where(user_id: recipient_ids).map(&:registration_id).each do |reg_id|
+      resp = fcm.send_with_notification_key(reg_id, {data: data})
+      Rails.logger.info resp.to_s
+    end
 
     # fcm = FCM.new("AIzaSyDkhn2fkoHTzghKXo-Jhkkofoq5Q_kRYtQ")
     # resp = fcm.send(
