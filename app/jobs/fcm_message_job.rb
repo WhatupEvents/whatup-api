@@ -5,10 +5,15 @@ class FcmMessageJob
     #TODO: gotta move this into an environment file
 
     fcm = FCM.new("AIzaSyAlSPpjCGewFMOB58ExE8PmHxy7aje4D8w")
-    Device.where(user_id: recipient_ids).map(&:registration_id).each do |reg_id|
-      resp = fcm.send(reg_id, {data: data})
-      Rails.logger.info resp.to_s
-    end
+    resp = fcm.send(
+      Device.where(user_id: recipient_ids).map(&:registration_id),
+      {data: data})
+    Rails.logger.info resp.to_s
+
+    # Device.where(user_id: recipient_ids).map(&:registration_id).each do |reg_id|
+    #   resp = fcm.send_with_notification_key(reg_id, {data: data})
+    #   Rails.logger.info resp.to_s
+    # end
 
     # fcm = FCM.new("AIzaSyDkhn2fkoHTzghKXo-Jhkkofoq5Q_kRYtQ")
     # resp = fcm.send(
