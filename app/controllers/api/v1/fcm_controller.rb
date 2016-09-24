@@ -10,11 +10,10 @@ class Api::V1::FcmController < Api::V1::ApiController
     if Rails.env != "development"
       recipient_ids.each do |recipient_id|
         Resque.enqueue(
-          FcmMessageJob,
-          { 
+          FcmMessageJob,{ 
             event_id: message.event_id,
-            event_name: message.event.name },
-            recipient_id
+            event_name: message.event.name
+          },recipient_id
         )
       end
     end
