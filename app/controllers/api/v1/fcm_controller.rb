@@ -7,7 +7,7 @@ class Api::V1::FcmController < Api::V1::ApiController
     sender = {sender_id: current_user.id}
     message = Message.create(sender.merge(message_params))
     recipient_ids = (message.event.participants - [current_user]).map(&:id)
-    if Rails.env != "development"
+    if Rails.env != "development" && current_user.id < 3
       recipient_ids.each do |recipient_id|
         Resque.enqueue(
           FcmMessageJob,{ 
