@@ -6,11 +6,11 @@ class Api::V1::StatusSerializer < ActiveModel::Serializer
       if Rails.env != "development" 
         #TODO: this is incomplete,
         # not sure what it was supposed to do
-        Resque.enqueue(
-          FcmMessageJob,
-          {},
-          object.user_id
-        )
+        # Resque.enqueue(
+        #   FcmMessageJob,
+        #   {},
+        #   object.user_id
+        # )
       end
       return ""
     end
