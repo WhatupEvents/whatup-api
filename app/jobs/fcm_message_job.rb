@@ -10,7 +10,7 @@ class FcmMessageJob
         data: {event_id: data['event_id']},
         content_available: true,
         priority: "high",
-        collapse_key: "#{data['event_id']}"
+        tag: "#{data['event_id']}"
       })
       Rails.logger.info resp.to_s
     end

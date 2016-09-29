@@ -1,6 +1,4 @@
 class User < ActiveRecord::Base
-  validates :email, uniqueness: true
-
   has_many :doorkeeper_access_tokens,
     foreign_key: :resource_owner_id,
     class_name: 'Doorkeeper::AccessToken',
