@@ -6,11 +6,10 @@ class FcmMessageJob
     fcm = FCM.new("AIzaSyAlSPpjCGewFMOB58ExE8PmHxy7aje4D8w")
     Device.where(user_id: recipient_id).map(&:registration_id).uniq.each do |reg_id|
       resp = fcm.send_with_notification_key(reg_id, {
-        notification: {title: data['event_name'], body: "#{data['event_name']} message"},
+        notification: {title: data['event_name'], body: "#{data['event_name']} message", tag: "#{data['event_id']}"},
         data: {event_id: data['event_id']},
         content_available: true,
-        priority: "high",
-        tag: "#{data['event_id']}"
+        priority: "high"
       })
       Rails.logger.info resp.to_s
     end
