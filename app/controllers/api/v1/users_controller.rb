@@ -28,7 +28,7 @@ class Api::V1::UsersController < Api::V1::ApiController
   end
 
   def fcm_register
-    current_device = Device.find_by_uuid(device_params[:uuid])
+    current_device = Device.where(uuid: device_params[:uuid], user_id: current_user.id)
     current_device.update_attributes(device_params.permit(:registration_id))
   end
 

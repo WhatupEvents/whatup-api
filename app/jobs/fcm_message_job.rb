@@ -9,7 +9,8 @@ class FcmMessageJob
       resp = fcm.send_with_notification_key(reg_id, {
         notification: {title: data['event_name'], body: "#{data['event_name']} message"},
         data: {event_id: data['event_id']},
-        content_available: true
+        content_available: true,
+        priority: "high"
       })
       Rails.logger.info resp.to_s
     end
