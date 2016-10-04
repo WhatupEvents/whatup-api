@@ -4,7 +4,7 @@ class Api::V1::UsersController < Api::V1::ApiController
   def create
     # when email is blank for whatever reason apple sends "" android sends nil
     # and so I get two different slightly broken users
-    @current_user = User.find_or_initialize_by(user_params)
+    @current_user = User.find_or_initialize_by(user_params['email'])
     if @current_user.new_record?
       @current_user.role = 'User'
       @current_user.save
