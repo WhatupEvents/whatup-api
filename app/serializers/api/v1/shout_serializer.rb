@@ -5,7 +5,7 @@ class Api::V1::ShoutSerializer < ActiveModel::Serializer
     object.image.url
   end
 
-  def sender
+  def shouter
     User.find(object.user_id).name
   end
 end
