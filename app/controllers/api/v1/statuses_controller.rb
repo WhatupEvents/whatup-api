@@ -11,7 +11,8 @@ class Api::V1::StatusesController < Api::V1::ApiController
   end
 
   def create
-    Status.create! status_params
+    status = Status.create! status_params
+    status.update_attribute(:text, status.text.capitalize)
     head :created
   rescue Exception => e
     Rails.logger.info e.to_s
