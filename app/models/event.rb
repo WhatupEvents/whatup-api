@@ -11,15 +11,15 @@ class Event < ActiveRecord::Base
   has_attached_file :image
   do_not_validate_attachment_file_type :image
 
-  @@to_mile = 1/68.703
+  @@from_mile = 1/68.703
 
   scope :near_user, ->(current, distance) do
     where('latitude > ? AND latitude < ? ', 
-          current.latitude.to_f-(distance*@@to_mile),
-          current.latitude.to_f+(distance*@@to_mile))
+          current.latitude.to_f-(distance*@@from_mile),
+          current.latitude.to_f+(distance*@@from_mile))
     .where('longitude > ? AND longitude < ?',
-           current.longitude.to_f-(distance*@@to_mile),
-           current.longitude.to_f+(distance*@@to_mile))
+           current.longitude.to_f-(distance*@@from_mile),
+           current.longitude.to_f+(distance*@@from_mile))
   end
 
   scope :pub, -> { where(public: true) }

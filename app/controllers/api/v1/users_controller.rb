@@ -2,8 +2,7 @@ class Api::V1::UsersController < Api::V1::ApiController
   doorkeeper_for :all, except: [:create, :authenticate]
 
   def create
-    # when email is blank for whatever reason apple sends "" android sends nil
-    # and so I get two different slightly broken users
+    user_params['email'] = user_params['first_name'] + '@' + user_params['last_name'] if user_params['email'].empty?
     @current_user = User.find_or_initialize_by(email: user_params['email'])
     if @current_user.new_record?
       @current_user.update(user_params)
