@@ -42,6 +42,7 @@ class Api::V1::UsersController < Api::V1::ApiController
     device.save
 
     render json: current_me,
+           include:  ['user', 'user.status'],
            serializer: Api::V1::MeSerializer,
            status: status
   end
