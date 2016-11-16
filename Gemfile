@@ -6,7 +6,7 @@ gem 'rails', '4.1.1'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 # gem 'sshkit', '1.3.0'
-gem 'mysql2'
+gem 'mysql2', '~> 0.3.13'
 
 # Gems used only for assets and not required
 # in production environments by default.
