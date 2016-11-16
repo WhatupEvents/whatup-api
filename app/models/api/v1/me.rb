@@ -1,4 +1,5 @@
 class Api::V1::Me
+  include ActiveModel::AttributeMethods
   include ActiveModel::Serialization
 
   attr_accessor :user, :access_token

@@ -47,11 +47,7 @@ class Api::V1::UsersController < Api::V1::ApiController
   end
 
   def current_me
-    Rails.logger.info @current_user.to_s
-    Rails.logger.info process_access_token.to_s
-    me = Api::V1::Me.new(@current_user, process_access_token)
-    Rails.logger.info me.to_s
-    return me
+    return Api::V1::Me.new(@current_user, process_access_token)
   end
 
   def device_params
