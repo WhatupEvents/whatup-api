@@ -5,7 +5,6 @@ class Api::V1::EventsController < Api::V1::ApiController
     distance = params[:distance] || 10.0
     render json: current_user.current_events | Event.pub.current.near_user(current_user, distance),
            each_serializer: Api::V1::EventSerializer,
-           root: "events",
            status: :ok
   end
 

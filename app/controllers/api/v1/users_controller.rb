@@ -41,10 +41,9 @@ class Api::V1::UsersController < Api::V1::ApiController
     device.registration_id = device_params[:registration_id]
     device.save
 
+    # include:  ['user', 'user.status', 'access_token'],
     render json: current_me,
-           include:  ['user', 'user.status', 'access_token'],
            serializer: Api::V1::MeSerializer,
-           root: "me",
            status: status
   end
 
