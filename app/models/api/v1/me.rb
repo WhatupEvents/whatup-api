@@ -1,6 +1,5 @@
-class Api::V1::Me < ActiveRecord::Base
-  # include ActiveModel::AttributeMethods
-  # include ActiveModel::Serialization
+class Api::V1::Me
+  include ActiveModel::SerializerSupport
 
   attr_accessor :user, :access_token
 
