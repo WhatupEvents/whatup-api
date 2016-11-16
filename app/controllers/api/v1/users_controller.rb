@@ -44,6 +44,7 @@ class Api::V1::UsersController < Api::V1::ApiController
     render json: current_me,
            include:  ['user', 'user.status', 'access_token'],
            serializer: Api::V1::MeSerializer,
+           root: "me",
            status: status
   end
 
