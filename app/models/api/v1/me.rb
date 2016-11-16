@@ -1,10 +1,9 @@
 class Api::V1::Me
-  include ActiveModel::SerializerSupport
+  include ActiveModel::Serialization
 
-  attr_accessor :user, :access_token
+  attr_accessor :attributes
 
-  def initialize(user, access_token)
-    @user = user
-    @access_token = access_token
+  def initialize(attributes = {})
+    @attributes = attributes
   end
 end
