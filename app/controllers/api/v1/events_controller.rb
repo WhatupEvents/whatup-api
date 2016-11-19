@@ -30,6 +30,14 @@ class Api::V1::EventsController < Api::V1::ApiController
     end
 
     event.update_attributes! create_event_params
+
+    Resque.enqueue(
+      FcmMessageJob, {
+        event_id: event.id,
+        event_name: event.name,
+        updated_at: event.updated_at
+      },object.user_id
+    )
     render json: event,
            serializer: Api::V1::EventSerializer,
            status: :ok

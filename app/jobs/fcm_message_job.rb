@@ -5,7 +5,6 @@ class FcmMessageJob
     #TODO: gotta move this into an environment file
     fcm = FCM.new("AIzaSyAlSPpjCGewFMOB58ExE8PmHxy7aje4D8w")
     Device.where(user_id: recipient_id).map(&:registration_id).uniq.each do |reg_id|
-
       if data.has_key? 'event_name'
         if data.has_key? 'updated_at'
           resp = fcm.send_with_notification_key(reg_id, {
