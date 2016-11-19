@@ -4,6 +4,7 @@ class FcmMessageJob
   def self.perform(data, recipient_id)
     #TODO: gotta move this into an environment file
     fcm = FCM.new("AIzaSyAlSPpjCGewFMOB58ExE8PmHxy7aje4D8w")
+    fcm = FCM.new("AAAAbeSD7bc:APA91bH5ilSjjNzDQOhIZoIJJFWxVTImMXf8ILD_MtUmqWPHOUoNdwmeUH5lEFC4mPv5phtWI3ucXe49AaFC8slJzLqseV7ZYrQ7GrlbTy9eHEpAAN_-YsH_3SNuSjHF_0G5CxLDt-LN0RgloT_igSj9N2diVKgSVw")
     Device.where(user_id: recipient_id).map(&:registration_id).uniq.each do |reg_id|
       if data.has_key? 'event_name'
         if data.has_key? 'updated_at'
