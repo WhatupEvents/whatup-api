@@ -28,7 +28,7 @@ class Api::V1::UsersController < Api::V1::ApiController
   end
 
   def fcm_register
-    current_device = Device.where(uuid: device_params[:uuid], user_id: current_user.id)
+    current_device = Device.where(user_id: current_user.id, os: device_params[:os])
     current_device.update_attributes(device_params.permit(:registration_id))
   end
 
@@ -36,8 +36,7 @@ class Api::V1::UsersController < Api::V1::ApiController
 
   def render_me(status)
     # Device.find_or_create_by({user_id: @current_user.id}.merge(device_params)} ??????
-    device = Device.find_or_initialize_by(user_id: @current_user.id, uuid: device_params[:uuid])
-    device.os = device_params[:os]
+    device = Device.find_or_initialize_by(user_id: @current_user.id, os: device_params[:os])
     device.registration_id = device_params[:registration_id]
     device.save
 
