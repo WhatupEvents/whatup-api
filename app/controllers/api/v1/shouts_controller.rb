@@ -28,7 +28,7 @@ class Api::V1::ShoutsController < Api::V1::ApiController
     last_id = last ? last.id : 0
     shouts = Shout.where('created_at > ?', Time.now-7.hour)
       .where(event_id: Event.current.pub.near_user(current_user, 2.0).map(&:id))
-      .where('id > ?', last_id)
+      .where('id < ?', last_id)
       .limit(15).order(created_at: :desc)
     if shouts.present?
       render json: shouts,
