@@ -24,10 +24,14 @@ class Api::V1::ShoutsController < Api::V1::ApiController
   private
 
   def render_shouts
+    last = params.has_key?(:last_id) ? Shout.find(params.delete(:last_id)) : nil
+    last_id = last ? last.id : 0
     shouts = Shout.where('created_at > ?', Time.now-7.hour)
-      .where(event_id: Event.current.pub.near_user(current_user, 2.0).map(&:id)).limit(50)
+      .where(event_id: Event.current.pub.near_user(current_user, 2.0).map(&:id))
+      .where('id > ?', last_id)
+      .limit(15).order(created_at: :desc)
     if shouts.present?
-      render json: shouts.reverse,
+      render json: shouts,
              each_serializer: Api::V1::ShoutSerializer,
              status: :ok
     else
@@ -36,6 +40,6 @@ class Api::V1::ShoutsController < Api::V1::ApiController
   end
 
   def shout_params
-    params.except(:format, :id).permit(:user_id, :text, :source, :image, :event_id)
+    params.except(:format, :id).permit(:user_id, :text, :source, :image, :event_id, :last_id)
   end
 end
