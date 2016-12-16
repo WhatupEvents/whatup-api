@@ -8,6 +8,6 @@ class Api::V1::EventSerializer < ActiveModel::Serializer
   end
 
   def notify
-    serialization_options['current_user'] + ' ' + serialization_options[:current_user]
+    "#{serialization_options['current_user']} #{serialization_options[:current_user]}"
   end
 end
