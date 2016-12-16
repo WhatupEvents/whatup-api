@@ -67,7 +67,7 @@ class Api::V1::EventsController < Api::V1::ApiController
   end
 
   def notify
-    event = Event.find(params[:id])
+    event = Event.find(params[:event_id])
     participant_relationship = event.participant_relationships.select{|p| p.participant_id == current_user.id}[0]
     participant_relationship.update_attribute('notify', !participant_relationship.notify)
     render json: {},
