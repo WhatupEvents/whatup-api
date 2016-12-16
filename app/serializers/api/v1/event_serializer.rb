@@ -8,6 +8,6 @@ class Api::V1::EventSerializer < ActiveModel::Serializer
   end
 
   def notify
-    "#{serialization_options['current_user']} #{serialization_options[:current_user]}"
+    object.participants.select{|p| p.participant_id == serialization_options[:current_user]}[0].notify
   end
 end
