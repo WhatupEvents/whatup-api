@@ -34,14 +34,16 @@ class Api::V1::EventsController < Api::V1::ApiController
     event.update_attributes! create_event_params
 
     if Rails.env != "development"
-      (event.participants - [current_user]).each do |recipient|
-        Resque.enqueue(
-          FcmMessageJob, {
-            event_id: event.id,
-            event_name: event.name,
-            updated_at: event.updated_at
-          },recipient.id
-        )
+      event.participant_relationships.each do |participant|
+        if participant.notify && (participant.participant_id != current_user.id)
+          Resque.enqueue(
+            FcmMessageJob, {
+              event_id: event.id,
+              event_name: event.name,
+              updated_at: event.updated_at
+            },participant.participant_id
+          )
+        end
       end
     end
     render json: event,

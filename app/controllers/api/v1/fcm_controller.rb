@@ -6,15 +6,16 @@ class Api::V1::FcmController < Api::V1::ApiController
   def message
     sender = {sender_id: current_user.id}
     message = Message.create(sender.merge(message_params))
-    recipient_ids = (message.event.participants - [current_user]).map(&:id)
     if Rails.env != "development"
-      recipient_ids.each do |recipient_id|
-        Resque.enqueue(
-          FcmMessageJob,{ 
-            event_id: message.event_id,
-            event_name: message.event.name
-          },recipient_id
-        )
+      message.event.participant_relationships.each do |participant|
+        if participant.notify && (participant.participant_id != current_user.id)
+          Resque.enqueue(
+            FcmMessageJob,{ 
+              event_id: message.event_id,
+              event_name: message.event.name
+            },participant.participant_id
+          )
+        end
       end
     end
     render json: {},
