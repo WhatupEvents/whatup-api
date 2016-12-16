@@ -18,7 +18,9 @@ Whatsup::Application.routes.draw do
       get :most_upped, to: 'statuses#most_upped', as: 'most_upped'
       resources :messages, only: [:index]
       get :random_messages, to: 'messages#random'
-      resources :events, only: [:index, :create, :update, :destroy]
+      resources :events, only: [:index, :create, :update, :destroy] do
+        get :notify, to: 'events#notify', as: 'events_notify'
+      end
       put 'events', to: 'events#index'
       put 'leave_events/:id', to: 'events#leave'
       post 'fcm_message', to: 'fcm#message'
