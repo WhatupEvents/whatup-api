@@ -5,7 +5,8 @@ class Api::V1::EventsController < Api::V1::ApiController
     distance = params[:distance] || 10.0
     render json: current_user.current_events | Event.pub.current.near_user(current_user, distance),
            each_serializer: Api::V1::EventSerializer,
-           status: :ok
+           status: :ok,
+           current_user: current_user.id
   end
 
   def create
@@ -13,7 +14,8 @@ class Api::V1::EventsController < Api::V1::ApiController
     event.participants = [current_user]
     render json: event,
            serializer: Api::V1::EventSerializer,
-           status: :created
+           status: :created,
+           current_user: current_user.id
   rescue Exception => e
     Rails.logger.info e.to_s
     head :bad_request
@@ -44,7 +46,8 @@ class Api::V1::EventsController < Api::V1::ApiController
     end
     render json: event,
            serializer: Api::V1::EventSerializer,
-           status: :ok
+           status: :ok,
+           current_user: current_user.id
   rescue Exception => e
     Rails.logger.info e.to_s
     head :bad_request
