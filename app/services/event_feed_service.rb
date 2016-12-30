@@ -15,8 +15,11 @@ class EventFeedService
 
   def events_to_database
     @events.each do |ev|
-      Event.create(
-        feed_id: ev["id"].to_i,
+      event = Event.find_or_create_by(
+        feed_id: ev["id"].to_i
+      )
+      
+      event.update_attributes(
         name: ev["title"],
         details: ev["description"],
         start_time: Time.parse(ev["starts"]),
