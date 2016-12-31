@@ -41,6 +41,7 @@ gem 'capistrano-bundler', '~> 1.1.2'
 gem "capistrano-resque", "~> 0.2.2", require: false
 gem 'resque'
 gem 'resque-web', require: 'resque_web'
+gem 'resque-scheduler-web'
 
 # Oauth api authentication
 gem 'doorkeeper', '~> 1.4.0'

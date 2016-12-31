@@ -1,5 +1,5 @@
 # config valid only for Capistrano 3.1
-lock '3.6.1'
+lock '3.7.1'
 
 set :application, 'whatup'
 set :repo_url, 'git@github.com:fellou89/whatup-api.git'
@@ -59,16 +59,6 @@ namespace :deploy do
       # end
     end
   end
-end
-
-namespace :resque do
-  task :setup_schedule => :setup do
-    require 'resque-scheduler'
-
-    Resque.schedule = YAML.load_file('config/resque_schedule.yml')
-  end
-
-  task :scheduler => :setup_schedule
 end
 
 after "deploy", "resque:restart"
