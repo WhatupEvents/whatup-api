@@ -1,0 +1,6 @@
+clear_leaderboards_contributors:
+  cron: "07 1 * * *"
+  class: "ClearLeaderboards"
+  queue: low
+  args: contributors
+  description: "This job resets the weekly leaderboard for contributions"

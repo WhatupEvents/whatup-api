@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160913050312) do
+ActiveRecord::Schema.define(version: 20161216033616) do
 
   create_table "devices", force: true do |t|
     t.integer "user_id"
@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(version: 20160913050312) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "created_by_id"
-    t.string   "details"
+    t.text     "details"
     t.string   "location"
     t.integer  "symbol_id",                       null: false
     t.datetime "start_time"
@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 20160913050312) do
     t.datetime "image_updated_at"
     t.string   "source",             default: ""
     t.datetime "end_at"
+    t.integer  "feed_id"
   end
 
   create_table "friend_group_memberships", force: true do |t|
@@ -132,6 +133,7 @@ ActiveRecord::Schema.define(version: 20160913050312) do
     t.integer  "participant_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "notify",         default: true
   end
 
   add_index "participant_relationships", ["event_id"], name: "index_participant_relationships_on_event_id", using: :btree

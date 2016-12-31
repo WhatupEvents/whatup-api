@@ -62,3 +62,4 @@ namespace :deploy do
 end
 
 after "deploy", "resque:restart"
+after "resque:restart", "resque:scheduler"
