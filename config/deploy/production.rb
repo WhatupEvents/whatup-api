@@ -5,7 +5,7 @@ role :app, [host]
 role :web, [host]
 role :db,  host
 
-set :branch, environment
+set :branch, 'master'
 set :rails_env, environment
 set :stage, environment
 
@@ -14,6 +14,8 @@ role :resque_scheduler, [ host ]
 
 set :default_environment, 'RAILS_ENV' => environment
 set :application, host
+
+set :ssh_options, keys: ['~/.ssh/whatup.pem'], forward_agent: true, user: 'ubuntu'
 
 why_here = "/var/www/#{host}"
 unicorn_pid = "#{why_here}/current/tmp/pids/unicorn.pid"

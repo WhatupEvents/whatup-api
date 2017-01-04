@@ -16,6 +16,8 @@ role :resque_scheduler, [ host ]
 set :default_environment, 'RAILS_ENV' => environment
 set :application, host
 
+set :ssh_options, keys: ['~/.ssh/whatup_staging.pem'], forward_agent: true, user: 'ubuntu'
+
 # deploy_to = "/srv/www/#{directory}"
 why_here = "/var/www/#{host}"
 unicorn_pid = "#{why_here}/current/tmp/pids/unicorn.pid"

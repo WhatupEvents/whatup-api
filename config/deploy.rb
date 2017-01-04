@@ -39,8 +39,6 @@ set :log_level, :debug
 # Default value for keep_releases is 5
 set :keep_releases, 3
 
-set :ssh_options, keys: ['~/.ssh/whatup.pem'], forward_agent: true, user: 'ubuntu'
-
 namespace :deploy do
 
   desc 'Restart application'
