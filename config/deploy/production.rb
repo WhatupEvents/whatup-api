@@ -1,13 +1,44 @@
-# Simple Role Syntax
-# ==================
-# Supports bulk-adding hosts to roles, the primary server in each group
-# is considered to be the first unless any hosts have the primary
-# property set.  Don't declare `role :all`, it's a meta role.
+host = '54.146.40.88'
+environment = 'production'
 
-role :app, %w{deploy@example.com}
-role :web, %w{deploy@example.com}
-role :db,  %w{deploy@example.com}
+role :app, [host]
+role :web, [host]
+role :db,  host
 
+set :branch, environment
+set :rails_env, environment
+set :stage, environment
+
+role :resque_worker, [ host ]
+role :resque_scheduler, [ host ]
+
+set :default_environment, 'RAILS_ENV' => environment
+set :application, host
+
+why_here = "/var/www/#{host}"
+unicorn_pid = "#{why_here}/current/tmp/pids/unicorn.pid"
+unicorn_conf = "#{why_here}/shared/config/unicorn.rb"
+
+namespace :deploy do
+  task :start do               
+    on roles(:app) do          
+      execute "cd #{why_here}/current && "\
+      "bundle exec unicorn_rails -E #{environment} -c #{unicorn_conf} -D"
+    end
+  end
+
+  task :stop do                
+    on roles(:app) do          
+      execute "sudo kill -QUIT $(cat #{unicorn_pid})"
+    end
+  end
+
+  task :restart do             
+    on roles(:app) do          
+      execute "kill -USR2 $(cat #{unicorn_pid})"
+    end
+  end
+end
 
 # Extended Server Syntax
 # ======================
@@ -15,7 +46,7 @@ role :db,  %w{deploy@example.com}
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
 
-server 'example.com', user: 'deploy', roles: %w{web app}, my_property: :my_value
+# server 'example.com', user: 'deploy', roles: %w{web app}, my_property: :my_value
 
 
 # Custom SSH Options
