@@ -8,8 +8,18 @@ class Event < ActiveRecord::Base
   has_many :participant_relationships, dependent: :destroy
   has_many :participants, through: :participant_relationships
 
-  has_attached_file :image
+  has_attached_file :image,
+    storage: :s3,
+    s3_credentials: Proc.new{|p| p.instance.s3_credentials}
   do_not_validate_attachment_file_type :image
+
+  def s3_credentials
+    {
+     bucket: "whatupevents-images",
+     access_key_id: "AKIAIF5LMWPOUEEJMVCA",
+     secret_access_key: "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"
+    }
+  end
 
   @@from_mile = 1/68.703
 
