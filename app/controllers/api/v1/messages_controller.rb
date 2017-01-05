@@ -2,7 +2,11 @@ class Api::V1::MessagesController < Api::V1::ApiController
   doorkeeper_for :all
 
   def index
+    last = params.has_key?(:last_id) ? Message.find(message_params.delete(:last_id)) : Message.last
     messages = Message.where(event_id: message_params[:event_id])
+      .where('created_at <= ?', last.created_at)
+      .limit(50).order(created_at: :desc)
+    
     return_messages(messages)
   end
 
@@ -27,6 +31,6 @@ class Api::V1::MessagesController < Api::V1::ApiController
   end
 
   def message_params
-    params.require(:messages).permit(:my_id, :event_id)
+    params.require(:messages).permit(:my_id, :event_id, :last_id)
   end
 end

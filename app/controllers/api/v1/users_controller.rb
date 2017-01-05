@@ -24,7 +24,7 @@ class Api::V1::UsersController < Api::V1::ApiController
       FriendRelationship.find_or_create_by(person_id: current_user.id, friend_id: friend.id)
       FriendRelationship.find_or_create_by(person_id: friend.id, friend_id: current_user.id)
     end
-    render json: current_user.friends,
+    render json: current_user.friends.order(name: :asc),
            each_serializer: Api::V1::FriendSerializer,
            status: :ok
   end
