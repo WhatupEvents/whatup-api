@@ -10,6 +10,7 @@ class Event < ActiveRecord::Base
 
   has_attached_file :image,
     storage: :s3,
+    :s3_region => 'us-east-2',
     s3_credentials: Proc.new{|p| p.instance.s3_credentials}
   do_not_validate_attachment_file_type :image
 
