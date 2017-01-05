@@ -1,5 +1,5 @@
 class Api::V1::MessageSerializer < ActiveModel::Serializer
-  attributes :sender, :event_id, :text, :media, :source, :created_at, :url
+  attributes :id, :sender, :event_id, :text, :media, :source, :created_at, :url
 
   def url
     object.image.url
