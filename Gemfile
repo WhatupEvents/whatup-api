@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '4.1.2'
+gem 'rails', '4.2.2'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -46,8 +46,8 @@ gem 'resque-scheduler-web'
 
 # Oauth api authentication
 gem 'doorkeeper', '~> 1.4.0'
-gem "paperclip", "~> 4.2"
-gem 'aws-sdk'
+gem "paperclip", "~> 5.0.0"
+gem 'aws-sdk', '~> 2.3.0'
 
 # To use debugger
 gem 'pry-byebug'
