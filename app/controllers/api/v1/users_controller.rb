@@ -9,6 +9,9 @@ class Api::V1::UsersController < Api::V1::ApiController
       @current_user.save
       render_me :created
     else
+      if @current_user.email.include? "no_email"
+        @current_user.update_attribute('email', user_params['email'])
+      end
       render_me :ok
     end
   rescue Exception => e
