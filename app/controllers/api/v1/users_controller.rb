@@ -2,8 +2,7 @@ class Api::V1::UsersController < Api::V1::ApiController
   doorkeeper_for :all, except: [:create, :authenticate]
 
   def create
-    user_params['email'] = user_params['first_name'] + '@' + user_params['last_name'] if user_params['email'].empty?
-    @current_user = User.find_or_initialize_by(email: user_params['email'])
+    @current_user = User.find_or_initialize_by(fb_id: user_params['fb_id'])
     if @current_user.new_record?
       @current_user.update(user_params)
       @current_user.role = 'User'
