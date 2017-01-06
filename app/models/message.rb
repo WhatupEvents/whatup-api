@@ -7,7 +7,7 @@ class Message < ActiveRecord::Base
     storage: :s3,
     bucket: "whatupevents-images",
     :s3_region => 'us-east-2',
-    url: :s3_domain_url,
+    url: ":s3_domain_url",
     s3_credentials: Proc.new{|p| p.instance.s3_credentials}
   do_not_validate_attachment_file_type :image
 
