@@ -4,7 +4,7 @@ class Api::V1::EventSerializer < ActiveModel::Serializer
   has_many :participants, each_serializer: Api::V1::ParticipantSerializer
 
   def url
-    object.image.url
+    object.image.url unless object.image.url.include? "missing.png"
   end
 
   def notify
