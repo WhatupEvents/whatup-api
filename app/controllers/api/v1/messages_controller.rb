@@ -1,5 +1,5 @@
 class Api::V1::MessagesController < Api::V1::ApiController
-  doorkeeper_for :all
+  doorkeeper_for :all, except: [:download]
 
   def index
     last = message_params.has_key?(:last_id) ? Message.find(message_params.delete(:last_id)) : Message.last
@@ -17,7 +17,7 @@ class Api::V1::MessagesController < Api::V1::ApiController
 
   def download
     Rails.logger.info params[:image_url]
-    object_key = params[:image_url].split('whatupevents-images/')[1]
+    object_key = params[:image_url].replace('/')
     Rails.logger.info object_key
 
     obj = Aws::S3::Object.new(
