@@ -5,9 +5,9 @@ Whatsup::Application.routes.draw do
 
   mount ResqueWeb::Engine => 'resque/web'
 
+  get 'https/:image_url', to: 'messages#download', as: 'image_download'
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
-      get 'https/:image_url', to: 'messages#download', as: 'image_download'
       post 'friends', to: 'users#friends', as: 'users_friends'
       resources :users, only: [:create] do
         post 'fcm_register', to: 'users#fcm_register', as: 'users_fcm_register'
