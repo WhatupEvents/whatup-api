@@ -16,9 +16,7 @@ class Api::V1::MessagesController < Api::V1::ApiController
   end
 
   def download
-    Rails.logger.info params[:image_url]
     object_key = params[:image_url].gsub('-','/').gsub('_','.')
-    Rails.logger.info object_key
 
     obj = Aws::S3::Object.new(
       bucket_name: 'whatupevents-images',
@@ -28,9 +26,7 @@ class Api::V1::MessagesController < Api::V1::ApiController
       region: 'us-east-2'
     )
 
-    url = obj.presigned_url(:get, expires_in: 300)
-    Rails.logger.info url
-    redirect_to url
+    redirect_to obj.presigned_url(:get, expires_in: 300)
   end
 
   private
