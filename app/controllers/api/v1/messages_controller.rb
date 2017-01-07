@@ -20,7 +20,7 @@ class Api::V1::MessagesController < Api::V1::ApiController
     object_key = params[:image_url].split('whatupevents-images/')[1]
     Rails.logger.info object_key
 
-    obj = Object.new(
+    obj = Aws::S3::Object.new(
       bucket_name: 'whatupevents-images',
       key: object_key,
       access_key_id: 'AKIAJSKGHQFVPEXZZGMA',
