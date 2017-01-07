@@ -19,13 +19,16 @@ class Api::V1::MessagesController < Api::V1::ApiController
     Rails.logger.info params[:image_url]
     object_key = params[:image_url].split('whatupevents-images/')[1]
     Rails.logger.info object_key
-    s3 = Aws::S3::Resource.new(
-      region: 'us-east-2',
+
+    obj = Object.new(
+      bucket_name: 'whatupevents-images',
+      key: object_key,
       access_key_id: "AKIAJSKGHQFVPEXZZGMA",
       secret_access_key: "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"
-    )
+      region: 'us-east-2',
+    })
 
-    url = s3.bucket('whatupevents-images').object(object_key).presigned_url(:get, expires_in: 300)
+    url = obj.presigned_url(:get, expires_in: 300)
     Rails.logger.info url
     redirect_to url
   end
