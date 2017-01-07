@@ -4,12 +4,12 @@ class Message < ActiveRecord::Base
   belongs_to :event
 
   has_attached_file :image,
-    storage: :s3,
-    bucket: "whatupevents-images",
+    :storage => :s3,
+    :bucket => "whatupevents-images",
     :s3_region => 'us-east-2',
-    url: ":s3_domain_url",
-    path: ":class/:attachment/:id/:filename",
-    s3_credentials: Proc.new{|p| p.instance.s3_credentials}
+    :s3_permissions => :private,
+    :path => ":class/:attachment/:id/:filename",
+    :s3_credentials => Proc.new{|p| p.instance.s3_credentials}
   do_not_validate_attachment_file_type :image
 
   def s3_credentials
