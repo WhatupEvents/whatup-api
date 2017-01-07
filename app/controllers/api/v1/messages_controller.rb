@@ -25,7 +25,7 @@ class Api::V1::MessagesController < Api::V1::ApiController
       secret_access_key: "kUireXbm3eT4E7l6lPqeU7Ddm04yRaZBZLi2xss7"
     )
 
-    url = s3.bucket('whatupevents-images').key(object_key).presigned_url(:get, expires_in: 300)
+    url = s3.bucket('whatupevents-images').object(object_key).presigned_url(:get, expires_in: 300)
     Rails.logger.info url
     redirect_to url
   end
