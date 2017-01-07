@@ -23,10 +23,10 @@ class Api::V1::MessagesController < Api::V1::ApiController
     obj = Object.new(
       bucket_name: 'whatupevents-images',
       key: object_key,
-      access_key_id: "AKIAJSKGHQFVPEXZZGMA",
-      secret_access_key: "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"
-      region: 'us-east-2',
-    })
+      access_key_id: 'AKIAJSKGHQFVPEXZZGMA',
+      secret_access_key: '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',
+      region: 'us-east-2'
+    )
 
     url = obj.presigned_url(:get, expires_in: 300)
     Rails.logger.info url
