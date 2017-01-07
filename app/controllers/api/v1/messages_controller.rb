@@ -16,7 +16,9 @@ class Api::V1::MessagesController < Api::V1::ApiController
   end
 
   def download
-    object_key = param[:image_url].split('whatupevents-images/')[1]
+    Rails.logger.info params[:image_url]
+    object_key = params[:image_url].split('whatupevents-images/')[1]
+    Rails.logger.info object_key
     s3 = Aws::S3::Resource.new(
       region: 'us-east-2',
       access_key_id: "AKIAJSKGHQFVPEXZZGMA",
