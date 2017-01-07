@@ -15,6 +15,19 @@ class Api::V1::MessagesController < Api::V1::ApiController
     return_messages(messages)
   end
 
+  def download
+    object_key = param[:image_url].split('whatupevents-images/')[1]
+    s3 = Aws::S3::Resource.new(
+      region: 'us-east-2',
+      access_key_id: "AKIAJSKGHQFVPEXZZGMA",
+      secret_access_key: "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"
+    )
+
+    url = s3.bucket('whatupevents-images').key(object_key).presigned_url(:get, expires_in: 300)
+    Rails.logger.info url
+    redirect_to url
+  end
+
   private
 
   def return_messages(messages)
