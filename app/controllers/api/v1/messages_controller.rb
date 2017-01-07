@@ -17,7 +17,7 @@ class Api::V1::MessagesController < Api::V1::ApiController
 
   def download
     Rails.logger.info params[:image_url]
-    object_key = params[:image_url].gsub('-','/')
+    object_key = params[:image_url].gsub('-','/').gsub('_','.')
     Rails.logger.info object_key
 
     obj = Aws::S3::Object.new(
