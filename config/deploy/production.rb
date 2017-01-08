@@ -1,4 +1,4 @@
-host = '54.163.121.191'
+host = '54.227.93.139'
 environment = 'production'
 
 role :app, [host]
