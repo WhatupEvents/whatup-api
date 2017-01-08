@@ -4,7 +4,9 @@ class Api::V1::EventSerializer < ActiveModel::Serializer
   has_many :participants, each_serializer: Api::V1::ParticipantSerializer
 
   def url
-    object.image.url unless object.image.url.include? "missing.png"
+    unless object.image.url.include? "missing.png"
+      object.image.url.split('whatupevents-images/')[1].split('?')[0].gsub('/', '-').gsub('.','_')
+    end
   end
 
   def notify

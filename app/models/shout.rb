@@ -3,16 +3,20 @@ class Shout < ActiveRecord::Base
   belongs_to :event
 
   has_attached_file :image,
-    storage: :s3,
+    :storage => :s3,
+    :bucket => 'whatupevents-images',
     :s3_region => 'us-east-2',
-    s3_credentials: Proc.new{|p| p.instance.s3_credentials}
+    :s3_host_name => 's3.us-east-2.amazonaws.com',
+    :s3_permissions => :private,
+    :path => ':class/:attachment/:id/:filename',
+    :s3_credentials => Proc.new{|p| p.instance.s3_credentials}
   do_not_validate_attachment_file_type :image
 
   def s3_credentials
     {
-     bucket: "whatupevents-images",
-     access_key_id: "AKIAIF5LMWPOUEEJMVCA",
-     secret_access_key: "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"
+     access_key_id: "AKIAJSKGHQFVPEXZZGMA",
+     secret_access_key: "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"
     }
   end
+
 end

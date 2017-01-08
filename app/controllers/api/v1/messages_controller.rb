@@ -26,7 +26,7 @@ class Api::V1::MessagesController < Api::V1::ApiController
       region: 'us-east-2'
     )
 
-    redirect_to obj.presigned_url(:get, expires_in: 300)
+    redirect_to obj.presigned_url(:get, expires_in: 60*60*24*3)
   end
 
   private

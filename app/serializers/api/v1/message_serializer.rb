@@ -3,7 +3,7 @@ class Api::V1::MessageSerializer < ActiveModel::Serializer
 
   def url
     unless object.image.url.include? "missing.png"
-      'api/v1/download/' + object.image.url.split('whatupevents-images/')[1].split('?')[0].gsub('/', '-').gsub('.','_')
+      object.image.url.split('whatupevents-images/')[1].split('?')[0].gsub('/', '-').gsub('.','_')
     end
   end
 
