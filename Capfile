@@ -9,23 +9,24 @@ require 'capistrano/safe_deploy_to'
 
 require "capistrano-resque"
 
-# Includes tasks from other gems included in your Gemfile
-#
-# For documentation on these, see for example:
-#
-#   https://github.com/capistrano/rvm
-#   https://github.com/capistrano/rbenv
-#   https://github.com/capistrano/chruby
-#   https://github.com/capistrano/bundler
-#   https://github.com/capistrano/rails
-#
-require 'capistrano/rvm'
-# require 'capistrano/rbenv'
-# require 'capistrano/chruby'
-require 'capistrano/bundler'
-# require 'capistrano/rails/assets'
+require "capistrano/scm/git"
+install_plugin Capistrano::SCM::Git
+
+# require 'capistrano/rvm'
+require 'rvm1/capistrano3'
 require 'capistrano/rails/migrations'
 
 # Loads custom tasks from `lib/capistrano/tasks' if you have any defined.
 Dir.glob('lib/capistrano/tasks/*.rake').each { |r| import r }
 Dir.glob('lib/capistrano/tasks/*.cap').each { |r| import r }
+
+task :query_interactive do
+  on 'ubuntu@54.146.179.63' do
+    info capture("[[ $- == *i* ]] && echo 'Interactive' || echo 'Not interactive'")
+  end
+end
+task :query_login do
+  on 'ubuntu@54.146.179.63' do
+    info capture("shopt -q login_shell && echo 'Login shell' || echo 'Not login shell'")
+  end
+end

@@ -1,5 +1,4 @@
 host = '52.11.163.139'
-# directory = 'staging.whatup.com'
 environment = 'staging'
 
 role :app, [host]
@@ -18,7 +17,6 @@ set :application, host
 
 set :ssh_options, keys: ['~/.ssh/whatup_staging.pem'], forward_agent: true, user: 'ubuntu'
 
-# deploy_to = "/srv/www/#{directory}"
 why_here = "/var/www/#{host}"
 unicorn_pid = "#{why_here}/current/tmp/pids/unicorn.pid"
 unicorn_conf = "#{why_here}/shared/config/unicorn.rb"
