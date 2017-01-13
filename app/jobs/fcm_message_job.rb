@@ -9,14 +9,14 @@ class FcmMessageJob
       if data.has_key? 'event_name'
         if data.has_key? 'updated_at'
           resp = fcm.send_with_notification_key(reg_id, {
-            notification: {title: data['event_name'], body: "has been updated", tag: "#{data['event_id']}_updt"},
+            notification: {title: data['event_name'], body: "has been updated", tag: "#{data['event_id']}_updt", sound: "whatupPop"},
             data: {event_id: data['event_id']},
             content_available: true,
             priority: "high"
           })
         else
           resp = fcm.send_with_notification_key(reg_id, {
-            notification: {title: data['event_name'], body: "#{data['event_name']} message", tag: "#{data['event_id']}_msg"},
+            notification: {title: data['event_name'], body: "#{data['event_name']} message", tag: "#{data['event_id']}_msg", sound: "whatupPop"},
             data: {event_id: data['event_id']},
             content_available: true,
             priority: "high"
