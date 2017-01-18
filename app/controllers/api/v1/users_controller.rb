@@ -2,16 +2,14 @@ class Api::V1::UsersController < Api::V1::ApiController
   doorkeeper_for :all, except: [:create, :authenticate]
 
   def create
-    @current_user = User.find_or_initialize_by(fb_id: user_params['fb_id'])
+    @current_user = User.where('fb_id = ? or email = ?', user_params['fb_id'], user_params['email']).first || User.new
     if @current_user.new_record?
       @current_user.update(user_params)
       @current_user.role = 'User'
       @current_user.save
       render_me :created
     else
-      if @current_user.email.include? "no_email"
-        @current_user.update_attribute('email', user_params['email'])
-      end
+      @current_user.update_attribute('email', user_params['email'])
       render_me :ok
     end
   rescue Exception => e

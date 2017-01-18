@@ -2,6 +2,7 @@ class EventFeedService
 
   attr_accessor :url
   attr_accessor :events
+  attr_accessor :parsed
 
   def initialize(url = 'http://events.ucf.edu/')
     @url = url
@@ -18,10 +19,15 @@ class EventFeedService
       event = Event.find_or_create_by(
         feed_id: ev["id"].to_i
       )
-      
+
+      uri = URI.parse(ev["location_url"])
+      req = Net::HTTP::Get.new(uri.to_s)
+      res = Net::HTTP.start(uri.host, uri.port) {|http| http.request(req)}
+      @parsed = Nokogiri::HTML(res.body) 
+
       event.update_attributes(
         name: ev["title"],
-        details: ev["description"],
+        details: ActionView::Base.full_sanitizer.sanitize(ev["description"]),
         start_time: Time.parse(ev["starts"]),
         end_at: Time.parse(ev["ends"]),
         created_by_id: 1,

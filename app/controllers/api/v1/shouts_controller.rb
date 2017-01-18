@@ -16,6 +16,16 @@ class Api::V1::ShoutsController < Api::V1::ApiController
   def update
     shout = Shout.find(params[:id])
     shout.update_attributes! shout_params
+
+    obj = Aws::S3::Object.new(
+      bucket_name: 'whatupevents-images',
+      key: shout.image.url,
+      access_key_id: 'AKIAJSKGHQFVPEXZZGMA',
+      secret_access_key: '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',
+      region: 'us-east-2'
+    )
+    shout.update_attribute(:url, obj.presigned_url(:get, expires_in: 60*60*7))
+    
     render json: shout,
            serializer: Api::V1::ShoutSerializer,
            status: :ok
