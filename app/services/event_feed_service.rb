@@ -24,7 +24,14 @@ class EventFeedService
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = (uri.scheme == "https")
       res = http.request(req)
-      loc_array = Nokogiri::HTML(res.body).document.search("meta[name='geo.position']")[0]['content'].split(';')
+      parse = Nokogiri::HTML(res.body).document.search("meta[name='geo.position']")
+
+      if parse.length > 0 && parse[0].has_key? 'content'
+        loc_array = parse[0]['content'].split(';')
+      else
+        print parse
+        loc_array = ["28.6024","-81.2001"]
+      end
 
       event.update_attributes(
         name: ev["title"],
