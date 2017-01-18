@@ -2,7 +2,6 @@ class EventFeedService
 
   attr_accessor :url
   attr_accessor :events
-  attr_accessor :parsed
 
   def initialize(url = 'http://events.ucf.edu/')
     @url = url
@@ -22,8 +21,10 @@ class EventFeedService
 
       uri = URI.parse(ev["location_url"])
       req = Net::HTTP::Get.new(uri.to_s)
-      res = Net::HTTP.start(uri.host, uri.port) {|http| http.request(req)}
-      @parsed = Nokogiri::HTML(res.body) 
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = (uri.scheme == "https")
+      res = http.request(req)
+      loc_array = Nokogiri::HTML(res.body).document.search("meta[name='geo.position']")[0]['content'].split(';')
 
       event.update_attributes(
         name: ev["title"],
@@ -34,9 +35,9 @@ class EventFeedService
         public: true,
         location: ev["location"],
         symbol_id: 1,
-        latitude: "28.6024",
-        longitude: "-81.2001",
-        category_id: get_category_id(ev["categoru"])
+        latitude: loc_array[0],
+        longitude: loc_array[1],
+        category_id: get_category_id(ev["category"])
       )
     end
   end
