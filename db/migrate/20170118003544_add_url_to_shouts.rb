@@ -1,5 +1,5 @@
 class AddUrlToShouts < ActiveRecord::Migration
   def change
-    add_column :url, :status, :string
+    add_column :statuses, :url, :string
   end
 end
