@@ -45,7 +45,7 @@ class EventFeedService
         end_at: Time.parse(ev["ends"]),
         created_by_id: 1,
         public: true,
-        location: ev["location"] + " " + ev["location_url"],
+        location: ev["location"],
         symbol_id: 1,
         latitude: loc_array[0],
         longitude: loc_array[1],
