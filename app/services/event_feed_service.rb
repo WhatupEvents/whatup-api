@@ -19,7 +19,8 @@ class EventFeedService
         feed_id: ev["id"].to_i
       )
 
-      uri = URI.parse(ev["location_url"])
+      location_url = ev["location_url"]
+      uri = URI.parse(location_url)
       req = Net::HTTP::Get.new(uri.to_s)
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = (uri.scheme == "https")
@@ -29,8 +30,12 @@ class EventFeedService
       if parse.length > 0 && parse[0]['content']
         loc_array = parse[0]['content'].split(';')
       else
-        print parse
-        loc_array = ["28.6024","-81.2001"]
+        if location_url.include?('google')
+          loc_url_array = location_url.split('/')
+          loc_array = loc_url_array[loc_url_array.length-2].split(',')[0..1].map{|l|l.gsub('@','')}
+        else
+          loc_array = ["28.6024","-81.2001"]
+        end
       end
 
       event.update_attributes(
