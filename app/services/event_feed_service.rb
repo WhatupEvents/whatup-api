@@ -26,7 +26,7 @@ class EventFeedService
       res = http.request(req)
       parse = Nokogiri::HTML(res.body).document.search("meta[name='geo.position']")
 
-      if parse.length > 0 && parse[0].has_key? 'content'
+      if parse.length > 0 && parse[0].has_key?('content')
         loc_array = parse[0]['content'].split(';')
       else
         print parse
