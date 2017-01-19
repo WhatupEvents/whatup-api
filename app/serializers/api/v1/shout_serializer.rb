@@ -3,7 +3,7 @@ class Api::V1::ShoutSerializer < ActiveModel::Serializer
 
   def text
     text = object.text
-    blacklist = [/[a]+[r]+[s]+[e]+/, /[a]+[s]+[s]+/, /[a]+[s]+[s]+[h]+[o]+[l]+[e]+/, /[b]+[a|e]+[s]+[t]+[a|e]+[r]+[d]+/, /[b]+[i|a]+[t]+[c]+[h]+/, /[b]+[a|o]+[l]+[o]+[c]+[k]+[s]+/, /child-.*/, /[c]+[r]+[a]+[p]+/, /[d]+[a|e|i]+[m]+[n]+/, /[g]+[o]+[d]+[a]+[m]+[n]+/, /[m]+[o]+[t]+[h]+[e]+[r]+[f]+[u|a|o]+[c]+[k]+[e]+[r]+/, /[n]+[i]+[g]+[a|e]+[r]*/, /[t]+[w]+[a]+[t]+/, /[w]+[h]+[o|a]+[r]+[e]+/, /[f]+[u|a|o]+[c]+[k]+[e]*[r]*/, /[s]+[h]+[a|e|i]+[t]+/, /[c]+[u]+[n]+[t]+/]
+    blacklist = [/[a]+[r]+[s]+[e]+[s]*/, /[a]+[s]+[s]+[e]*[s]*/, /[a]+[s]+[s]+[h]+[o]+[l]+[e]+[s]*/, /[b]+[a|e]+[s]+[t]+[a|e]+[r]+[d]+[s]*/, /[b]+[i|e]+[a|e|i]*[t]+[c]+[h]+[e]*[s]*/, /[b]+[a|o]+[l]+[o]+[c]+[k]+[s]*/, /child-.*/, /[c]+[r]+[a]+[p]+/, /[d]+[a|e|i]+[m]+[n]+/, /[g]+[o]+[d]+[a]+[m]+[n]+/, /[m]+[o]+[t]+[h]+[e]+[r]+[f]+[u|a|o]+[c]+[k]+[e]*[r]*[s]*/, /[n]+[i]+[g]+[a|e]+[r]*[s]*/, /[t]+[w]+[a]+[t]+[s]*/, /[w]+[h]+[o|a]+[r]+[e]+[s]*/, /[f]+[u|a|o]+[c]+[k]+[e]*[r]*[s]*/, /[s]+[h]+[a|e|i]+[t]+[s]*/, /[c]+[u]+[n]+[t]+[s]*/, /[s]+[h]+[a]+[t]+ /]
     blacklist.each do |b|
       match = b.match(text)
       if match
