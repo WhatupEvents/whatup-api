@@ -19,7 +19,7 @@ class Api::V1::ShoutsController < Api::V1::ApiController
 
     obj = Aws::S3::Object.new(
       bucket_name: 'whatupevents-images',
-      key: shout.image.url,
+      key: shout.image.url.split('whatupevents-images/')[1].split('?')[0],
       access_key_id: 'AKIAJSKGHQFVPEXZZGMA',
       secret_access_key: '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',
       region: 'us-east-2'
