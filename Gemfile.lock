@@ -284,6 +284,7 @@ DEPENDENCIES
   foreman
   jquery-rails
   mysql2 (~> 0.3.13)
+  nokogiri
   paperclip (~> 5.0.0)
   pry-byebug
   pry-rails

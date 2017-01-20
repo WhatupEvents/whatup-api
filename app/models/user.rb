@@ -26,9 +26,9 @@ class User < ActiveRecord::Base
 
   def default_friend_groups
     FriendGroup.find_or_create_by(user_id: self.id, name: 'All', default: true, symbol_id: 0)
-    FriendGroup.find_or_create_by(user_id: self.id, name: 'Favorites', default: true, symbol_id: 0)
-    FriendGroup.find_or_create_by(user_id: self.id, name: 'School', default: true, symbol_id: 0)
-    FriendGroup.find_or_create_by(user_id: self.id, name: 'Work', default: true, symbol_id: 0)
+    FriendGroup.find_or_create_by(user_id: self.id, name: 'Favorites', default: true, symbol_id: -3)
+    FriendGroup.find_or_create_by(user_id: self.id, name: 'School', default: true, symbol_id: -2)
+    FriendGroup.find_or_create_by(user_id: self.id, name: 'Work', default: true, symbol_id: -1)
   end
 
   def current_events
