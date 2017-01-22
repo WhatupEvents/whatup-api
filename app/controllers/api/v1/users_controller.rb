@@ -27,9 +27,13 @@ class Api::V1::UsersController < Api::V1::ApiController
            status: :ok
   end
 
-  def fcm_register
-    current_device = Device.where(user_id: current_user.id, os: device_params[:os])
-    current_device.update_attributes(device_params.permit(:registration_id))
+  # def fcm_register
+  #   current_device = Device.where(user_id: current_user.id, os: device_params[:os])
+  #   current_device.update_attributes(device_params.permit(:registration_id))
+  # end
+
+  def fcm_unregister
+    Device.where(user_id: current_user.id, os: device_params[:os]).destroy_all
   end
 
   private
