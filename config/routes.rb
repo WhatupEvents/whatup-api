@@ -9,6 +9,7 @@ Whatsup::Application.routes.draw do
     namespace :v1 do
       get 'download/:image_url', to: 'messages#download', as: 'image_download'
       post 'friends', to: 'users#friends', as: 'users_friends'
+      post 'add_friend', to: 'users#add_friend', as: 'users_add_friend'
       resources :users, only: [:create] do
         delete 'fcm_unregister', to: 'users#fcm_unregister', as: 'users_fcm_unregister'
       end

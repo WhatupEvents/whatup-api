@@ -2,7 +2,7 @@ class Api::V1::UsersController < Api::V1::ApiController
   doorkeeper_for :all, except: [:create, :authenticate]
 
   def create
-    @current_user = User.where('fb_id = ? or email = ?', user_params['fb_id'], user_params['email']).first || User.new
+    @current_user = User.where('user_name = ? or email = ?', user_params['user_name'], user_params['email']).first || User.new
     if @current_user.new_record?
       @current_user.update(user_params)
       @current_user.role = 'User'
@@ -17,10 +17,18 @@ class Api::V1::UsersController < Api::V1::ApiController
     head :bad_request
   end
 
+  def add_friend
+	  FriendRelationship.find_or_create_by(person_id: current_user.id, friend_id: User.find_by_user_name(params[:new_friend_username]).id)
+		FriendRelationship.find_or_create_by(person_id: User.find_by_user_name(params[:new_friend_username]).id, friend_id: current_user.id)
+    render json: {}, status: :created
+  end
+
   def friends
-    User.where('fb_id in (?)',JSON.parse(params['friends_fb_ids'])).each do |friend|
-      FriendRelationship.find_or_create_by(person_id: current_user.id, friend_id: friend.id)
-      FriendRelationship.find_or_create_by(person_id: friend.id, friend_id: current_user.id)
+    if (params['friends_fb_ids'])
+			User.where('fb_id in (?)',JSON.parse(params['friends_fb_ids'])).each do |friend|
+				FriendRelationship.find_or_create_by(person_id: current_user.id, friend_id: friend.id)
+				FriendRelationship.find_or_create_by(person_id: friend.id, friend_id: current_user.id)
+			end
     end
     render json: current_user.friends.order(first_name: :asc),
            each_serializer: Api::V1::FriendSerializer,
@@ -64,7 +72,9 @@ class Api::V1::UsersController < Api::V1::ApiController
       :email, 
       :first_name, 
       :last_name, 
-      :fb_id
+      :fb_id,
+      :source,
+      :image
     )
   end
 end

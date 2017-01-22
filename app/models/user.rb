@@ -24,6 +24,23 @@ class User < ActiveRecord::Base
 
   after_create :default_friend_groups
 
+  has_attached_file :image,
+    :storage => :s3,
+    :bucket => 'whatupevents-images',
+    :s3_region => 'us-east-2',
+    :s3_host_name => 's3.us-east-2.amazonaws.com',
+    :s3_permissions => :private,
+    :path => ':class/:attachment/:id/:filename',
+    :s3_credentials => Proc.new{|p| p.instance.s3_credentials}
+  do_not_validate_attachment_file_type :image
+
+  def s3_credentials
+    {
+     access_key_id: "AKIAJSKGHQFVPEXZZGMA",
+     secret_access_key: "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"
+    }
+  end
+
   def default_friend_groups
     FriendGroup.find_or_create_by(user_id: self.id, name: 'All', default: true, symbol_id: 0)
     FriendGroup.find_or_create_by(user_id: self.id, name: 'Favorites', default: true, symbol_id: -3)
