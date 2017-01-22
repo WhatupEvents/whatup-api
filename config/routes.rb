@@ -11,6 +11,7 @@ Whatsup::Application.routes.draw do
       get 'download/:image_url', to: 'messages#download', as: 'image_download'
       post 'friends', to: 'users#friends', as: 'users_friends'
       resources :users, only: [:create]
+      post 'add_friend', to: 'users#add_friend', as: 'users_add_friend'
       resources :friend_groups, only: [:index, :create, :update, :destroy]
       resources :shouts, only: [:create, :index, :update]
       resources :statuses, only: [:create]
