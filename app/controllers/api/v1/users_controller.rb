@@ -1,6 +1,11 @@
 class Api::V1::UsersController < Api::V1::ApiController
   doorkeeper_for :all, except: [:create, :authenticate]
 
+  def check_uniqueness
+    render :ok if User.where(params[:unique_field] => params[:unique_value]).empty?
+    render :gone
+  end
+
   def login
     @current_user = User.where(user_name: params[:user_name], encrypted_password: params[:encrypted_password])
     if @current_user
