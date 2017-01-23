@@ -1,6 +1,15 @@
 class Api::V1::UsersController < Api::V1::ApiController
   doorkeeper_for :all, except: [:create, :authenticate]
 
+  def login
+    @current_user = User.where(user_name: params[:user_name], encrypted_password: params[:encrypted_password])
+    if @current_user
+      render_me :ok
+    else
+      render :unauthorized
+    end
+  end
+
   def create
     @current_user = User.where('user_name = ? or email = ?', user_params['user_name'], user_params['email']).first || User.new
     if @current_user.new_record?
@@ -73,6 +82,7 @@ class Api::V1::UsersController < Api::V1::ApiController
       :first_name, 
       :last_name, 
       :fb_id,
+      :encrypted_password,
       :source,
       :image
     )

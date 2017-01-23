@@ -8,6 +8,7 @@ Whatsup::Application.routes.draw do
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
       get 'download/:image_url', to: 'messages#download', as: 'image_download'
+      post 'login', to: 'users#login', as: 'login'
       post 'friends', to: 'users#friends', as: 'users_friends'
       post 'add_friend', to: 'users#add_friend', as: 'users_add_friend'
       resources :users, only: [:create] do
