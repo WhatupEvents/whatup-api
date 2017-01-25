@@ -7,7 +7,7 @@ class Api::V1::UsersController < Api::V1::ApiController
   end
 
   def authenticate
-    @current_user = User.where(user_name: params[:user_name], encrypted_password: params[:encrypted_password]).first
+    @current_user = User.where(user_name: user_params[:user_name], encrypted_password: user_params[:encrypted_password]).first
     if @current_user
       render_me :ok
     else
