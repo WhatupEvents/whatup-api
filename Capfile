@@ -1,8 +1,6 @@
 # Load DSL and Setup Up Stages
 require 'capistrano/setup'
 
-require 'capistrano/rails/migrations'
-
 # Includes default deployment tasks
 require 'capistrano/deploy'
 require 'capistrano/safe_deploy_to'
@@ -13,12 +11,14 @@ require "capistrano-resque"
 require "capistrano/scm/git"
 install_plugin Capistrano::SCM::Git
 
-# needed for staging onle
+# needed for staging only
 require 'capistrano/bundler'
 require 'capistrano/rvm'
 
 # needed for production only
 # require 'rvm1/capistrano3'
+
+require 'capistrano/rails/migrations'
 
 # Loads custom tasks from `lib/capistrano/tasks' if you have any defined.
 Dir.glob('lib/capistrano/tasks/*.rake').each { |r| import r }
