@@ -6,8 +6,8 @@ class Api::V1::UsersController < Api::V1::ApiController
     render :gone
   end
 
-  def login
-    @current_user = User.where(user_name: params[:user_name], encrypted_password: params[:encrypted_password])
+  def authenticate
+    @current_user = User.where(user_name: params[:user_name], encrypted_password: params[:encrypted_password]).first
     if @current_user
       render_me :ok
     else
