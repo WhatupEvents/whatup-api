@@ -2,8 +2,8 @@ class Api::V1::UsersController < Api::V1::ApiController
   doorkeeper_for :all, except: [:create, :authenticate]
 
   def check_uniqueness
-    render :ok if User.where(params[:unique_field] => params[:unique_value]).empty?
-    render :gone
+    head :ok if User.where(params[:unique_field] => params[:unique_value]).empty?
+    head :gone
   end
 
   def authenticate
@@ -11,7 +11,7 @@ class Api::V1::UsersController < Api::V1::ApiController
     if @current_user
       render_me :ok
     else
-      render :unauthorized
+      head :unauthorized
     end
   end
 
@@ -30,23 +30,20 @@ class Api::V1::UsersController < Api::V1::ApiController
       @current_user.update_attribute('email', user_params['email'])
       render_me :ok
     end
-  rescue Exception => e
-    Rails.logger.info e.to_s
-    head :bad_request
   end
 
   def add_friend
-	  FriendRelationship.find_or_create_by(person_id: current_user.id, friend_id: User.find_by_user_name(params[:new_friend_username]).id)
-		FriendRelationship.find_or_create_by(person_id: User.find_by_user_name(params[:new_friend_username]).id, friend_id: current_user.id)
+    FriendRelationship.find_or_create_by(person_id: current_user.id, friend_id: User.find_by_user_name(params[:new_friend_username]).id)
+    FriendRelationship.find_or_create_by(person_id: User.find_by_user_name(params[:new_friend_username]).id, friend_id: current_user.id)
     render json: {}, status: :created
   end
 
   def friends
     if (params['friends_fb_ids'])
-			User.where('fb_id in (?)',JSON.parse(params['friends_fb_ids'])).each do |friend|
-				FriendRelationship.find_or_create_by(person_id: current_user.id, friend_id: friend.id)
-				FriendRelationship.find_or_create_by(person_id: friend.id, friend_id: current_user.id)
-			end
+      User.where('fb_id in (?)',JSON.parse(params['friends_fb_ids'])).each do |friend|
+        FriendRelationship.find_or_create_by(person_id: current_user.id, friend_id: friend.id)
+	FriendRelationship.find_or_create_by(person_id: friend.id, friend_id: current_user.id)
+      end
     end
     render json: current_user.friends.order(first_name: :asc),
            each_serializer: Api::V1::FriendSerializer,
