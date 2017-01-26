@@ -33,6 +33,7 @@ class Api::V1::UsersController < Api::V1::ApiController
   end
 
   def update
+    @current_user = User.find(params[:id])
     @current_user.update_attributes(user_image_params)
     head :ok
   end
