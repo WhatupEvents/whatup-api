@@ -32,6 +32,11 @@ class Api::V1::UsersController < Api::V1::ApiController
     end
   end
 
+  def update
+    @current_user.update_attributes(user_image_params)
+    head :ok
+  end
+
   def add_friend
     FriendRelationship.find_or_create_by(person_id: current_user.id, friend_id: User.find_by_user_name(params[:new_friend_username]).id)
     FriendRelationship.find_or_create_by(person_id: User.find_by_user_name(params[:new_friend_username]).id, friend_id: current_user.id)
@@ -77,6 +82,10 @@ class Api::V1::UsersController < Api::V1::ApiController
 
   def device_params
     params.require(:device).permit(:uuid, :registration_id, :os)
+  end
+
+  def user_image_params
+    params.permit(:source, :image)
   end
 
   def user_params
