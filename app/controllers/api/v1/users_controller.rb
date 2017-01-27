@@ -30,7 +30,12 @@ class Api::V1::UsersController < Api::V1::ApiController
       if user_params.has_key? 'accepted_terms'
         @current_user.update_attribute('accepted_terms', user_params['accepted_terms'])
       end
-      @current_user.update_attribute('email', user_params['email'])
+      if (user_params['fb_id'])
+        @current_user.update_attribute('fb_id', user_params['fb_id'])
+      end
+      if (user_params['email'])
+        @current_user.update_attribute('email', user_params['email'])
+      end
       render_me :ok
     end
   end
