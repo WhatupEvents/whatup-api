@@ -31,14 +31,16 @@ class Api::V1::UsersController < Api::V1::ApiController
         @current_user.update_attribute('accepted_terms', user_params['accepted_terms'])
       end
       if (user_params['fb_id'])
-        if !User.find_by_fb_id(user_params['fb_id'])
+        if @current_user.fb_id == nil
           @current_user.update_attribute('fb_id', user_params['fb_id'])
+          render_me :ok
+        elsif @current_user.user_name == @current_user.fb_id
           render_me :ok
         else
           head :gone
         end
       end
-      if (user_params['email'])
+      if user_params['email']
         @current_user.update_attribute('email', user_params['email'])
         render_me :ok
       end
