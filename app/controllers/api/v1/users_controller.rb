@@ -52,9 +52,14 @@ class Api::V1::UsersController < Api::V1::ApiController
   end
 
   def add_friend
-    FriendRelationship.find_or_create_by(person_id: current_user.id, friend_id: User.find_by_user_name(params[:new_friend_username]).id)
-    FriendRelationship.find_or_create_by(person_id: User.find_by_user_name(params[:new_friend_username]).id, friend_id: current_user.id)
-    render json: {}, status: :created
+    friend = User.find_by_user_name(params[:new_friend_username])
+    if friend
+      FriendRelationship.find_or_create_by(person_id: current_user.id, friend_id: friend.id)
+      FriendRelationship.find_or_create_by(person_id: friend.id, friend_id: current_user.id)
+      render json: {}, status: :created
+    else
+      head :not_found
+    end
   end
 
   def friends
