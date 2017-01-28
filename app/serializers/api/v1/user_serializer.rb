@@ -1,5 +1,6 @@
 class Api::V1::UserSerializer < ActiveModel::Serializer
-  attributes :id, :first_name, :last_name, :email, :role, :fb_id, :accepted_terms, :username, :url
+  attributes :id, :first_name, :last_name, :email, :role, :fb_id, :accepted_terms, :username, :url, :image_updated_at
+
   has_one :status, serializer: Api::V1::StatusSerializer
 
   def url
