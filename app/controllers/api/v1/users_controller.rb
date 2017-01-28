@@ -19,7 +19,7 @@ class Api::V1::UsersController < Api::V1::ApiController
   end
 
   def create
-    @current_user = User.where('user_name = ? or fb_id = ?', user_params['user_name'], user_params['fb_id']).first || User.new
+    @current_user = User.where('user_name = ?', user_params['user_name']).first || User.new
     if @current_user.new_record?
       @current_user.role = 'User'
       @current_user.accepted_terms = false
