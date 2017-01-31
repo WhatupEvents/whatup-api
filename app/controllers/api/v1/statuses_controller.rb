@@ -18,6 +18,7 @@ class Api::V1::StatusesController < Api::V1::ApiController
         Resque.enqueue(FcmMessageJob,{ 
           status_id: status.id,
           status_text: status.text,
+          user_id: current_user.id,
           user_name: current_user.name
         }, friend.id)
       end
