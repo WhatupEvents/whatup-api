@@ -27,7 +27,7 @@ class Api::V1::MessagesController < Api::V1::ApiController
       region: 'us-east-2'
     )
 
-    signed_url = obj.presigned_url(:get, expires_in: 60*60*24*3)
+    signed_url = obj.presigned_url(:get, expires_in: 60) #*60*24*3)
     Rails.logger.info signed_url
     redirect_to signed_url
   end
