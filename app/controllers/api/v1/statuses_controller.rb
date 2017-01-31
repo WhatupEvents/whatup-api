@@ -13,6 +13,15 @@ class Api::V1::StatusesController < Api::V1::ApiController
   def create
     status = Status.create! status_params
     status.update_attribute(:text, status.text.capitalize)
+    if Rails.env != "development"
+      current_user.friends.each do |friend|
+        Resque.enqueue(FcmMessageJob,{ 
+          status_id: status.id,
+          status_text: status.text,
+          user_name: current_user.name
+        }, friend.id)
+      end
+    end
     head :created
   rescue Exception => e
     Rails.logger.info e.to_s

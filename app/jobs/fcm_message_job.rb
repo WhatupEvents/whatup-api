@@ -23,12 +23,21 @@ class FcmMessageJob
           })
         end
       else
-        resp = fcm.send_with_notification_key(reg_id, {
-          notification: {title: 'Set a status!', body: "you haven't updated in a while", tag: 'status'},
-          data: {},
-          content_available: true,
-          priority: "high"
-        })
+        if data.has_key? 'status_id'
+          resp = fcm.send_with_notification_key(reg_id, {
+            notification: {title: "#{data['user_name']} updated their status", body: "#{data['status_text']}", tag: 'status_updt'},
+            data: {},
+            content_available: true,
+            priority: "high"
+          })
+        else
+          resp = fcm.send_with_notification_key(reg_id, {
+            notification: {title: 'Set a status!', body: "you haven't updated in a while", tag: 'status'},
+            data: {},
+            content_available: true,
+            priority: "high"
+          })
+        end
       end
       Rails.logger.info resp.to_s
     end
