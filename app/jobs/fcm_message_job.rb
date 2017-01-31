@@ -25,7 +25,6 @@ class FcmMessageJob
       else
         if data.has_key? 'status_id'
           resp = fcm.send_with_notification_key(reg_id, {
-            notification: {title: "#{data['user_name']} updated their status", body: "#{data['status_text']}", tag: 'status_updt'},
             data: data,
             content_available: true,
             priority: "high"
