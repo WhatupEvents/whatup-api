@@ -24,7 +24,8 @@ class Api::V1::EventsController < Api::V1::ApiController
   def update
     event = Event.find(params[:id])
 
-    before_update = event.participant_relationships
+    before_update = event.participant_relationships.all.map(&:attributes)
+    Rails.logger.info 'before_update'
     Rails.logger.info before_update
     if create_event_params[:friend_ids]
       friend_ids = JSON.parse(create_event_params[:friend_ids])
@@ -32,25 +33,28 @@ class Api::V1::EventsController < Api::V1::ApiController
       event.participants = participants
       params.delete("friend_ids")
     end
-    after_update = event.participant_relationships
+    after_update = event.participant_relationships.all.map(&:attributes)
 
-    Rails.logger.info before_update
+    Rails.logger.info 'after_update'
     Rails.logger.info after_update
+    Rails.logger.info 'sum'
     Rails.logger.info (before_update+after_update)
+    Rails.logger.info 'uniq'
     Rails.logger.info (before_update+after_update).uniq
 
     event.update_attributes! create_event_params
 
     if Rails.env != "development"
+      Rails.logger.info 'participants'
       (before_update+after_update).uniq.each do |participant|
         Rails.logger.info participant
-        if participant.notify && (participant.participant_id != current_user.id)
+        if participant['notify'] && (participant['participant_id'] != current_user.id)
           Resque.enqueue(
             FcmMessageJob, {
               event_id: event.id,
               event_name: event.name,
               updated_at: event.updated_at
-            },participant.participant_id
+            },participant['participant_id']
           )
         end
       end
