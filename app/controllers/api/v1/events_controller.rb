@@ -24,7 +24,7 @@ class Api::V1::EventsController < Api::V1::ApiController
   def update
     event = Event.find(params[:id])
 
-    before_update = event.participants_relationships
+    before_update = event.participant_relationships
     if create_event_params[:friend_ids]
       friend_ids = JSON.parse(create_event_params[:friend_ids])
       participants = User.where(id: friend_ids + [create_event_params[:created_by_id]])
