@@ -1,4 +1,4 @@
-class EventFeedJob
+class FeedServiceJob
   @queue = :low
 
   def self.perform()
