@@ -60,7 +60,7 @@ class EventFeedService
       cat = 2 #"education"
     elsif feed_category == "Arts Exhibit"
       cat = 8 #"art"
-    elsif feed_category == "Carrer/Jobs"
+    elsif feed_category == "Career/Jobs"
       cat = 3 #"work"
     elsif feed_category == "Concert/Performance"
       cat = 6 #"music"
