@@ -1,5 +1,5 @@
-clear_leaderboards_contributors:
-  cron: "07 1 * * *"
+event_feed_service_jobs:
+  cron: "30 20 * * *"
   class: "EventFeedServiceJob"
   queue: low
   description: "This job pulls in rss feed events"
