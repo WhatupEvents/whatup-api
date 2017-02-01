@@ -24,17 +24,19 @@ class Api::V1::EventsController < Api::V1::ApiController
   def update
     event = Event.find(params[:id])
 
+    before_update = event.participants_relationships
     if create_event_params[:friend_ids]
       friend_ids = JSON.parse(create_event_params[:friend_ids])
       participants = User.where(id: friend_ids + [create_event_params[:created_by_id]])
       event.participants = participants
       params.delete("friend_ids")
     end
+    after_update = event.participant_relationships
 
     event.update_attributes! create_event_params
 
     if Rails.env != "development"
-      event.participant_relationships.each do |participant|
+      (before_update+after_update).uniq.each do |participant|
         if participant.notify && (participant.participant_id != current_user.id)
           Resque.enqueue(
             FcmMessageJob, {
