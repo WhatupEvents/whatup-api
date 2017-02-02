@@ -3,7 +3,7 @@ class Api::V1::EventsController < Api::V1::ApiController
 
   def index
     distance = params[:distance] || 10.0
-    lat, long = get_geo.split(':')
+    long, lat = get_geo.split(':')
     render json: current_user.current_events | Event.pub.current.near_user(lat, long, distance),
            each_serializer: Api::V1::EventSerializer,
            status: :ok,
