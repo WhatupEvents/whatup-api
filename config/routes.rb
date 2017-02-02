@@ -10,9 +10,7 @@ Whatsup::Application.routes.draw do
       delete 'unregister_device', to: 'users#unregister', as: 'unregister'
       get 'download/:image_url', to: 'messages#download', as: 'image_download'
       post 'friends', to: 'users#friends', as: 'users_friends'
-      resources :users, only: [:create] do
-        post 'fcm_register', to: 'users#fcm_register', as: 'users_fcm_register'
-      end
+      resources :users, only: [:create]
       resources :friend_groups, only: [:index, :create, :update, :destroy]
       resources :shouts, only: [:create, :index, :update]
       resources :statuses, only: [:create]

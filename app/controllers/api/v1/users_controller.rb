@@ -27,14 +27,10 @@ class Api::V1::UsersController < Api::V1::ApiController
            status: :ok
   end
 
-  def fcm_register
-    current_device = Device.where(user_id: current_user.id, os: device_params[:os])
-    current_device.update_attributes(device_params.permit(:registration_id))
-  end
-
   def unregister
     current_device = Device.where(user_id: current_user.id, os: device_params[:os], uuid: device_params[:uuid])
     current_device.destroy
+    render json: {}, status: :accepted
   end
 
   private
