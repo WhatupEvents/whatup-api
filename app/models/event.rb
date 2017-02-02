@@ -27,13 +27,13 @@ class Event < ActiveRecord::Base
 
   @@from_mile = 1/68.703
 
-  scope :near_user, ->(current, distance) do
+  scope :near_user, ->(lat, long, distance) do
     where('latitude > ? AND latitude < ? ', 
-          current.latitude.to_f-(distance*@@from_mile),
-          current.latitude.to_f+(distance*@@from_mile))
+          lat.to_f-(distance*@@from_mile),
+          lat.to_f+(distance*@@from_mile))
     .where('longitude > ? AND longitude < ?',
-           current.longitude.to_f-(distance*@@from_mile),
-           current.longitude.to_f+(distance*@@from_mile))
+           long.to_f-(distance*@@from_mile),
+           long.to_f+(distance*@@from_mile))
   end
 
   scope :pub, -> { where(public: true) }

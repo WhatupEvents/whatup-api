@@ -6,12 +6,16 @@ class Api::V1::ApiController < ActionController::API
   def geo_update
     if request.env["HTTP_GEOLOCATION"].present? && 
       request.env["HTTP_AUTHORIZATION"] != 'Bearer null'
-      geo = request.env["HTTP_GEOLOCATION"]
-      current_user.update_attributes(
-        longitude: geo.split(':')[0],
-        latitude: geo.split(':')[1]
-      )
+      @geo = request.env["HTTP_GEOLOCATION"]
+      # current_user.update_attributes(
+      #   longitude: geo.split(':')[0],
+      #   latitude: geo.split(':')[1]
+      # )
     end
+  end
+
+  def get_geo
+    @geo
   end
 
   def process_access_token
