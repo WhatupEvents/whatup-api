@@ -7,6 +7,7 @@ Whatsup::Application.routes.draw do
 
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
+      delete 'unregister_device', to: 'users#unregister', as: 'unregister'
       get 'download/:image_url', to: 'messages#download', as: 'image_download'
       post 'friends', to: 'users#friends', as: 'users_friends'
       resources :users, only: [:create] do

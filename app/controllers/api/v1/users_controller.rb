@@ -32,6 +32,11 @@ class Api::V1::UsersController < Api::V1::ApiController
     current_device.update_attributes(device_params.permit(:registration_id))
   end
 
+  def unregister
+    current_device = Device.where(user_id: current_user.id, os: device_params[:os], uuid: device_params[:uuid])
+    current_device.destroy
+  end
+
   private
 
   def render_me(status)
