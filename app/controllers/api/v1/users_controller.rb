@@ -28,7 +28,7 @@ class Api::V1::UsersController < Api::V1::ApiController
   end
 
   def unregister
-    current_device = Device.where(user_id: current_user.id, os: device_params[:os], uuid: device_params[:uuid])
+    current_device = Device.where(user_id: current_user.id, os: device_params[:os], uuid: device_params[:uuid]).first
     current_device.destroy
     render json: {}, status: :accepted
   end
