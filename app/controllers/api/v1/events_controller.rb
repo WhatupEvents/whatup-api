@@ -3,15 +3,13 @@ class Api::V1::EventsController < Api::V1::ApiController
 
   def index
     distance = params[:distance] || 10.0
-    Rails.logger.info current_user.attributes
     events = current_user.current_events
-    Rails.logger.info events.map{|u| u.attributes}
+    Rails.logger.info get_geo
     if !get_geo
-      Rails.logger.info get_geo
       long, lat = get_geo.split(':')
       events |= Event.pub.current.near_user(lat, long, distance)
-      Rails.logger.info events.map{|u| u.attributes}
     end
+    Rails.logger.info events.map{|u| u.attributes}
     render json: events,
            each_serializer: Api::V1::EventSerializer,
            status: :ok,

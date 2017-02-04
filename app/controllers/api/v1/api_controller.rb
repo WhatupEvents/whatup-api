@@ -4,10 +4,10 @@ class Api::V1::ApiController < ActionController::API
   before_action :geo_update
 
   def geo_update
-    Rails.logger.info request.env
     if request.env["HTTP_GEOLOCATION"].present? && 
       request.env["HTTP_AUTHORIZATION"] != 'Bearer null'
       @geo = request.env["HTTP_GEOLOCATION"]
+      Rails.logger.info @geo
       # current_user.update_attributes(
       #   longitude: geo.split(':')[0],
       #   latitude: geo.split(':')[1]
@@ -16,6 +16,7 @@ class Api::V1::ApiController < ActionController::API
   end
 
   def get_geo
+    Rails.logger.info @geo
     @geo
   end
 
