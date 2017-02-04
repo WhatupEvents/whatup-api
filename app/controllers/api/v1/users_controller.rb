@@ -9,7 +9,9 @@ class Api::V1::UsersController < Api::V1::ApiController
       @current_user.save
       render_me :created
     else
-      @current_user.update_attribute('accepted_terms', user_params['accepted_terms'])
+      if user_params.has_key? 'accepted_terms'
+        @current_user.update_attribute('accepted_terms', user_params['accepted_terms'])
+      end
       @current_user.update_attribute('email', user_params['email'])
       render_me :ok
     end
