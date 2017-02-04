@@ -5,6 +5,7 @@ class Api::V1::UsersController < Api::V1::ApiController
     @current_user = User.where('fb_id = ? or email = ?', user_params['fb_id'], user_params['email']).first || User.new
     if @current_user.new_record?
       @current_user.role = 'User'
+      @current_user.accepted_terms = false
       @current_user.update(user_params)
       @current_user.save
       render_me :created
