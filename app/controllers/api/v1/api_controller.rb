@@ -4,6 +4,7 @@ class Api::V1::ApiController < ActionController::API
   before_action :geo_update
 
   def geo_update
+    Rails.logger.info request.env
     if request.env["HTTP_GEOLOCATION"].present? && 
       request.env["HTTP_AUTHORIZATION"] != 'Bearer null'
       @geo = request.env["HTTP_GEOLOCATION"]

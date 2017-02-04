@@ -3,7 +3,7 @@ class Api::V1::EventsController < Api::V1::ApiController
 
   def index
     distance = params[:distance] || 10.0
-    Rails.logger.info current_user
+    Rails.logger.info current_user.attributes
     events = current_user.current_events
     Rails.logger.info events.map{|u| u.attributes}
     if !get_geo
