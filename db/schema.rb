@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170203222632) do
+ActiveRecord::Schema.define(version: 20170204023437) do
 
   create_table "devices", force: :cascade do |t|
     t.integer "user_id",         limit: 4
@@ -197,7 +197,7 @@ ActiveRecord::Schema.define(version: 20170203222632) do
     t.integer  "image_file_size",    limit: 4
     t.datetime "image_updated_at"
     t.string   "source",             limit: 191, default: ""
-    t.string   "accepted_terms",     limit: 191
+    t.boolean  "accepted_terms",     limit: 1
   end
 
 end
