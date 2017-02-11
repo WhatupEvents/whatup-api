@@ -37,7 +37,7 @@ class Api::V1::ShoutsController < Api::V1::ApiController
     last = params.has_key?(:last_id) ? Shout.find(params.delete(:last_id)) : Shout.last
     long, lat = get_geo.split(':')
     shouts = Shout.where('created_at > ?', Time.now-7.hour)
-      .where(event_id: Event.current.pub.near_user(lat, long, 2.0).map(&:id))
+      .where(event_id: Event.current.pub.near_user(lat, long, 20.0).map(&:id))
       .where('created_at <= ?', last.created_at)
       .limit(15).order(created_at: :desc)
     if shouts.present?
