@@ -25,23 +25,18 @@ class Api::V1::ShoutsController < Api::V1::ApiController
 
   def flag
     @shout = Shout.find(params[:shout_id])
-    # TODO: if admin flag up to 3 automatically
     flag_update = 1
     if current_user.role == "Admin"
       flag_update = 3
     end
     @shout.update_attributes flag: @shout.flag+flag_update
-    render json: @shout,
-       serializer: Api::V1::ShoutSerializer,
-       status: :ok
+    render_shouts
   end
 
   def up
     @shout = Shout.find(params[:shout_id])
     @shout.update_attributes ups: @shout.ups+1
-    render json: @shout,
-       serializer: Api::V1::ShoutSerializer,
-       status: :ok
+    render_shouts
   end
 
   private
