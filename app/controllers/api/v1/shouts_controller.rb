@@ -7,6 +7,7 @@ class Api::V1::ShoutsController < Api::V1::ApiController
 
   def create
     @shout = Shout.create! shout_params
+    update_image
     render_shouts
   rescue Exception => e
     Rails.logger.info e.to_s
@@ -16,6 +17,7 @@ class Api::V1::ShoutsController < Api::V1::ApiController
   def update
     @shout = Shout.find(params[:id])
     @shout.update_attributes! shout_params
+    update_image
     render json: @shout,
        serializer: Api::V1::ShoutSerializer,
        status: :ok
@@ -53,7 +55,6 @@ class Api::V1::ShoutsController < Api::V1::ApiController
   end
 
   def render_shouts
-    update_image if @shout
     last = params.has_key?(:last_id) ? Shout.find(params.delete(:last_id)) : Shout.last
     long, lat = get_geo.split(':')
     shouts = Shout.where('created_at > ?', Time.now-7.hour)
