@@ -10,6 +10,8 @@ class User < ActiveRecord::Base
 
   has_many :statuses
 
+  has_many :shouts, dependent: :destroy
+
   has_many :friend_relationships_in,
            class_name: 'FriendRelationship',
            foreign_key: :friend_id

@@ -6,7 +6,7 @@ class Api::V1::ShoutsController < Api::V1::ApiController
   end
 
   def create
-    Shout.create! shout_params
+    @shout = Shout.create! shout_params
     render_shouts
   rescue Exception => e
     Rails.logger.info e.to_s
@@ -14,26 +14,46 @@ class Api::V1::ShoutsController < Api::V1::ApiController
   end
 
   def update
-    shout = Shout.find(params[:id])
-    shout.update_attributes! shout_params
+    @shout = Shout.find(params[:id])
+    @shout.update_attributes! shout_params
+    render json: @shout,
+       serializer: Api::V1::ShoutSerializer,
+       status: :ok
+  end
 
-    obj = Aws::S3::Object.new(
-      bucket_name: 'whatupevents-images',
-      key: shout.image.url.split('whatupevents-images/')[1].split('?')[0],
-      access_key_id: 'AKIAJSKGHQFVPEXZZGMA',
-      secret_access_key: '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',
-      region: 'us-east-2'
-    )
-    shout.update_attribute(:url, obj.presigned_url(:get, expires_in: 60*60*7))
-    
-    render json: shout,
-           serializer: Api::V1::ShoutSerializer,
-           status: :ok
+  def flag
+    @shout = Shout.find(params[:id])
+    @shout.update_attributes ups: @shout.ups+1
+    render json: @shout,
+       serializer: Api::V1::ShoutSerializer,
+       status: :ok
+  end
+
+  def up
+    @shout = Shout.find(params[:id])
+    @shout.update_attributes flag: @shout.flag+1
+    render json: @shout,
+       serializer: Api::V1::ShoutSerializer,
+       status: :ok
   end
 
   private
 
+  def update_image
+    unless @shout.image.url.include? "missing.png"
+      obj = Aws::S3::Object.new(
+        bucket_name: 'whatupevents-images',
+        key: @shout.image.url.split('whatupevents-images/')[1].split('?')[0],
+        access_key_id: 'AKIAJSKGHQFVPEXZZGMA',
+        secret_access_key: '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',
+        region: 'us-east-2'
+      )
+      @shout.update_attribute(:url, obj.presigned_url(:get, expires_in: 60*60*7))
+    end
+  end
+
   def render_shouts
+    update_image
     last = params.has_key?(:last_id) ? Shout.find(params.delete(:last_id)) : Shout.last
     long, lat = get_geo.split(':')
     shouts = Shout.where('created_at > ?', Time.now-7.hour)

@@ -12,7 +12,10 @@ Whatsup::Application.routes.draw do
       post 'friends', to: 'users#friends', as: 'users_friends'
       resources :users, only: [:create]
       resources :friend_groups, only: [:index, :create, :update, :destroy]
-      resources :shouts, only: [:create, :index, :update]
+      resources :shouts, only: [:create, :index, :update] do
+        put 'shouts/:id/flag', to: 'shouts#flag', as: 'shouts_flag'
+        put 'shouts/:id/up', to: 'shouts#up', as: 'shouts_up'
+      end
       resources :statuses, only: [:create]
       put :statuses, to: 'statuses#up', as: 'up_status'
       get :most_upped, to: 'statuses#most_upped', as: 'most_upped'

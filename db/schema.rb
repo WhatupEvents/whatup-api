@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170204023437) do
+ActiveRecord::Schema.define(version: 20170217014023) do
 
   create_table "devices", force: :cascade do |t|
     t.integer "user_id",         limit: 4
@@ -151,6 +151,8 @@ ActiveRecord::Schema.define(version: 20170204023437) do
     t.datetime "image_updated_at"
     t.string   "source",             limit: 191,   default: ""
     t.text     "url",                limit: 65535
+    t.integer  "flag",               limit: 4
+    t.integer  "ups",                limit: 4
   end
 
   create_table "statuses", force: :cascade do |t|
