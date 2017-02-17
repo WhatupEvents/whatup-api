@@ -24,7 +24,7 @@ class Api::V1::ShoutsController < Api::V1::ApiController
   end
 
   def flag
-    @shout = Shout.find(params[:id])
+    @shout = Shout.find(params[:shout_id])
     @shout.update_attributes ups: @shout.ups+1
     render json: @shout,
        serializer: Api::V1::ShoutSerializer,
@@ -32,7 +32,7 @@ class Api::V1::ShoutsController < Api::V1::ApiController
   end
 
   def up
-    @shout = Shout.find(params[:id])
+    @shout = Shout.find(params[:shout_id])
     @shout.update_attributes flag: @shout.flag+1
     render json: @shout,
        serializer: Api::V1::ShoutSerializer,
