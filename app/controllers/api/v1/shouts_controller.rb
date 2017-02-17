@@ -30,13 +30,17 @@ class Api::V1::ShoutsController < Api::V1::ApiController
       flag_update = 3
     end
     @shout.update_attributes flag: @shout.flag+flag_update
-    render_shouts
+    render json: @shout,
+       serializer: Api::V1::ShoutSerializer,
+       status: :ok
   end
 
   def up
     @shout = Shout.find(params[:shout_id])
     @shout.update_attributes ups: @shout.ups+1
-    render_shouts
+    render json: @shout,
+       serializer: Api::V1::ShoutSerializer,
+       status: :ok
   end
 
   private
