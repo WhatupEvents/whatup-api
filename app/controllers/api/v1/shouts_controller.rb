@@ -25,7 +25,12 @@ class Api::V1::ShoutsController < Api::V1::ApiController
 
   def flag
     @shout = Shout.find(params[:shout_id])
-    @shout.update_attributes ups: @shout.ups+1
+    # TODO: if admin flag up to 3 automatically
+    flag_update = 1
+    if current_user.role == "Admin"
+      flag_update = 3
+    end
+    @shout.update_attributes flag: @shout.flag+flag_update
     render json: @shout,
        serializer: Api::V1::ShoutSerializer,
        status: :ok
@@ -33,7 +38,7 @@ class Api::V1::ShoutsController < Api::V1::ApiController
 
   def up
     @shout = Shout.find(params[:shout_id])
-    @shout.update_attributes flag: @shout.flag+1
+    @shout.update_attributes ups: @shout.ups+1
     render json: @shout,
        serializer: Api::V1::ShoutSerializer,
        status: :ok
@@ -60,6 +65,7 @@ class Api::V1::ShoutsController < Api::V1::ApiController
     shouts = Shout.where('created_at > ?', Time.now-7.hour)
       .where(event_id: Event.current.pub.near_user(lat, long, 20.0).map(&:id))
       .where('created_at <= ?', last.created_at)
+      .where('flagged <= 3')
       .limit(15).order(created_at: :desc)
     if shouts.present?
       render json: shouts,
