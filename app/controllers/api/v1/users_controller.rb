@@ -1,8 +1,25 @@
 class Api::V1::UsersController < Api::V1::ApiController
-  doorkeeper_for :all, except: [:create, :authenticate]
+  doorkeeper_for :all, except: [:create, :authenticate, :check_uniqueness]
+
+  def check_uniqueness
+    if User.where(params[:unique_field] => params[:unique_value]).empty?
+      render json: {}, status: :ok
+    else
+      head :gone
+    end
+  end
+
+  def authenticate
+    @current_user = User.where(user_name: user_params[:user_name], encrypted_password: user_params[:encrypted_password]).first
+    if @current_user
+      render_me :ok
+    else
+      head :unauthorized
+    end
+  end
 
   def create
-    @current_user = User.where('fb_id = ? or email = ?', user_params['fb_id'], user_params['email']).first || User.new
+    @current_user = User.where('user_name = ?', user_params['user_name']).first || User.new
     if @current_user.new_record?
       @current_user.role = 'User'
       @current_user.accepted_terms = false
@@ -13,18 +30,44 @@ class Api::V1::UsersController < Api::V1::ApiController
       if user_params.has_key? 'accepted_terms'
         @current_user.update_attribute('accepted_terms', user_params['accepted_terms'])
       end
-      @current_user.update_attribute('email', user_params['email'])
-      render_me :ok
+      if user_params['fb_id']
+        if User.find_by_fb_id(user_params['fb_id'])
+          head :gone
+        else
+          @current_user.update_attribute('fb_id', user_params['fb_id'])
+          render_me :ok
+        end
+      end
+      if user_params['email']
+        @current_user.update_attribute('email', user_params['email'])
+        render_me :ok
+      end
     end
-  rescue Exception => e
-    Rails.logger.info e.to_s
-    head :bad_request
+  end
+
+  def update
+    @current_user = User.find(params[:id])
+    @current_user.update_attributes(user_image_params)
+    head :ok
+  end
+
+  def add_friend
+    friend = User.find_by_user_name(params[:new_friend_username])
+    if friend
+      FriendRelationship.find_or_create_by(person_id: current_user.id, friend_id: friend.id)
+      FriendRelationship.find_or_create_by(person_id: friend.id, friend_id: current_user.id)
+      render json: {}, status: :created
+    else
+      head :not_found
+    end
   end
 
   def friends
-    User.where('fb_id in (?)',JSON.parse(params['friends_fb_ids'])).each do |friend|
-      FriendRelationship.find_or_create_by(person_id: current_user.id, friend_id: friend.id)
-      FriendRelationship.find_or_create_by(person_id: friend.id, friend_id: current_user.id)
+    if (params['friends_fb_ids'])
+      User.where('fb_id in (?)',JSON.parse(params['friends_fb_ids'])).each do |friend|
+        FriendRelationship.find_or_create_by(person_id: current_user.id, friend_id: friend.id)
+	FriendRelationship.find_or_create_by(person_id: friend.id, friend_id: current_user.id)
+      end
     end
     render json: current_user.friends.order(first_name: :asc),
            each_serializer: Api::V1::FriendSerializer,
@@ -60,6 +103,10 @@ class Api::V1::UsersController < Api::V1::ApiController
     params.require(:device).permit(:uuid, :registration_id, :os)
   end
 
+  def user_image_params
+    params.permit(:source, :image)
+  end
+
   def user_params
     params.require(:user).permit(
       :user_name, 
@@ -67,7 +114,10 @@ class Api::V1::UsersController < Api::V1::ApiController
       :first_name, 
       :last_name, 
       :fb_id,
-      :accepted_terms
+      :accepted_terms,
+      :encrypted_password,
+      :source,
+      :image
     )
   end
 end

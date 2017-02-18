@@ -3,18 +3,22 @@ require 'capistrano/setup'
 
 # Includes default deployment tasks
 require 'capistrano/deploy'
-
-require 'capistrano/unicorn_nginx'
 require 'capistrano/safe_deploy_to'
+require 'capistrano/unicorn_nginx'
 
 require "capistrano-resque"
 
 require "capistrano/scm/git"
 install_plugin Capistrano::SCM::Git
 
-# require 'capistrano/rvm'
+# needed for staging only
+require 'capistrano/bundler'
+require 'capistrano/rvm'
+
+# needed for production only
+# require 'rvm1/capistrano3'
+
 require 'capistrano/rails/migrations'
-require 'rvm1/capistrano3'
 
 # Loads custom tasks from `lib/capistrano/tasks' if you have any defined.
 Dir.glob('lib/capistrano/tasks/*.rake').each { |r| import r }

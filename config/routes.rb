@@ -9,8 +9,11 @@ Whatsup::Application.routes.draw do
     namespace :v1 do
       delete 'unregister_device', to: 'users#unregister', as: 'unregister'
       get 'download/:image_url', to: 'messages#download', as: 'image_download'
+      post 'check_uniqueness', to: 'users#check_uniqueness', as: 'check_uniqueness'
+      post 'authenticate', to: 'users#authenticate', as: 'authenticate'
       post 'friends', to: 'users#friends', as: 'users_friends'
       resources :users, only: [:create]
+      post 'add_friend', to: 'users#add_friend', as: 'users_add_friend'
       resources :friend_groups, only: [:index, :create, :update, :destroy]
       resources :shouts, only: [:create, :index, :update] do
         put 'flag', to: 'shouts#flag', as: 'shouts_flag'
