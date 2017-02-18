@@ -1,5 +1,0 @@
-event_feed_service_jobs:
-  cron: "0 1 * * *"
-  class: "FeedServiceJob"
-  queue: low
-  description: "This job pulls in rss feed events"
