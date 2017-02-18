@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170217014023) do
+ActiveRecord::Schema.define(version: 20170218070314) do
 
   create_table "devices", force: :cascade do |t|
     t.integer "user_id",         limit: 4
@@ -138,6 +138,26 @@ ActiveRecord::Schema.define(version: 20170217014023) do
 
   add_index "participant_relationships", ["event_id"], name: "index_participant_relationships_on_event_id", using: :btree
   add_index "participant_relationships", ["participant_id"], name: "index_participant_relationships_on_participant_id", using: :btree
+
+  create_table "shout_flaggings", force: :cascade do |t|
+    t.integer  "shout_id",      limit: 4
+    t.integer  "flagged_by_id", limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "shout_flaggings", ["flagged_by_id"], name: "index_shout_flaggings_on_flagged_by_id", using: :btree
+  add_index "shout_flaggings", ["shout_id"], name: "index_shout_flaggings_on_shout_id", using: :btree
+
+  create_table "shout_uppings", force: :cascade do |t|
+    t.integer  "shout_id",    limit: 4
+    t.integer  "upped_by_id", limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "shout_uppings", ["shout_id"], name: "index_shout_uppings_on_shout_id", using: :btree
+  add_index "shout_uppings", ["upped_by_id"], name: "index_shout_uppings_on_upped_by_id", using: :btree
 
   create_table "shouts", force: :cascade do |t|
     t.integer  "user_id",            limit: 4

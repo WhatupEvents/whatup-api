@@ -1,5 +1,5 @@
 class Api::V1::ShoutSerializer < ActiveModel::Serializer
-  attributes :id, :text, :created_at, :shouter, :user_id, :event_id, :source, :url, :ups, :flag
+  attributes :id, :text, :created_at, :shouter, :shouter_url, :user_id, :event_id, :source, :url, :ups, :upped_by, :flag, :flagged_by
 
   def text
     text = object.text
@@ -19,5 +19,17 @@ class Api::V1::ShoutSerializer < ActiveModel::Serializer
 
   def shouter
     User.find(object.user_id).name
+  end
+
+  def shouter_url
+    User.find(object.user_id).url
+  end
+
+  def upped_by
+    object.upped_by.include? User.find(object.user_id)
+  end
+
+  def flagged_by
+    object.flagged_by.include? User.find(object.user_id)
   end
 end

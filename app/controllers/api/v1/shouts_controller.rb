@@ -25,11 +25,14 @@ class Api::V1::ShoutsController < Api::V1::ApiController
 
   def flag
     @shout = Shout.find(params[:shout_id])
-    flag_update = 1
-    if current_user.role == "Admin"
-      flag_update = 3
+    unless @shout.flagged_by.include? current_user
+      flag_update = 1
+      if current_user.role == "Admin"
+        flag_update = 3
+      end
+      @shout.update_attributes flag: @shout.flag+flag_update
+      @shout.flagged_by << current_user
     end
-    @shout.update_attributes flag: @shout.flag+flag_update
     render json: @shout,
        serializer: Api::V1::ShoutSerializer,
        status: :ok
@@ -37,7 +40,10 @@ class Api::V1::ShoutsController < Api::V1::ApiController
 
   def up
     @shout = Shout.find(params[:shout_id])
-    @shout.update_attributes ups: @shout.ups+1
+    unless @shout.upped_by.include? current_user
+      @shout.update_attributes ups: @shout.ups+1
+      @shout.upped_by << current_user
+    end
     render json: @shout,
        serializer: Api::V1::ShoutSerializer,
        status: :ok

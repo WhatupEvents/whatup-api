@@ -2,6 +2,12 @@ class Shout < ActiveRecord::Base
   belongs_to :user
   belongs_to :event
 
+  has_many :shout_uppings
+  has_many :upped_by, class_name: 'User', through: :shout_uppings
+
+  has_many :shout_flaggings
+  has_many :flagged_by, class_name: 'User', through: :shout_flaggings
+
   has_attached_file :image,
     :storage => :s3,
     :bucket => 'whatupevents-images',
