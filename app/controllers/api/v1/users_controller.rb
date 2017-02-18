@@ -37,6 +37,11 @@ class Api::V1::UsersController < Api::V1::ApiController
           @current_user.update_attribute('fb_id', user_params['fb_id'])
           render_me :ok
         end
+      else
+        if user_params['email']
+          @current_user.update_attribute('email', user_params['email'])
+        end
+        render_me :ok
       end
     end
   end
