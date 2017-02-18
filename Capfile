@@ -12,11 +12,10 @@ require "capistrano/scm/git"
 install_plugin Capistrano::SCM::Git
 
 # needed for staging only
-require 'capistrano/bundler'
-require 'capistrano/rvm'
+# require 'capistrano/rvm'
 
 # needed for production only
-# require 'rvm1/capistrano3'
+require 'rvm1/capistrano3'
 
 require 'capistrano/rails/migrations'
 
