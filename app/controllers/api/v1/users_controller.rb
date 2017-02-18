@@ -38,10 +38,6 @@ class Api::V1::UsersController < Api::V1::ApiController
           render_me :ok
         end
       end
-      if user_params['email']
-        @current_user.update_attribute('email', user_params['email'])
-        render_me :ok
-      end
     end
   end
 
