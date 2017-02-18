@@ -22,7 +22,10 @@ class Api::V1::ShoutSerializer < ActiveModel::Serializer
   end
 
   def shouter_url
-    User.find(object.user_id).url
+    url = User.find(object.user_id).image.url
+    unless url.include? "missing.png"
+      url.split('whatupevents-images/')[1].split('?')[0].gsub('/', '-').gsub('.','_')
+    end
   end
 
   def upped_by
