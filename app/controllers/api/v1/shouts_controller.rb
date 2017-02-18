@@ -75,7 +75,8 @@ class Api::V1::ShoutsController < Api::V1::ApiController
     if shouts.present?
       render json: shouts,
              each_serializer: Api::V1::ShoutSerializer,
-             status: :ok
+             status: :ok,
+             current_user: current_user.id
     else
       head :not_found
     end

@@ -29,10 +29,10 @@ class Api::V1::ShoutSerializer < ActiveModel::Serializer
   end
 
   def upped_by
-    object.upped_by.include? User.find(object.user_id)
+    object.upped_by.include? User.find(serialization_options[:current_user])
   end
 
   def flagged_by
-    object.flagged_by.include? User.find(object.user_id)
+    object.flagged_by.include? User.find(serialization_options[:current_user])
   end
 end
