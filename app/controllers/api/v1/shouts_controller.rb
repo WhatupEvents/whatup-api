@@ -20,7 +20,8 @@ class Api::V1::ShoutsController < Api::V1::ApiController
     update_image
     render json: @shout,
        serializer: Api::V1::ShoutSerializer,
-       status: :ok
+       status: :ok,
+       current_user: current_user.id
   end
 
   def flag
@@ -35,7 +36,8 @@ class Api::V1::ShoutsController < Api::V1::ApiController
     end
     render json: @shout,
        serializer: Api::V1::ShoutSerializer,
-       status: :ok
+       status: :ok,
+       current_user: current_user.id
   end
 
   def up
@@ -46,15 +48,14 @@ class Api::V1::ShoutsController < Api::V1::ApiController
     end
     render json: @shout,
        serializer: Api::V1::ShoutSerializer,
-       status: :ok
+       status: :ok,
+       current_user: current_user.id
   end
 
   private
 
   def update_image
     unless @shout.image.url.include? "missing.png"
-      Rails.logger.info @shout.image
-      Rails.logger.info @shout.image.url
       obj = Aws::S3::Object.new(
         bucket_name: 'whatupevents-images',
         key: @shout.image.url.split('whatupevents-images/')[1].split('?')[0],
