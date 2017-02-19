@@ -23,8 +23,12 @@ class Api::V1::ShoutSerializer < ActiveModel::Serializer
 
   def shouter_url
     url = User.find(object.user_id).image.url
+    Rails.logger.info("-----------------url:" + url)
     unless url.include? "missing.png"
-      url.split('whatupevents-images/')[1].split('?')[0].gsub('/', '-').gsub('.','_')
+      url_split = url.split('whatupevents-images/')
+      Rails.logger.info("---------------------split:")
+      Rails.logger.info(url_split)
+      url_split[1].split('?')[0].gsub('/', '-').gsub('.','_')
     end
   end
 
