@@ -53,6 +53,8 @@ class Api::V1::ShoutsController < Api::V1::ApiController
 
   def update_image
     unless @shout.image.url.include? "missing.png"
+      Rails.logger.info @shout.image
+      Rails.logger.info @shout.image.url
       obj = Aws::S3::Object.new(
         bucket_name: 'whatupevents-images',
         key: @shout.image.url.split('whatupevents-images/')[1].split('?')[0],
