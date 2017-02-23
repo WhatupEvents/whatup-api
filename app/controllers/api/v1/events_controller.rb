@@ -7,6 +7,9 @@ class Api::V1::EventsController < Api::V1::ApiController
     if get_geo
       long, lat = get_geo.split(':')
       events |= Event.pub.current.near_user(lat, long, distance)
+      # eventually need to either remove this or do a by city thing to limit
+      # events that don't have coordinates at least by city and not lose them
+      events |= Event.pub.current.where(latitude: "200.0", longitude: "200.0")
     end
     render json: events,
            each_serializer: Api::V1::EventSerializer,
