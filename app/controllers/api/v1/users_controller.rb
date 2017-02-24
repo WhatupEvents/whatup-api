@@ -65,7 +65,8 @@ class Api::V1::UsersController < Api::V1::ApiController
 
   def friends
     if (params['friends_fb_ids'])
-      User.where('fb_id in (?)',JSON.parse(params['friends_fb_ids'])).each do |friend|
+      # using user_name since fb_id is saved here for fb users
+      User.where('user_name in (?)',JSON.parse(params['friends_fb_ids'])).each do |friend|
         FriendRelationship.find_or_create_by(person_id: current_user.id, friend_id: friend.id)
 	FriendRelationship.find_or_create_by(person_id: friend.id, friend_id: current_user.id)
       end
