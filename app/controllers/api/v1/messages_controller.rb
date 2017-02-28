@@ -39,7 +39,7 @@ class Api::V1::MessagesController < Api::V1::ApiController
              each_serializer: Api::V1::MessageSerializer,
              status: :ok
     else
-      head :not_found
+      render json: {}, status: :not_found
     end
   rescue Exception => e
     Rails.logger.info e.to_s

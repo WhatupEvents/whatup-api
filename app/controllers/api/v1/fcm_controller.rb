@@ -18,8 +18,7 @@ class Api::V1::FcmController < Api::V1::ApiController
         end
       end
     end
-    render json: {},
-           status: :not_found
+    render json: {}, status: :not_found
   end
   
   private

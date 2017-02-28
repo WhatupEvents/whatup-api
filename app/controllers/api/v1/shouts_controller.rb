@@ -81,7 +81,7 @@ class Api::V1::ShoutsController < Api::V1::ApiController
              status: :ok,
              current_user: current_user.id
     else
-      head :not_found
+      render json: {}, status: :not_found
     end
   end
 

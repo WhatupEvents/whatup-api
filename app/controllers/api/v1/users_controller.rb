@@ -3,7 +3,7 @@ class Api::V1::UsersController < Api::V1::ApiController
 
   def check_uniqueness
     if User.where(params[:unique_field] => params[:unique_value]).empty?
-      render json: {}, status: :ok
+      render json: {}, status: :not_found
     else
       head :gone
     end
@@ -59,7 +59,7 @@ class Api::V1::UsersController < Api::V1::ApiController
       FriendRelationship.find_or_create_by(person_id: friend.id, friend_id: current_user.id)
       render json: {}, status: :created
     else
-      head :not_found
+      render json: {}, status: :not_found
     end
   end
 
