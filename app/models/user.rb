@@ -25,6 +25,8 @@ class User < ActiveRecord::Base
 
   has_many :friend_groups
 
+  has_many :events, foreign_key: :created_by_id, dependent: :destroy
+
   after_create :default_friend_groups
 
   has_attached_file :image,
@@ -53,7 +55,9 @@ class User < ActiveRecord::Base
 
   def current_events
     # TODO: decide whether we want to delete events and archive any data
-    Event.current.joins(:participants).where('users.id = ?', id).where('public = 0')
+    my_events = events.where('public = 0')
+    friend_events = Event.current.joins(:participants).where('users.id = ?', id).where('public = 0')
+    return my_events | friend_events
   end
 
   def name
