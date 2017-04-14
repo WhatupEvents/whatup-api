@@ -24,6 +24,12 @@ class Api::V1::ShoutsController < Api::V1::ApiController
        current_user: current_user.id
   end
 
+  def destroy
+    Shout.find(params[:id]).destroy
+    render json: {},
+           status: :ok
+  end
+
   def flag
     @shout = Shout.find(params[:shout_id])
     unless @shout.flagged_by.include? current_user
