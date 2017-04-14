@@ -37,6 +37,10 @@ class Api::V1::StatusesController < Api::V1::ApiController
       status.ups += 1
       status.save
     end
+
+    render json: status,
+           serializer: Api::V1::StatusSerializer,
+           status: :ok
   end
 
   def status_params
