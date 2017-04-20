@@ -57,6 +57,7 @@ gem 'pry-byebug'
 gem 'pry-rails'
 gem 'pry-stack_explorer'
 gem 'foreman'
+gem 'dotenv-rails'
 
 group :development, :staging do
   gem 'faker', '~> 1.4.3'
