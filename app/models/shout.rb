@@ -20,8 +20,8 @@ class Shout < ActiveRecord::Base
 
   def s3_credentials
     {
-     access_key_id: "AKIAJSKGHQFVPEXZZGMA",
-     secret_access_key: "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"
+     access_key_id: ENV['AWS_ACCESS_KEY'],
+     secret_access_key: ENV['AWS_SECRET_KEY']
     }
   end
 

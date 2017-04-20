@@ -65,8 +65,8 @@ class Api::V1::ShoutsController < Api::V1::ApiController
       obj = Aws::S3::Object.new(
         bucket_name: 'whatupevents-images',
         key: @shout.image.url.split('whatupevents-images/')[1].split('?')[0],
-        access_key_id: 'AKIAJSKGHQFVPEXZZGMA',
-        secret_access_key: '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',
+        access_key_id: ENV['AWS_ACCESS_KEY'],
+        secret_access_key: ENV['AWS_SECRET_KEY'],
         region: 'us-east-2'
       )
       @shout.update_attribute(:url, obj.presigned_url(:get, expires_in: 60*60*7))

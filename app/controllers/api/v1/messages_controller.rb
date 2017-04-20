@@ -21,8 +21,8 @@ class Api::V1::MessagesController < Api::V1::ApiController
     obj = Aws::S3::Object.new(
       bucket_name: 'whatupevents-images',
       key: object_key,
-      access_key_id: 'AKIAJSKGHQFVPEXZZGMA',
-      secret_access_key: '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',
+      access_key_id: ENV['AWS_ACCESS_KEY'],
+      secret_access_key: ENV['AWS_SECRET_KEY'],
       region: 'us-east-2'
     )
 
