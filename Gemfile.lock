@@ -70,7 +70,7 @@ GEM
       resque-scheduler
     capistrano-safe-deploy-to (1.1.1)
       capistrano (>= 3.0)
-    capistrano-unicorn-nginx (3.2.0)
+    capistrano-unicorn-nginx (3.4.0)
       capistrano (>= 3.1)
       sshkit (>= 1.2.0)
     climate_control (0.1.0)
@@ -279,7 +279,7 @@ DEPENDENCIES
   capistrano-rails (~> 1.1.0)
   capistrano-resque (~> 0.2.2)
   capistrano-safe-deploy-to (~> 1.1.1)
-  capistrano-unicorn-nginx (~> 3.2.0)
+  capistrano-unicorn-nginx (~> 3.4.0)
   coffee-rails
   doorkeeper (~> 1.4.0)
   dotenv-rails
@@ -306,4 +306,4 @@ DEPENDENCIES
   unicorn
 
 BUNDLED WITH
-   1.13.7
+   1.14.6
