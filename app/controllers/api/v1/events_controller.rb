@@ -9,7 +9,7 @@ class Api::V1::EventsController < Api::V1::ApiController
       events |= Event.pub.current.near_user(lat, long, distance)
       # eventually need to either remove this or do a by city thing to limit
       # events that don't have coordinates at least by city and not lose them
-      events |= Event.pub.current.where(latitude: "200.0", longitude: "200.0")
+      events |= Event.pub.current.where(latitude: '200.0', longitude: '200.0')
     end
     render json: events,
            each_serializer: Api::V1::EventSerializer,
@@ -31,44 +31,55 @@ class Api::V1::EventsController < Api::V1::ApiController
 
   def update
     event = Event.find(params[:id])
+    
+    if (event.created_by_id != current_user.id && current_user.role != 'Admin') ||
+      (create_event_params[:public] == '1' && current_user.role == 'User')
+      head :bad_request
+    else
+      before_update = event.participant_relationships.all.map(&:attributes)
+      if create_event_params[:friend_ids]
+        friend_ids = JSON.parse(create_event_params[:friend_ids])
+        participants = User.where(id: friend_ids + [create_event_params[:created_by_id]])
+        event.participants = participants
+        params.delete("friend_ids")
+      end
+      after_update = event.participant_relationships.all.map(&:attributes)
 
-    before_update = event.participant_relationships.all.map(&:attributes)
-    if create_event_params[:friend_ids]
-      friend_ids = JSON.parse(create_event_params[:friend_ids])
-      participants = User.where(id: friend_ids + [create_event_params[:created_by_id]])
-      event.participants = participants
-      params.delete("friend_ids")
-    end
-    after_update = event.participant_relationships.all.map(&:attributes)
+      event.update_attributes! create_event_params
 
-    event.update_attributes! create_event_params
-
-    if Rails.env != "development"
-      (before_update+after_update).uniq.each do |participant|
-        if participant['notify'] && (participant['participant_id'] != current_user.id)
-          Resque.enqueue(
-            FcmMessageJob, {
-              event_id: event.id,
-              event_name: event.name,
-              updated_at: event.updated_at
-            },participant['participant_id']
-          )
+      if Rails.env != "development"
+        (before_update+after_update).uniq.each do |participant|
+          if participant['notify'] && (participant['participant_id'] != current_user.id)
+            Resque.enqueue(
+              FcmMessageJob, {
+                event_id: event.id,
+                event_name: event.name,
+                updated_at: event.updated_at
+              }, participant['participant_id']
+            )
+          end
         end
       end
+      render json: event,
+             serializer: Api::V1::EventSerializer,
+             status: :ok,
+             current_user: current_user.id
     end
-    render json: event,
-           serializer: Api::V1::EventSerializer,
-           status: :ok,
-           current_user: current_user.id
   rescue Exception => e
     Rails.logger.info e.to_s
     head :bad_request
   end
 
   def destroy
-    Event.find(params[:id]).destroy
-    render json: {},
-           status: :ok
+    event = Event.find(params[:id])
+    
+    if event.created_by_id == current_user.id || current_user.role == 'Admin'
+      event.destroy
+      render json: {},
+             status: :ok
+    else
+      head :bad_request
+    end
   end
 
   def leave

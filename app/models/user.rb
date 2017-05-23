@@ -55,8 +55,8 @@ class User < ActiveRecord::Base
 
   def current_events
     # TODO: decide whether we want to delete events and archive any data
-    my_events = events.where('public = 0').not_old
-    friend_events = Event.current.joins(:participants).where('users.id = ?', id).where('public = 0')
+    my_events = events.where('public = 0').not_old.order(start_time: :desc)
+    friend_events = Event.current.joins(:participants).where('users.id = ?', id).where('public = 0').order(start_time: :desc)
     return my_events | friend_events
   end
 
