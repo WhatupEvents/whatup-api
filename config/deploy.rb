@@ -1,5 +1,5 @@
 # config valid only for Capistrano 3.1
-lock '3.8.1'
+lock '3.7.2'
 
 set :application, 'whatup'
 set :repo_url, 'git@github.com:fellou89/whatup-api.git'
