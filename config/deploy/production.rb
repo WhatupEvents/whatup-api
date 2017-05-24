@@ -15,6 +15,7 @@ role :resque_scheduler, [ host ]
 set :default_environment, 'RAILS_ENV' => environment
 set :application, host
 
+set :use_sudo, false
 set :ssh_options, keys: ['~/.ssh/whatup.pem'], forward_agent: true, user: 'ubuntu'
 
 why_here = "/var/www/#{host}"
