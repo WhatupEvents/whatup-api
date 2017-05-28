@@ -36,17 +36,30 @@ class Api::V1::EventsController < Api::V1::ApiController
       (create_event_params[:public] == '1' && current_user.role == 'User')
       head :bad_request
     else
+
+      # clear participants when going from private to public
+      if !event.public && create_event_params[:public]
+        event.participants = []
+        create_event_params.delete("friend_ids")
+      end
+
+      # saves participants before change so that they can be notified
+      # when they've been removed from an event?
       before_update = event.participant_relationships.all.map(&:attributes)
+
       if create_event_params[:friend_ids]
         friend_ids = JSON.parse(create_event_params[:friend_ids])
         participants = User.where(id: friend_ids + [create_event_params[:created_by_id]])
         event.participants = participants
         params.delete("friend_ids")
       end
+
       after_update = event.participant_relationships.all.map(&:attributes)
 
+      # update attributes
       event.update_attributes! create_event_params
 
+      # messages go out to participants that have notifications on
       if Rails.env != "development"
         (before_update+after_update).uniq.each do |participant|
           if participant['notify'] && (participant['participant_id'] != current_user.id)
@@ -60,11 +73,13 @@ class Api::V1::EventsController < Api::V1::ApiController
           end
         end
       end
+
       render json: event,
              serializer: Api::V1::EventSerializer,
              status: :ok,
              current_user: current_user.id
     end
+
   rescue Exception => e
     Rails.logger.info e.to_s
     head :bad_request
@@ -80,6 +95,14 @@ class Api::V1::EventsController < Api::V1::ApiController
     else
       head :bad_request
     end
+  end
+
+  def rsvp
+    event = Event.find(params[:event_id])
+    Rails.logger.info event.name
+    Rails.logger.info params
+    render json: {},
+           status: :ok
   end
 
   def leave
