@@ -40,10 +40,7 @@ class Api::V1::EventsController < Api::V1::ApiController
       # clear participants when going from private to public or viceversa
       if event.public != (create_event_params[:public] == "true")
         event.participants = []
-        Rails.logger.info event.participants.count
-        Rails.logger.info create_event_params
         params.delete("friend_ids")
-        Rails.logger.info create_event_params
       end
 
       # saves participants before change so that they can be notified
