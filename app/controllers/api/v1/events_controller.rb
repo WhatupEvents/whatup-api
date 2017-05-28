@@ -38,13 +38,12 @@ class Api::V1::EventsController < Api::V1::ApiController
     else
 
       # clear participants when going from private to public or viceversa
-      Rails.logger.info event.public
-      Rails.logger.info create_event_params
-      Rails.logger.info create_event_params[:public]
       if event.public != (create_event_params[:public] == "true")
         event.participants = []
         Rails.logger.info event.participants.count
-        create_event_params.delete("friend_ids")
+        Rails.logger.info create_event_params
+        create_event_params['friend_ids'] = []
+        create_event_params.delete('friend_ids')
         Rails.logger.info create_event_params
       end
 
