@@ -25,11 +25,11 @@ Whatsup::Application.routes.draw do
       resources :messages, only: [:index]
       get :random_messages, to: 'messages#random'
       resources :events, only: [:index, :create, :update, :destroy] do
-        get :notify, to: 'events#notify', as: 'events_notify'
-        get :rsvp, to: 'events#rsvp', as: 'events_rsvp'
+        put :notify, to: 'events#notify', as: 'events_notify'
+        put :rsvp, to: 'events#rsvp', as: 'events_rsvp'
+        put :leave, to: 'events#leave', as: 'events_leave'
       end
       put 'events', to: 'events#index'
-      put 'leave_events/:id', to: 'events#leave'
       post 'fcm_message', to: 'fcm#message'
     end
   end

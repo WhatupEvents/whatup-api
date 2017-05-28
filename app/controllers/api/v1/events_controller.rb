@@ -37,8 +37,8 @@ class Api::V1::EventsController < Api::V1::ApiController
       head :bad_request
     else
 
-      # clear participants when going from private to public
-      if !event.public && create_event_params[:public]
+      # clear participants when going from private to public or viceversa
+      if event.public != create_event_params[:public]
         event.participants = []
         create_event_params.delete("friend_ids")
       end
@@ -99,14 +99,13 @@ class Api::V1::EventsController < Api::V1::ApiController
 
   def rsvp
     event = Event.find(params[:event_id])
-    Rails.logger.info event.name
-    Rails.logger.info params
+    event.participants |= [current_user]
     render json: {},
            status: :ok
   end
 
   def leave
-    event = Event.find(params[:id])
+    event = Event.find(params[:event_id])
     event.participants.delete current_user
     render json: {},
            status: :ok
