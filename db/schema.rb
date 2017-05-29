@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170218070314) do
+ActiveRecord::Schema.define(version: 20170529042819) do
 
   create_table "devices", force: :cascade do |t|
     t.integer "user_id",         limit: 4
@@ -43,6 +43,16 @@ ActiveRecord::Schema.define(version: 20170218070314) do
     t.datetime "end_at"
     t.integer  "feed_id",            limit: 4
   end
+
+  create_table "follow_relationships", force: :cascade do |t|
+    t.integer  "followed_id", limit: 4
+    t.integer  "follower_id", limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "follow_relationships", ["followed_id"], name: "index_follow_relationships_on_followed_id", using: :btree
+  add_index "follow_relationships", ["follower_id"], name: "index_follow_relationships_on_follower_id", using: :btree
 
   create_table "friend_group_memberships", force: :cascade do |t|
     t.integer  "friend_group_id", limit: 4
