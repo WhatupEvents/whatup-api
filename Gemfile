@@ -29,7 +29,7 @@ gem 'jquery-rails'
 gem 'rails-api', '~> 0.2.1'
 gem 'active_model_serializers', '~> 0.9.0'
 gem 'fcm'
-gem 'nokogiri'
+gem "nokogiri", '1.7.2', :require => "nokogiri"
 
 # Use unicorn as the app server
 gem 'unicorn'

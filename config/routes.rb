@@ -28,6 +28,7 @@ Whatsup::Application.routes.draw do
         put :notify, to: 'events#notify', as: 'events_notify'
         put :rsvp, to: 'events#rsvp', as: 'events_rsvp'
         put :leave, to: 'events#leave', as: 'events_leave'
+        put :follow_creator, to: 'events#follow_creator', as: 'events_follow_creator'
       end
       put 'events', to: 'events#index'
       post 'fcm_message', to: 'fcm#message'
