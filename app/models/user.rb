@@ -7,15 +7,8 @@ class User < ActiveRecord::Base
     class_name: 'Doorkeeper::AccessToken',
     dependent: :destroy
 
-  has_many :follow_relationships_out,
-           class_name: 'FollowRelationship',
-           foreign_key: :user_id
-
-  has_many :follow_relationships_in,
-           class_name: 'FollowRelationship',
-           foreign_key: :follower_id
-
-  has_many :following, through: :follow_relationships_out, source: :user
+  has_many :follow_relationships
+  has_many :following, through: :follow_relationships
 
   has_many :devices
 
