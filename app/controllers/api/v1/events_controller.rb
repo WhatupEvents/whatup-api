@@ -19,6 +19,20 @@ class Api::V1::EventsController < Api::V1::ApiController
 
   def create
     event = Event.create! create_event_params
+
+    if (event.created_by.followers.count > 0)
+      if Rails.env != "development"
+        event.created_by.followers.each do |follower|
+          Resque.enqueue(
+            FcmMessageJob, {
+              follower_name: follower.name,
+              created_at: event.created_at
+            }, follower.id
+          )
+        end
+      end
+    end
+
     event.participants = [current_user]
     render json: event,
            serializer: Api::V1::EventSerializer,
@@ -121,7 +135,7 @@ class Api::V1::EventsController < Api::V1::ApiController
 
   def follow_creator
     event = Event.find(params[:event_id])
-    event.creator.followings |= [current_user]
+    event.created_by.followings |= [current_user]
     render json: {},
            status: :ok
   end

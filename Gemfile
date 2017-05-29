@@ -35,7 +35,7 @@ gem "nokogiri", '1.7.2', :require => "nokogiri"
 gem 'unicorn'
 
 # Deploy with Capistrano
-gem 'capistrano'
+gem 'capistrano', '3.7.2'
 gem 'capistrano-rails', '~> 1.1.0'
 gem 'capistrano-unicorn-nginx', '~> 3.4.0'
 gem 'capistrano-safe-deploy-to', '~> 1.1.1'

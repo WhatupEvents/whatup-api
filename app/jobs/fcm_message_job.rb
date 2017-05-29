@@ -3,11 +3,12 @@ class FcmMessageJob
 
   def self.perform(data, recipient_id)
     #TODO: gotta move this into an environment file
-    fcm = FCM.new("AIzaSyAlSPpjCGewFMOB58ExE8PmHxy7aje4D8w")
-    fcm = FCM.new("AAAAbeSD7bc:APA91bH5ilSjjNzDQOhIZoIJJFWxVTImMXf8ILD_MtUmqWPHOUoNdwmeUH5lEFC4mPv5phtWI3ucXe49AaFC8slJzLqseV7ZYrQ7GrlbTy9eHEpAAN_-YsH_3SNuSjHF_0G5CxLDt-LN0RgloT_igSj9N2diVKgSVw")
+    fcm = FCM.new(ENV['FCM_LEGACY_SERVER_KEY'])
+    fcm = FCM.new(ENV['FCM_SERVER_KEY'])
     Device.where(user_id: recipient_id).map(&:registration_id).uniq.each do |reg_id|
       if data.has_key? 'event_name'
         if data.has_key? 'updated_at'
+          # event updated job
           resp = fcm.send_with_notification_key(reg_id, {
             notification: {title: data['event_name'], body: "has been updated", tag: "#{data['event_id']}_updt", sound: "whatuppop"},
             data: data,
@@ -15,6 +16,7 @@ class FcmMessageJob
             priority: "high"
           })
         else
+          # event message job
           resp = fcm.send_with_notification_key(reg_id, {
             notification: {title: data['event_name'], body: "#{data['event_name']} message", tag: "#{data['event_id']}_msg", sound: "whatuppop"},
             data: data,
@@ -23,19 +25,31 @@ class FcmMessageJob
           })
         end
       else
-        if data.has_key? 'status_id'
-          resp = fcm.send_with_notification_key(reg_id, {
-            data: data,
-            content_available: true,
-            priority: "high"
-          })
+        if data.has_key? 'follower_name'
+            # followed event creator message
+            resp = fcm.send_with_notification_key(reg_id, {
+              notification: {title: 'New Public Event!', body: "#{data['follower_name']} has posted a new event. ", tag: 'followed'},
+              data: data,
+              content_available: true,
+              priority: "high"
+            })
         else
-          resp = fcm.send_with_notification_key(reg_id, {
-            notification: {title: 'Set a status!', body: "you haven't updated in a while", tag: 'status'},
-            data: data,
-            content_available: true,
-            priority: "high"
-          })
+          if data.has_key? 'status_id'
+            # friend status update job
+            resp = fcm.send_with_notification_key(reg_id, {
+              data: data,
+              content_available: true,
+              priority: "high"
+            })
+          else
+            # set a status job
+            resp = fcm.send_with_notification_key(reg_id, {
+              notification: {title: 'Set a status!', body: "you haven't updated in a while", tag: 'status'},
+              data: data,
+              content_available: true,
+              priority: "high"
+            })
+          end
         end
       end
       Rails.logger.info resp.to_s
