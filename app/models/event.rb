@@ -1,9 +1,7 @@
 class Event < ActiveRecord::Base
   validates :name, presence: true
 
-  has_one :creator,
-          class_name: 'User',
-          foreign_key: :created_by_id
+  has_one :created_by, class_name: 'User'
 
   # TODO: dependent destroy?
   has_many :messages
