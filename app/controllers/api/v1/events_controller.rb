@@ -25,7 +25,7 @@ class Api::V1::EventsController < Api::V1::ApiController
         event.created_by.followers.each do |follower|
           Resque.enqueue(
             FcmMessageJob, {
-              follower_name: follower.name,
+              followed_name: current_user.name,
               created_at: event.created_at
             }, follower.id
           )

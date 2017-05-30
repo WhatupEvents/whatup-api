@@ -30,11 +30,21 @@ class Api::V1::StatusesController < Api::V1::ApiController
   end
 
   def up
-    status = Status.find(User.find(status_params[:user_id]).statuses.current.last.id)
-    upped_by = User.find(status_params[:upped_by])
-    unless status.upped_by.include? upped_by
-      status.upped_by.push upped_by
+    upping_friend = User.find(status_params[:user_id])
+    status = Status.find(upping_friend.statuses.current.last.id)
+
+    unless status.upped_by.include? current_user
+      status.upped_by.push current_user
       status.ups += 1
+
+      if Rails.env != "development"
+        Resque.enqueue(
+          FcmMessageJob, {
+            ups: status.ups,
+          }, current_user.id
+        )
+      end 
+
       status.save
     end
 
@@ -44,6 +54,6 @@ class Api::V1::StatusesController < Api::V1::ApiController
   end
 
   def status_params
-    params.require(:status).permit(:user_id, :symbol_id, :text, :upped_by, :ups)
+    params.require(:status).permit(:user_id, :symbol_id, :text, :ups)
   end
 end

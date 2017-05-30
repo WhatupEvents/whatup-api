@@ -7,6 +7,7 @@ class FcmMessageJob
     fcm = FCM.new(ENV['FCM_SERVER_KEY'])
     Device.where(user_id: recipient_id).map(&:registration_id).uniq.each do |reg_id|
       if data.has_key? 'event_name'
+        ##### EVENTS JOBS #####
         if data.has_key? 'updated_at'
           # event updated job
           resp = fcm.send_with_notification_key(reg_id, {
@@ -16,7 +17,7 @@ class FcmMessageJob
             priority: "high"
           })
         else
-          # event message job
+          # event chat message job
           resp = fcm.send_with_notification_key(reg_id, {
             notification: {title: data['event_name'], body: "#{data['event_name']} message", tag: "#{data['event_id']}_msg", sound: "whatuppop"},
             data: data,
@@ -25,15 +26,17 @@ class FcmMessageJob
           })
         end
       else
-        if data.has_key? 'follower_name'
-            # followed event creator message
+        if data.has_key? 'followed_name'
+            ##### FOLLOW JOBS #####
+            # followed creator new event job
             resp = fcm.send_with_notification_key(reg_id, {
-              notification: {title: 'New Public Event!', body: "#{data['follower_name']} has posted a new event. ", tag: 'followed'},
+              notification: {title: 'New Public Event!', body: "#{data['followed_name']} has posted a new event. ", tag: 'followed'},
               data: data,
               content_available: true,
               priority: "high"
             })
         else
+          ##### STATUS JOBS #####
           if data.has_key? 'status_id'
             # friend status update job
             resp = fcm.send_with_notification_key(reg_id, {
@@ -41,6 +44,13 @@ class FcmMessageJob
               content_available: true,
               priority: "high"
             })
+          elsif data.has_key? 'ups'
+            # upped status for user job
+            resp = fcm.send_with_notification_key(reg_id, {
+              data: data,
+              content_available: true,
+              priority: "high"
+            })   
           else
             # set a status job
             resp = fcm.send_with_notification_key(reg_id, {
