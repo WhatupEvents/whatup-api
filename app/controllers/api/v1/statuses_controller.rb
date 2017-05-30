@@ -23,7 +23,9 @@ class Api::V1::StatusesController < Api::V1::ApiController
         }, friend.id)
       end
     end
-    head :created
+    render json: status,
+           serializer: Api::V1::StatusSerializer,
+           status: :created
   rescue Exception => e
     Rails.logger.info e.to_s
     head :bad_request
