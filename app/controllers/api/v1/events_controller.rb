@@ -135,8 +135,13 @@ class Api::V1::EventsController < Api::V1::ApiController
 
   def follow_creator
     event = Event.find(params[:event_id])
-    event.created_by.followings |= [current_user]
-    render json: {},
+    event_creator = event.created_by
+    if event_creator.followers.include? current_user
+      event_creator.followers = event_creator.followers - [current_user]
+    else
+      event_creator.followers |= [current_user]
+    end
+    render json: {creator_name: event_creator.name},
            status: :ok
   end
 
