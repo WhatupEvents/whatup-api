@@ -35,16 +35,12 @@ class Api::V1::EventsController < Api::V1::ApiController
     
     # only event creator or Admins can update events, User role cannot make events public
     if (event.created_by_id != current_user.id && current_user.role != 'Admin') ||
-      (create_event_params[:public] == '1' && current_user.role == 'User')
+      (create_event_params[:public] == 'true' && current_user.role == 'User')
       head :bad_request
     else
 
-      Rails.logger.info create_event_params
-      Rails.logger.info create_event_params[:public]
-      Rails.logger.info create_event_params[:public] == '1'
-
       # if event is being made public send out notifications
-      if (event.created_by.followers.count > 0 && create_event_params[:public] == '1' \
+      if (event.created_by.followers.count > 0 && create_event_params[:public] == 'true' \
         && Rails.env != "development")
         event.created_by.followers.each do |follower|
           Resque.enqueue(
