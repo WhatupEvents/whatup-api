@@ -25,7 +25,7 @@ class Api::V1::FcmController < Api::V1::ApiController
   end
 
   def messages_read
-    participant = ParticipantRelationship.where(event_id: message_params[:event_id], participant_id: current_user.id)
+    participant = ParticipantRelationship.where(event_id: message_params[:event_id], participant_id: current_user.id).last
     participant.update_attributes(unread: 0)
   end
   
