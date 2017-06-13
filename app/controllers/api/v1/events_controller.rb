@@ -20,19 +20,6 @@ class Api::V1::EventsController < Api::V1::ApiController
   def create
     event = Event.create! create_event_params
 
-    if (event.created_by.followers.count > 0)
-      if Rails.env != "development"
-        event.created_by.followers.each do |follower|
-          Resque.enqueue(
-            FcmMessageJob, {
-              followed_name: current_user.name,
-              created_at: event.created_at
-            }, follower.id
-          )
-        end
-      end
-    end
-
     event.participants = [current_user]
     render json: event,
            serializer: Api::V1::EventSerializer,
@@ -50,6 +37,19 @@ class Api::V1::EventsController < Api::V1::ApiController
       (create_event_params[:public] == '1' && current_user.role == 'User')
       head :bad_request
     else
+
+      # if event is being made public send out notifications
+      if (event.created_by.followers.count > 0 && create_event_params[:public] == '1' \
+        && Rails.env != "development")
+        event.created_by.followers.each do |follower|
+          Resque.enqueue(
+            FcmMessageJob, {
+              followed_name: current_user.name,
+              created_at: event.created_at
+            }, follower.id
+          )
+        end
+      end
 
       # clear participants when going from private to public or viceversa
       if event.public != (create_event_params[:public] == "true")
