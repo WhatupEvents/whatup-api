@@ -32,6 +32,7 @@ Whatsup::Application.routes.draw do
       end
       put 'events', to: 'events#index'
       post 'fcm_message', to: 'fcm#message'
+      put 'messages_read', to: 'fcm#messages_read'
     end
   end
 end

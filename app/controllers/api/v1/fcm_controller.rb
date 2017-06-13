@@ -8,7 +8,10 @@ class Api::V1::FcmController < Api::V1::ApiController
     message = Message.create(sender.merge(message_params))
     if Rails.env != "development"
       message.event.participant_relationships.each do |participant|
-        if participant.notify && (participant.participant_id != current_user.id)
+        # increases unread count
+        participant.update_attribues(unread: participant.unread.nil? ? 1 : participant.unread+1)
+
+        if participant.notify && (participant.participant_id != current_user.id) && participant.unread == 0
           Resque.enqueue(
             FcmMessageJob,{ 
               event_id: message.event_id,
@@ -19,6 +22,11 @@ class Api::V1::FcmController < Api::V1::ApiController
       end
     end
     render json: {}, status: :not_found
+  end
+
+  def messages_read
+    participant = ParticipantRelationship.where(event_id: message_params[:event_id], participant_id: current_user.id)
+    participant.update_attributes(unread: 0)
   end
   
   private
