@@ -9,7 +9,7 @@ class Api::V1::FcmController < Api::V1::ApiController
     if Rails.env != "development"
       message.event.participant_relationships.each do |participant|
         # increases unread count
-        participant.update_attribues(unread: participant.unread.nil? ? 1 : participant.unread+1)
+        participant.update_attributes(unread: participant.unread.nil? ? 1 : participant.unread+1)
 
         if participant.notify && (participant.participant_id != current_user.id) && participant.unread == 0
           Resque.enqueue(
