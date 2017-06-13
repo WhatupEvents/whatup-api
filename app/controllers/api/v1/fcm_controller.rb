@@ -11,7 +11,7 @@ class Api::V1::FcmController < Api::V1::ApiController
         # increases unread count
         participant.update_attributes(unread: participant.unread.nil? ? 1 : participant.unread+1)
 
-        if participant.notify && (participant.participant_id != current_user.id) && participant.unread == 0
+        if participant.notify && (participant.participant_id != current_user.id) && participant.unread == 1
           Resque.enqueue(
             FcmMessageJob,{ 
               event_id: message.event_id,
