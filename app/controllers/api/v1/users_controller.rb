@@ -3,9 +3,9 @@ class Api::V1::UsersController < Api::V1::ApiController
 
   def check_uniqueness
     if User.where(params[:unique_field] => params[:unique_value]).empty?
-      render json: {}, status: :not_found
+      render json: {}, status: :ok
     else
-      head :gone
+      head :bad_request
     end
   end
 
