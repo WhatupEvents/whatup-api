@@ -114,8 +114,16 @@ class Api::V1::EventsController < Api::V1::ApiController
 
   def rsvp
     event = Event.find(params[:event_id])
-    event.participants |= [current_user]
-    render json: {},
+    json = {}
+
+    if event.participants.include? current_user
+      event.participants |= [current_user]
+      json[:action] = 'rsvp'
+    else
+      event.participants = event.participants - [current_user]
+      json[:action] = 'un-rsvp'
+    end
+    render json: json,
            status: :ok
   end
 
