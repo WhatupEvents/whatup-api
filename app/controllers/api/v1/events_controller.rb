@@ -117,11 +117,11 @@ class Api::V1::EventsController < Api::V1::ApiController
     json = {}
 
     if event.participants.include? current_user
-      event.participants |= [current_user]
-      json[:action] = 'rsvp'
-    else
       event.participants = event.participants - [current_user]
       json[:action] = 'un-rsvp'
+    else
+      event.participants |= [current_user]
+      json[:action] = 'rsvp'
     end
     render json: json,
            status: :ok
