@@ -40,8 +40,7 @@ class Api::V1::EventsController < Api::V1::ApiController
     else
 
       # if event is being made public send out notifications
-      if (event.created_by.followers.count > 0 && create_event_params[:public] == 'true' \
-        && Rails.env != "development")
+      if (event.created_by.followers.count > 0 && !event.public && create_event_params[:public] == 'true' && Rails.env != "development")
         event.created_by.followers.each do |follower|
           Resque.enqueue(
             FcmMessageJob, {

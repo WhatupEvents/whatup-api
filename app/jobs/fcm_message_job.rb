@@ -2,7 +2,6 @@ class FcmMessageJob
   @queue = :messages
 
   def self.perform(data, recipient_id)
-    #TODO: gotta move this into an environment file
     fcm = FCM.new(ENV['FCM_LEGACY_SERVER_KEY'])
     fcm = FCM.new(ENV['FCM_SERVER_KEY'])
     Device.where(user_id: recipient_id).map(&:registration_id).uniq.each do |reg_id|
