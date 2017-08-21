@@ -37,10 +37,11 @@ class Api::V1::EventsController < Api::V1::ApiController
     if (event.created_by_id != current_user.id && current_user.role != 'Admin') ||
       (create_event_params[:public] == 'true' && current_user.role == 'User')
       head :bad_request
-    else
 
-      # if event is being made public send out notifications
-      if (event.created_by.followers.count > 0 && !event.public && create_event_params[:public] == 'true' && Rails.env != "development")
+    else
+      # if event is being made public send notifications to followers
+      if (Rails.env != "development" && event.created_by.followers.count > 0 && 
+          !event.public && create_event_params[:public] == 'true')
         event.created_by.followers.each do |follower|
           Resque.enqueue(
             FcmMessageJob, {
@@ -54,7 +55,6 @@ class Api::V1::EventsController < Api::V1::ApiController
       # clear participants when going from private to public or viceversa
       if event.public != (create_event_params[:public] == "true")
         event.participants = []
-        params.delete("friend_ids")
       end
 
       # saves participants before change so that they can be notified
@@ -63,7 +63,7 @@ class Api::V1::EventsController < Api::V1::ApiController
 
       if create_event_params[:friend_ids]
         friend_ids = JSON.parse(create_event_params[:friend_ids])
-        participants = User.where(id: friend_ids + [create_event_params[:created_by_id]])
+        participants = User.where(id: friend_ids + [event.created_by_id])
         event.participants = participants
         params.delete("friend_ids")
       end
