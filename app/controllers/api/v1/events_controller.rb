@@ -163,15 +163,10 @@ class Api::V1::EventsController < Api::V1::ApiController
 
   def check_action
     event = Event.find(params[:event_id])
-    json = {}
-
-    if params[:action] == 'rsvp'
-      json[:value] = event.participants.include?(current_user).to_s
-    elsif params[:action] == 'follow'
-      json[:value] = event.created_by.followers.include?(current_user).to_s
-    else
-      head :bad_request
-    end
+    json = {
+      rsvp: event.participants.include?(current_user).to_s,
+      follow: event.created_by.followers.include?(current_user).to_s
+    }
 
     render json: json,
            status: :ok
