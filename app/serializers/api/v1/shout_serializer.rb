@@ -18,7 +18,7 @@ class Api::V1::ShoutSerializer < ActiveModel::Serializer
   end
 
   def shouter
-    User.find(object.user_id).name
+    User.find(object.user_id).first_name
   end
 
   def shouter_url
