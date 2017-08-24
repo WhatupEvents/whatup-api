@@ -11,7 +11,7 @@ class Api::V1::EventsController < Api::V1::ApiController
       # events that don't have coordinates at least by city and not lose them
       events |= Event.pub.current.where(latitude: '200.0', longitude: '200.0')
     end
-    render json: events,
+    render json: events.sort{|x,y| x.start_time <=> y.start_time},
            each_serializer: Api::V1::EventSerializer,
            status: :ok,
            current_user: current_user.id
