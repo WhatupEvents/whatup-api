@@ -111,21 +111,6 @@ class Api::V1::EventsController < Api::V1::ApiController
     end
   end
 
-  def rsvp
-    event = Event.find(params[:event_id])
-    json = {}
-
-    if event.participants.include? current_user
-      event.participants = event.participants - [current_user]
-      json[:action] = 'un-rsvp'
-    else
-      event.participants |= [current_user]
-      json[:action] = 'rsvp'
-    end
-    render json: json,
-           status: :ok
-  end
-
   def leave
     event = Event.find(params[:event_id])
     event.participants.delete current_user
@@ -158,6 +143,37 @@ class Api::V1::EventsController < Api::V1::ApiController
     end
 
     render json: json_result,
+           status: :ok
+  end
+
+  def rsvp
+    event = Event.find(params[:event_id])
+    json = {}
+
+    if event.participants.include? current_user
+      event.participants = event.participants - [current_user]
+      json[:action] = 'un-rsvp'
+    else
+      event.participants |= [current_user]
+      json[:action] = 'rsvp'
+    end
+    render json: json,
+           status: :ok
+  end
+
+  def check_action
+    event = Event.find(params[:event_id])
+    json = {}
+
+    if params[:action] == 'rsvp'
+      json[:value] = event.participants.include?(current_user).to_s
+    elsif params[:action] == 'follow'
+      json[:value] = event.created_by.followers.include?(current_user).to_s
+    else
+      head :bad_request
+    end
+
+    render json: json,
            status: :ok
   end
 
