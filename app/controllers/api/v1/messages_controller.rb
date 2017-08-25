@@ -5,7 +5,7 @@ class Api::V1::MessagesController < Api::V1::ApiController
     last = message_params.has_key?(:last_id) ? Message.find(message_params.delete(:last_id)) : Message.last
     messages = Message.where(event_id: message_params[:event_id])
       .where('created_at <= ?', last.created_at)
-      .limit(50).order(created_at: :desc)
+      .limit(50).order(created_at: :desc).not_flagged_for(current_user.id)
     
     return_messages(messages)
   end

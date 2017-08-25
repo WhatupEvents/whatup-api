@@ -76,6 +76,10 @@ class Api::V1::UsersController < Api::V1::ApiController
            status: :ok
   end
 
+  def flag
+    Flag.create(user_id: current_user.id, obj_class: params[:object_class], obj_id: params[:object_id])
+  end
+
   def unregister
     current_device = Device.where(user_id: current_user.id, os: device_params[:os], uuid: device_params[:uuid]).first
     current_device.destroy

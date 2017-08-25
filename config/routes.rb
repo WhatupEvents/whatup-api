@@ -12,7 +12,9 @@ Whatsup::Application.routes.draw do
       post 'check_uniqueness', to: 'users#check_uniqueness', as: 'check_uniqueness'
       post 'authenticate', to: 'users#authenticate', as: 'authenticate'
       post 'friends', to: 'users#friends', as: 'users_friends'
-      resources :users, only: [:create, :update]
+      resources :users, only: [:create, :update] do
+        post 'flag', to: 'users#flag', as: 'users_flag'
+      end
       post 'add_friend', to: 'users#add_friend', as: 'users_add_friend'
       resources :friend_groups, only: [:index, :create, :update, :destroy]
       resources :shouts, only: [:create, :index, :update, :destroy] do

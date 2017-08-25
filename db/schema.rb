@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170529042819) do
+ActiveRecord::Schema.define(version: 20170825213712) do
 
   create_table "devices", force: :cascade do |t|
     t.integer "user_id",         limit: 4
@@ -43,6 +43,14 @@ ActiveRecord::Schema.define(version: 20170529042819) do
     t.datetime "end_at"
     t.integer  "feed_id",            limit: 4
   end
+
+  create_table "flags", force: :cascade do |t|
+    t.integer "user_id",   limit: 4
+    t.string  "obj_id",    limit: 191
+    t.string  "obj_class", limit: 191
+  end
+
+  add_index "flags", ["user_id"], name: "index_flags_on_user_id", using: :btree
 
   create_table "follow_relationships", force: :cascade do |t|
     t.integer  "followed_id", limit: 4
@@ -144,6 +152,7 @@ ActiveRecord::Schema.define(version: 20170529042819) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "notify",         limit: 1, default: true
+    t.integer  "unread",         limit: 4
   end
 
   add_index "participant_relationships", ["event_id"], name: "index_participant_relationships_on_event_id", using: :btree

@@ -6,10 +6,10 @@ class Api::V1::EventsController < Api::V1::ApiController
     events = current_user.current_events
     if get_geo
       long, lat = get_geo.split(':')
-      events |= Event.pub.current.near_user(lat, long, distance)
+      events |= Event.pub.current.near_user(lat, long, distance).not_flagged_for(current_user.id)
       # eventually need to either remove this or do a by city thing to limit
       # events that don't have coordinates at least by city and not lose them
-      events |= Event.pub.current.where(latitude: '200.0', longitude: '200.0')
+      events |= Event.pub.current.where(latitude: '200.0', longitude: '200.0').not_flagged_for(current_user.id)
     end
     render json: events.sort{|x,y| x.start_time <=> y.start_time},
            each_serializer: Api::V1::EventSerializer,

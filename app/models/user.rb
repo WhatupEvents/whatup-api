@@ -17,6 +17,8 @@ class User < ActiveRecord::Base
 
   has_many :devices
 
+  has_many :flags
+
   has_many :statuses
 
   has_many :shouts, dependent: :destroy

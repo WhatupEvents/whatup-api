@@ -8,6 +8,12 @@ class Shout < ActiveRecord::Base
   has_many :shout_flaggings
   has_many :flagged_by, class_name: 'User', through: :shout_flaggings
 
+  scope :not_flagged_for, ->(user_id) do
+    select do |item|
+      !Flag.where(obj_class: item.class.to_s, obj_id: item.id, user_id: user_id).present?
+    end
+  end
+
   has_attached_file :image,
     :storage => :s3,
     :bucket => 'whatupevents-images',
