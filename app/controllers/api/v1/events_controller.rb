@@ -165,7 +165,7 @@ class Api::V1::EventsController < Api::V1::ApiController
     event = Event.find(params[:event_id])
     json = {
       rsvp: event.participants.include?(current_user).to_s,
-      follow: event.created_by.followers.include?(current_user).to_s,
+      follow: event.created_by ? event.created_by.followers.include?(current_user).to_s : '',
       notify: event.participant_relationships.select{|p| p.participant_id == current_user.id}[0].notify.to_s
     }
 
