@@ -78,6 +78,7 @@ class Api::V1::UsersController < Api::V1::ApiController
 
   def flag
     Flag.create(user_id: current_user.id, obj_class: params[:object_class], obj_id: params[:object_id])
+    render json: {}, status: :ok
   end
 
   def unregister
