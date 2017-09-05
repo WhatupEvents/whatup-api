@@ -1,6 +1,13 @@
 class Api::V1::EventsController < Api::V1::ApiController
   doorkeeper_for :all
 
+  def mine
+    render json: current_user.events.sort{|x,y| x.start_time <=> y.start_time},
+           each_serializer: Api::V1::EventSerializer,
+           status: :ok,
+           current_user: current_user.id
+  end
+
   def index
     distance = params[:distance] || 10.0
     events = current_user.current_events

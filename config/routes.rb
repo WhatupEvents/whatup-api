@@ -27,6 +27,7 @@ Whatsup::Application.routes.draw do
       resources :messages, only: [:index]
       get :random_messages, to: 'messages#random'
       resources :events, only: [:index, :create, :update, :destroy] do
+        put :mine, to: 'events#mine', as: 'events_mine'
         put :notify, to: 'events#notify', as: 'events_notify'
         put :leave, to: 'events#leave', as: 'events_leave'
         put :rsvp, to: 'events#rsvp', as: 'events_rsvp'
