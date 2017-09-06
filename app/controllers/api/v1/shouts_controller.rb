@@ -45,6 +45,12 @@ class Api::V1::ShoutsController < Api::V1::ApiController
        status: :ok,
        current_user: current_user.id
   end
+  
+  def block
+    @shout = Shout.find(params[:shout_id])
+    Flag.find_or_create_by(user_id: current_user.id, obj_class: 'User', obj_id: @shout.user_id)
+    head :ok
+  end
 
   def up
     @shout = Shout.find(params[:shout_id])
@@ -77,9 +83,10 @@ class Api::V1::ShoutsController < Api::V1::ApiController
     last = params.has_key?(:last_id) ? Shout.find(params.delete(:last_id)) : Shout.last
     long, lat = get_geo.split(':')
     shouts = Shout.where('created_at > ?', Time.now-7.hour)
-      .where(event_id: Event.current.pub.near_user(lat, long, 20.0).not_flagged_for(current_user.id).map(&:id))
       .where('created_at <= ?', last.created_at)
-      .where('flag < 3')
+      .where('flag < 8')
+      .where(event_id: Event.current.pub.near_user(lat, long, 20.0).not_flagged_for(current_user.id).map(&:id))
+      .where(user_id: User.not_flagged_for(current_user.id).all.map(&:obj_id))
       .limit(15).order(created_at: :desc).not_flagged_for(current_user.id)
     if shouts.present?
       render json: shouts,

@@ -56,6 +56,12 @@ class User < ActiveRecord::Base
     }
   end
 
+  scope :not_flagged_for, ->(user_id) do
+    select do |item|
+      !Flag.where(obj_class: item.class.to_s, obj_id: item.id, user_id: user_id).present?
+    end
+  end
+
   def default_friend_groups
     FriendGroup.find_or_create_by(user_id: self.id, name: 'All', default: true, symbol_id: 0)
     FriendGroup.find_or_create_by(user_id: self.id, name: 'Favorites', default: true, symbol_id: 1)
