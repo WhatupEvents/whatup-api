@@ -33,6 +33,7 @@ class Api::V1::ShoutsController < Api::V1::ApiController
   def flag
     @shout = Shout.find(params[:shout_id])
     unless @shout.flagged_by.include? current_user
+      Flag.create(user_id: current_user.id, obj_class: 'Shout', obj_id: @shout.id)
       flag_update = 1
       if current_user.role == "Admin"
         flag_update = 3
