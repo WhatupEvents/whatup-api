@@ -88,13 +88,14 @@ class Api::V1::UsersController < Api::V1::ApiController
   end
 
   def interested
+    user = User.find(params[:user_id])
     status = user.statuses.current.last
     if Rails.env != "development" && status.present?
       Resque.enqueue(
         FcmMessageJob,{ 
           status_text: status.text,
           friend_name: current_user.name
-        }, params[:user_id]
+        }, user.id
       )
     end
     head :ok
