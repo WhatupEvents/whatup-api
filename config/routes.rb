@@ -14,6 +14,7 @@ Whatsup::Application.routes.draw do
       post 'friends', to: 'users#friends', as: 'users_friends'
       resources :users, only: [:create, :update] do
         post 'flag', to: 'users#flag', as: 'users_flag'
+        get 'interested', to: 'users#interested', as: 'users_interested'
       end
       post 'add_friend', to: 'users#add_friend', as: 'users_add_friend'
       resources :friend_groups, only: [:index, :create, :update, :destroy]

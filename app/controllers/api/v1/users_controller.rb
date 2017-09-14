@@ -87,6 +87,19 @@ class Api::V1::UsersController < Api::V1::ApiController
     render json: {}, status: :accepted
   end
 
+  def interested
+    status = user.statuses.current.last
+    if Rails.env != "development" && status.present?
+      Resque.enqueue(
+        FcmMessageJob,{ 
+          status_text: status.text,
+          friend_name: current_user.name
+        }, params[:user_id]
+      )
+    end
+    head :ok
+  end
+
   private
 
   def render_me(status)
