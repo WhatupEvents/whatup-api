@@ -57,6 +57,6 @@ class Api::V1::StatusesController < Api::V1::ApiController
   end
 
   def status_params
-    params.require(:status).permit(:user_id, :symbol_id, :text, :ups)
+    params.require(:status).permit(:user_id, :symbol_id, :text, :ups, :valid_until)
   end
 end
