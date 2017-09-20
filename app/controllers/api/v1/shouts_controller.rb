@@ -91,9 +91,9 @@ class Api::V1::ShoutsController < Api::V1::ApiController
     shouts = Shout.where('created_at > ?', Time.now-7.hour)
       .where('created_at <= ?', last.created_at)
       .where('flag < 8')
-      .where('user_id NOT IN (?)', invalid_user_ids)
+      .where('user_id NOT IN (?)', invalid_user_ids.present? ? invalid_user_ids : '')
       .where(event_id: in_range_event_ids)
-      .where('event_id NOT IN (?)', invalid_event_ids)
+      .where('event_id NOT IN (?)', invalid_event_ids.present? ? invalid_event_ids : '')
       .limit(15).order(created_at: :desc).not_flagged_for(current_user.id)
 
     if shouts.present?
