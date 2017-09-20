@@ -10,7 +10,7 @@ class Shout < ActiveRecord::Base
 
   scope :not_flagged_for, ->(user_id) do
     select do |item|
-      Flag.where(obj_class: item.class.to_s, obj_id: item.id, user_id: user_id).nil?
+      Flag.where(obj_class: item.class.to_s, obj_id: item.id, user_id: user_id).empty?
     end
   end
 
