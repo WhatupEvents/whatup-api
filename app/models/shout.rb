@@ -9,8 +9,8 @@ class Shout < ActiveRecord::Base
   has_many :flagged_by, class_name: 'User', through: :shout_flaggings
 
   scope :not_flagged_for, ->(user_id) do
-    reject do |item|
-      Flag.where(obj_class: item.class.to_s, obj_id: item.id, user_id: user_id).present?
+    select do |item|
+      Flag.where(obj_class: item.class.to_s, obj_id: item.id, user_id: user_id).nil?
     end
   end
 
