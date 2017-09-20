@@ -45,8 +45,8 @@ class Event < ActiveRecord::Base
   scope :current, -> { not_old.not_far_off }
   
   scope :not_flagged_for, ->(user_id) do
-    select do |item|
-      !Flag.where(obj_class: item.class.to_s, obj_id: item.id, user_id: user_id).present?
+    reject do |item|
+      Flag.where(obj_class: item.class.to_s, obj_id: item.id, user_id: user_id).present?
     end
   end
 end

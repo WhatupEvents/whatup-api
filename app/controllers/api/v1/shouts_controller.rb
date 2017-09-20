@@ -83,12 +83,19 @@ class Api::V1::ShoutsController < Api::V1::ApiController
   def render_shouts
     last = params.has_key?(:last_id) ? Shout.find(params.delete(:last_id)) : Shout.last
     long, lat = get_geo.split(':')
+
+    in_range_event_ids = Event.current.pub.near_user(lat, long, 20.0).map(&:id)
+    invalid_event_ids = Flag.where(obj_class: "Event", obj_id: in_range_event_ids, user_id: current_user.id).map(&:id)
+    invalid_user_ids = Flag.where(obj_class: "User", user_id: current_user.id).map(&:id)
+
     shouts = Shout.where('created_at > ?', Time.now-7.hour)
       .where('created_at <= ?', last.created_at)
       .where('flag < 8')
-      .where(event_id: Event.current.pub.near_user(lat, long, 20.0).not_flagged_for(current_user.id).map(&:id))
-      .where(user_id: User.not_flagged_for(current_user.id).map(&:id))
+      .where('user_id NOT IN (?)', invalid_user_ids)
+      .where(event_id: in_range_event_ids)
+      .where('event_id NOT IN (?)', invalid_event_ids)
       .limit(15).order(created_at: :desc).not_flagged_for(current_user.id)
+
     if shouts.present?
       render json: shouts,
              each_serializer: Api::V1::ShoutSerializer,
