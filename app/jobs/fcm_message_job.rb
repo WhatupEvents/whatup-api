@@ -4,13 +4,19 @@ class FcmMessageJob
   def self.perform(data, recipient_id)
     fcm = FCM.new(ENV['FCM_LEGACY_SERVER_KEY'])
     fcm = FCM.new(ENV['FCM_SERVER_KEY'])
-    Device.where(user_id: recipient_id).map(&:registration_id).uniq.each do |reg_id|
+    device = Device.where(user_id: recipient_id)
+    device.map{|d| [d.registration_id, d.os]}.uniq.each do |reg_id, os|
       if data.has_key? 'event_name'
+        whatuppop = 'whatuppop'
+        if os == 'iOS'
+          whatuppop += '.wav'
+        end
+
         ##### EVENTS JOBS #####
         if data.has_key? 'updated_at'
           # event updated job
           resp = fcm.send_with_notification_key(reg_id, {
-            notification: {title: data['event_name'], body: "has been updated", tag: "#{data['event_id']}_updt", sound: "whatuppop"},
+            notification: {title: data['event_name'], body: "has been updated", tag: "#{data['event_id']}_updt", sound: whatuppop},
             data: data,
             content_available: true,
             priority: "high"
@@ -18,7 +24,7 @@ class FcmMessageJob
         else
           # event chat message job
           resp = fcm.send_with_notification_key(reg_id, {
-            notification: {title: data['event_name'], body: "#{data['event_name']} message", tag: "#{data['event_id']}_msg", sound: "whatuppop"},
+            notification: {title: data['event_name'], body: "#{data['event_name']} message", tag: "#{data['event_id']}_msg", sound: whatuppop},
             data: data,
             content_available: true,
             priority: "high"
