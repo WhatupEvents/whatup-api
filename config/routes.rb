@@ -23,6 +23,7 @@ Whatsup::Application.routes.draw do
         put 'flag', to: 'shouts#flag', as: 'shouts_flag'
         put 'up', to: 'shouts#up', as: 'shouts_up'
       end
+      resources :symbols, only: [:index]
       resources :statuses, only: [:create]
       put :statuses, to: 'statuses#up', as: 'up_status'
       get :most_upped, to: 'statuses#most_upped', as: 'most_upped'
