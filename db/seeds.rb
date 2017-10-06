@@ -7,6 +7,6 @@ if Rails.env.staging? || Rails.env.development?
   )
 
 categories = ['Academic', 'Arts Exhibit', 'Career/Jobs', 'Concert/Performance', 'Entertainment', 'Health', 'Holiday', 'Meeting', 'Open Forum', 'Recreation & Exercise', 'Service/Volunteer', 'Social Event', 'Speaker/Lecture/Seminar', 'Sports', 'Tour/Open House/Information Session', 'Workshop/Conference', 'Uncategorized/Other']
-categories.each { |c| Symbol.find_or_create_by(name: c) }
+categories.each { |c| Category.find_or_create_by(name: c) }
 
 end
