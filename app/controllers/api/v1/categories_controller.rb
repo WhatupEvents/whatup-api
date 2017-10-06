@@ -1,4 +1,4 @@
-class Api::V1::CategoriessController < Api::V1::ApiController
+class Api::V1::CategoriesController < Api::V1::ApiController
   doorkeeper_for :all
 
   def index
