@@ -1,2 +1,2 @@
-class Symbol < ACtiveRecord::Base
+class Symbol < ActiveRecord::Base
 end
