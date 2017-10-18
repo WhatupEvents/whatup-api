@@ -16,7 +16,7 @@ class Api::V1::EventsController < Api::V1::ApiController
       events |= Event.current.pub.near_user(lat, long, distance).not_flagged_for(current_user.id)
 
       # this adds the tutorial event, so info can be pulled for shouts 
-      events |= Event.pub.where(latitude: '200.0', longitude: '200.0').not_flagged_for(current_user.id)
+      events |= Event.where(latitude: '200.0', longitude: '200.0')
     end
     render json: events.sort{|x,y| x.start_time <=> y.start_time},
            each_serializer: Api::V1::EventSerializer,
