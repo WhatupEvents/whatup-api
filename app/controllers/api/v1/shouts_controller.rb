@@ -96,6 +96,10 @@ class Api::V1::ShoutsController < Api::V1::ApiController
       .where('event_id NOT IN (?)', invalid_event_ids.present? ? invalid_event_ids : '')
       .limit(15).order(created_at: :desc).not_flagged_for(current_user.id)
 
+    tutorial_shouts = Shout.where(event_id: Event.where(latitude: 200, longitude: 200))
+      .where('event_id NOT IN (?)', invalid_event_ids.present? ? invalid_event_ids : '')
+
+    shouts = tutorial_shouts + shouts
     if shouts.present?
       render json: shouts,
              each_serializer: Api::V1::ShoutSerializer,
