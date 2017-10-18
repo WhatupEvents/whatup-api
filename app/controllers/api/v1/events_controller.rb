@@ -14,11 +14,13 @@ class Api::V1::EventsController < Api::V1::ApiController
     if get_geo
       long, lat = get_geo.split(':')
       events |= Event.current.pub.near_user(lat, long, distance).not_flagged_for(current_user.id)
-
-      # this adds the tutorial event, so info can be pulled for shouts 
-      events |= Event.where(latitude: '200.0', longitude: '200.0')
     end
-    render json: events.sort{|x,y| x.start_time <=> y.start_time},
+    events.sort!{|x,y| x.start_time <=> y.start_time}
+      
+    # this adds the tutorial event, so info can be pulled for shouts 
+    events |= Event.where(latitude: '200.0', longitude: '200.0')
+
+    render json: events,
            each_serializer: Api::V1::EventSerializer,
            status: :ok,
            current_user: current_user.id
