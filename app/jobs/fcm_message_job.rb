@@ -24,7 +24,7 @@ class FcmMessageJob
         else
           # event chat message job
           resp = fcm.send_with_notification_key(reg_id, {
-            notification: {title: data['event_name'], body: "#{data['event_name']} message", tag: "#{data['event_id']}_msg", sound: whatuppop},
+            notification: {title: data['event_name'], body: "There's a new message, check out what your friends are up to", tag: "#{data['event_id']}_msg", sound: whatuppop},
             data: data,
             content_available: true,
             priority: "high"
