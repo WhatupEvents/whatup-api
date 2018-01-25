@@ -84,7 +84,7 @@ class Api::V1::ShoutsController < Api::V1::ApiController
     last = params.has_key?(:last_id) ? Shout.find(params.delete(:last_id)) : Shout.last
     long, lat = get_geo.split(':')
 
-    in_range_event_ids = Event.current.pub.near_user(lat, long, 20.0).map(&:id)
+    in_range_event_ids = Event.pub.near_user(lat, long, 20.0).map(&:id)
     invalid_event_ids = Flag.where(obj_class: "Event", obj_id: in_range_event_ids, user_id: current_user.id).map(&:obj_id)
     invalid_user_ids = Flag.where(obj_class: "User", user_id: current_user.id).map(&:obj_id)
 
