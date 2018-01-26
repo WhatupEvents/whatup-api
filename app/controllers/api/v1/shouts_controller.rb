@@ -88,7 +88,8 @@ class Api::V1::ShoutsController < Api::V1::ApiController
     invalid_event_ids = Flag.where(obj_class: "Event", obj_id: in_range_event_ids, user_id: current_user.id).map(&:obj_id)
     invalid_user_ids = Flag.where(obj_class: "User", user_id: current_user.id).map(&:obj_id)
 
-    shouts = Shout.where('created_at > ?', Time.now-10.day)
+    # shouts = Shout.where('created_at > ?', Time.now-10.day)
+    shouts = Shout.where('created_at > ?', Time.now-2.hours)
       .where('created_at <= ?', last.created_at)
       .where('flag < 8')
       .where(event_id: in_range_event_ids)
