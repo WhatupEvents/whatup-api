@@ -13,7 +13,8 @@ class Api::V1::EventsController < Api::V1::ApiController
     events = current_user.current_events
     if get_geo
       long, lat = get_geo.split(':')
-      events |= Event.current.pub.near_user(lat, long, distance).not_flagged_for(current_user.id)
+      events |= Event.current.near_user(lat, long, distance).pub
+        .not_flagged_for(current_user.id)
     end
     events.sort!{|x,y| x.start_time <=> y.start_time}
       

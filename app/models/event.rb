@@ -43,6 +43,9 @@ class Event < ActiveRecord::Base
   scope :not_old, -> { where('end_at > ?', Time.now-2.hours) }
   scope :not_far_off, -> { where('start_time < ?', Time.now+4.days) }
   scope :current, -> { not_old.not_far_off }
+
+  scope :not_too_old, -> { where('end_at > ?', Time.now-10.days) }
+  scope :for_shouts, -> { not_too_old.not_far_off }
   
   scope :not_flagged_for, ->(user_id) do
     select do |item|
