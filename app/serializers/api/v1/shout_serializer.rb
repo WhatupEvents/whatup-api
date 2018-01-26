@@ -1,9 +1,28 @@
 class Api::V1::ShoutSerializer < ActiveModel::Serializer
-  attributes :id, :text, :created_at, :shouter, :shouter_url, :user_id, :event_id, :source, :url, :ups, :upped_by, :flag, :flagged_by, :event_name
+  attributes :id, :text, :created_at, :shouter, :shouter_url, :user_id, :event_id, :source, :url, :ups, :upped_by, :flag, :flagged_by, :event_name, :latitude, :longitude, :symbol_id
 
   def text
     text = object.text
-    blacklist = [/[a]+[r]+[s]+[e]+[s]*/, /[a]+s[s]+\z/, /[a]+s[s]+\s/, /[a]+s[s]+e[e]+s[s]\z/, /[a]+s[s]+e[e]+s[s]+\s/, /[a]+[s]+[s]+[h]+[o]+[l]+[e]+[s]*/, /[b]+[a|e]+[s]+[t]+[a|e]+[r]+[d]+[s]*/, /[b]+[i|e]+[a|e|i]*[t]+[c]+[h]+[e]*[s]*/, /[b]+[a|o]+[l]+[o]+[c]+[k]+[s]*/, /child-.*/, /[c]+[r]+[a]+[p]+/, /[d]+[a|e|i]+[m]+[n]+/, /[g]+[o]+[d]+[a]+[m]+[n]+/, /[m]+[o]+[t]+[h]+[e]+[r]+[f]+[u|a|o]+[c]+[k]+[e]*[r]*[s]*/, /[n]+[i]+[g]+[a|e]+[r]*[s]*/, /[t]+[w]+[a]+[t]+[s]*/, /[w]+[h]+[o|a]+[r]+[e]+[s]*/, /[f]+[u|a|o]+[c]+[k]+[e]*[r]*[s]*/, /[s]+[h]+[a|e|i]+[t]+[s]*/, /[c]+[u]+[n]+[t]+[s]*/, /[s]+[h]+[a]+[t]+ /]
+    blacklist = [/child-.*/,
+      /[a]+s[s]+\b/,
+      /[a]+s[s]+[e]+s\b/,
+      /[s]+[h]+[a]+[t]+\b/,
+      /[a]+[r]+[s]+[e]+[s]*/,
+      /[a]+[s]+[s]+[h]+[o]+[l]+[e]+[s]*/,
+      /[b]+(a|e)+[s]+[t]+(a|e)+[r]+[d]+[s]*/,
+      /[b]+(a|e|i)+[t]+[c]+[h]+[e]*[s]*/,
+      /[b]+(a|o)+[l]+[o]+[c]+[k]+[s]*/,
+      /[c]+[r]+[a]+[p]+/,
+      /[d]+[u]+[m]+[b]+/,
+      /[d]+(a|e|i)+[m]+[n]+/,
+      /[g]+[o]+[d]+[a]+[m]+[n]+/,
+      /[m]+[o]+[t]+[h]+[e]+[r]+[f]+(u|a|o)+[c]+[k]+[e]*[r]*[s]*/,
+      /[n]+[i]+[g]+(a|e)+[r]*[s]*/,
+      /[t]+[w]+[a]+[t]+[s]*/,
+      /[w]+[h]+(o|a)+[r]+[e]+[s]*/,
+      /[f]+(u|a|o)+[c]+[k]+[e]*[r]*[s]*/,
+      /[s]+[h]+(a|e|i)+[t]+[s]*/,
+      /[c]+[u]+[n]+[t]+[s]*/]
     blacklist.each do |b|
       match = b.match(text)
       if match
@@ -38,5 +57,17 @@ class Api::V1::ShoutSerializer < ActiveModel::Serializer
 
   def event_name
     Event.find(object.event_id).name
+  end
+
+  def symbol_id
+    Event.find(object.event_id).symbol_id
+  end
+
+  def latitude
+    Event.find(object.event_id).latitude
+  end
+
+  def longitude
+    Event.find(object.event_id).longitude
   end
 end

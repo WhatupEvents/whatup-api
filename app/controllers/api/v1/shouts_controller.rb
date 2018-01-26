@@ -36,7 +36,7 @@ class Api::V1::ShoutsController < Api::V1::ApiController
       Flag.create(user_id: current_user.id, obj_class: 'Shout', obj_id: @shout.id)
       flag_update = 1
       if current_user.role == "Admin"
-        flag_update = 3
+        flag_update = 10
       end
       @shout.update_attributes flag: @shout.flag+flag_update
       @shout.flagged_by << current_user
@@ -76,7 +76,7 @@ class Api::V1::ShoutsController < Api::V1::ApiController
         secret_access_key: ENV['AWS_SECRET_KEY'],
         region: 'us-east-2'
       )
-      @shout.update_attribute(:url, obj.presigned_url(:get, expires_in: 60*60*7))
+      @shout.update_attribute(:url, obj.presigned_url(:get, expires_in: 60*60*24*10))
     end
   end
 
