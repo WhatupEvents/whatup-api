@@ -76,7 +76,8 @@ class Api::V1::ShoutsController < Api::V1::ApiController
         secret_access_key: ENV['AWS_SECRET_KEY'],
         region: 'us-east-2'
       )
-      @shout.update_attribute(:url, obj.presigned_url(:get, expires_in: 60*60*24*10))
+      @shout.update_attribute(:url, obj.presigned_url(:get, expires_in: 60*60*24*7))
+      # 7 days is the maximum allowed for a presigned url
     end
   end
 
