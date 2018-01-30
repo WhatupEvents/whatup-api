@@ -68,18 +68,19 @@ class Api::V1::ShoutsController < Api::V1::ApiController
   private
 
   def update_image
-    @shout.update_attribute(:url, @shout.image.url)
-    # unless @shout.image.url.include? "missing.png"
-    #   obj = Aws::S3::Object.new(
-    #     bucket_name: 'whatupevents-images',
-    #     key: @shout.image.url.split('whatupevents-images/')[1].split('?')[0],
-    #     access_key_id: ENV['AWS_ACCESS_KEY'],
-    #     secret_access_key: ENV['AWS_SECRET_KEY'],
-    #     region: 'us-east-2'
-    #   )
-    #   @shout.update_attribute(:url, obj.presigned_url(:get, expires_in: 60*60*24*7))
-    #   # 7 days is the maximum allowed for a presigned url
-    # end
+    # @shout.update_attribute(:url, @shout.image.url)
+
+    unless @shout.image.url.include? "missing.png"
+      obj = Aws::S3::Object.new(
+        bucket_name: 'whatupevents-images',
+        key: @shout.image.url.split('whatupevents-images/')[1].split('?')[0],
+        access_key_id: ENV['AWS_ACCESS_KEY'],
+        secret_access_key: ENV['AWS_SECRET_KEY'],
+        region: 'us-east-2'
+      )
+      @shout.update_attribute(:url, obj.presigned_url(:get, expires_in: 60*60*24*7))
+      # 7 days is the maximum allowed for a presigned url
+    end
   end
 
   def render_shouts
