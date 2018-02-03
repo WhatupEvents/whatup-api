@@ -2,6 +2,9 @@ class User < ActiveRecord::Base
   validates :email, uniqueness: true
   validates :user_name, uniqueness: true
 
+  has_many :organizations, through: :organization_memberships
+  has_many :organization_memberships
+
   has_many :doorkeeper_access_tokens,
     foreign_key: :resource_owner_id,
     class_name: 'Doorkeeper::AccessToken',
