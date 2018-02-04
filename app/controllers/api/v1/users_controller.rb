@@ -150,6 +150,8 @@ class Api::V1::UsersController < Api::V1::ApiController
       :first_name, 
       :last_name, 
       :fb_id,
+      :fb_token,
+      :firebase_token,
       :accepted_terms,
       :encrypted_password,
       :source,
