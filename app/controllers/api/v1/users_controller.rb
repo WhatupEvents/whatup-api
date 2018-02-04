@@ -21,7 +21,13 @@ class Api::V1::UsersController < Api::V1::ApiController
   def create
     @current_user = User.where('user_id = ?', user_params['user_name'] || user_params['user_id']).first || User.new
     if @current_user.new_record?
-      @current_user.role = 'User'
+
+      if user_params['fb_token']
+        @current_user.role = 'User'
+      else
+        @current_user.role = 'Unverified'
+      end
+      
       @current_user.accepted_terms = false
       @current_user.update(user_params)
       @current_user.save
@@ -47,6 +53,10 @@ class Api::V1::UsersController < Api::V1::ApiController
   end
 
   def update
+    if current_user.role == 'Unverified'
+      head :bad_request
+    end
+
     @current_user = User.find(params[:id])
     @current_user.update_attributes(user_image_params)
     head :ok

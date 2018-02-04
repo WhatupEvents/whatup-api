@@ -6,6 +6,10 @@ class Api::V1::ShoutsController < Api::V1::ApiController
   end
 
   def create
+    if current_user.role == 'Unverified'
+      head :bad_request
+    end
+
     @shout = Shout.create! shout_params
     update_image
     render_shouts
@@ -15,6 +19,10 @@ class Api::V1::ShoutsController < Api::V1::ApiController
   end
 
   def update
+    if current_user.role == 'Unverified'
+      head :bad_request
+    end
+
     @shout = Shout.find(params[:id])
     @shout.update_attributes! shout_params
     update_image
