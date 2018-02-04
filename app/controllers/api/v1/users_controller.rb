@@ -9,17 +9,9 @@ class Api::V1::UsersController < Api::V1::ApiController
     end
   end
 
-  def get_email
-    @current_user = User.where(user_id: params[:user_id], encrypted_password: params[:encrypted_password]).first
-    if @current_user
-      render json: {email: @current_user.email}, status: :ok
-    else
-      head :unauthorized
-    end
-  end
-
   def authenticate
-    @current_user = User.where(user_id: user_params[:user_name] || user_params[:user_id], encrypted_password: user_params[:encrypted_password]).first
+    @current_user = User.where(user_id: user_params[:user_name] || user_params[:user_id], encrypted_password: user_params[:encrypted_password]).first ||
+      User.where(email: user_params[:user_id], encrypted_password: user_params[:encrypted_password]).first
     if @current_user
       render_me :ok
     else
@@ -28,8 +20,7 @@ class Api::V1::UsersController < Api::V1::ApiController
   end
 
   def create
-    @current_user = User.where(user_id: user_params['user_name'] || user_params['user_id']).first || 
-      @current_user = User.where(email: user_params['email']).first ||User.new
+    @current_user = User.where(user_id: user_params['user_name'] || user_params['user_id']).first || User.new
     if @current_user.new_record?
 
       if user_params['fb_token'] || user_params['firebase_token']
