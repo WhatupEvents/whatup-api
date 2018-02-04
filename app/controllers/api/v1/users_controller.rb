@@ -12,7 +12,7 @@ class Api::V1::UsersController < Api::V1::ApiController
   def get_email
     @current_user = User.where(user_id: params[:user_id], encrypted_password: params[:encrypted_password]).first
     if @current_user
-      render_me :ok
+      render json: {email: @current_user.email}, status: :ok
     else
       head :unauthorized
     end
@@ -21,7 +21,7 @@ class Api::V1::UsersController < Api::V1::ApiController
   def authenticate
     @current_user = User.where(user_id: user_params[:user_name] || user_params[:user_id], encrypted_password: user_params[:encrypted_password]).first
     if @current_user
-      render json: {email: @current_user.email}, status: :ok
+      render_me :ok
     else
       head :unauthorized
     end
@@ -45,6 +45,7 @@ class Api::V1::UsersController < Api::V1::ApiController
       if user_params.has_key? 'accepted_terms'
         @current_user.update_attribute('accepted_terms', user_params['accepted_terms'])
       end
+      # TODO: review this, seems like it is for later adding fb account to existing account
       if user_params['fb_id']
         if User.find_by_fb_id(user_params['fb_id'])
           head :gone
@@ -55,6 +56,9 @@ class Api::V1::UsersController < Api::V1::ApiController
       else
         if user_params['email']
           @current_user.update_attribute('email', user_params['email'])
+        end
+        if user_params['encrypted_password']
+          @current_user.update_attribute('encrypted_password', user_params['encrypted_password'])
         end
         render_me :ok
       end
