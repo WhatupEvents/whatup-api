@@ -10,7 +10,7 @@ class Api::V1::UsersController < Api::V1::ApiController
   end
 
   def get_email
-    @current_user = User.where(user_id: user_params[:user_id], encrypted_password: user_params[:encrypted_password]).first
+    @current_user = User.where(user_id: params[:user_id], encrypted_password: params[:encrypted_password]).first
     if @current_user
       render_me :ok
     else
