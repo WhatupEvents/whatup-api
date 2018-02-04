@@ -1,5 +1,5 @@
 class Api::V1::UsersController < Api::V1::ApiController
-  doorkeeper_for :all, except: [:create, :authenticate, :check_uniqueness]
+  doorkeeper_for :all, except: [:create, :authenticate, :get_email, :check_uniqueness]
 
   def check_uniqueness
     if User.where(params[:unique_field] => params[:unique_value]).empty?
@@ -9,10 +9,19 @@ class Api::V1::UsersController < Api::V1::ApiController
     end
   end
 
+  def get_email
+    @current_user = User.where(user_id: user_params[:user_id], encrypted_password: user_params[:encrypted_password]).first
+    if @current_user
+      render_me :ok
+    else
+      head :unauthorized
+    end
+  end
+
   def authenticate
     @current_user = User.where(user_id: user_params[:user_name] || user_params[:user_id], encrypted_password: user_params[:encrypted_password]).first
     if @current_user
-      render_me :ok
+      render json: {email: @current_user.email}, status: :ok
     else
       head :unauthorized
     end

@@ -10,6 +10,7 @@ Whatsup::Application.routes.draw do
       delete 'unregister_device', to: 'users#unregister', as: 'unregister'
       get 'download/:image_url', to: 'messages#download', as: 'image_download'
       post 'check_uniqueness', to: 'users#check_uniqueness', as: 'check_uniqueness'
+      post 'get_email', to: 'users#get_email', as: 'get_email'
       post 'authenticate', to: 'users#authenticate', as: 'authenticate'
       post 'friends', to: 'users#friends', as: 'users_friends'
       resources :users, only: [:create, :update] do
