@@ -28,10 +28,11 @@ class Api::V1::UsersController < Api::V1::ApiController
   end
 
   def create
-    @current_user = User.where('user_id = ?', user_params['user_name'] || user_params['user_id']).first || User.new
+    @current_user = User.where(user_id: user_params['user_name'] || user_params['user_id']).first || 
+      @current_user = User.where(email: user_params['email']).first ||User.new
     if @current_user.new_record?
 
-      if user_params['fb_token']
+      if user_params['fb_token'] || user_params['firebase_token']
         @current_user.role = 'User'
       else
         @current_user.role = 'Unverified'
