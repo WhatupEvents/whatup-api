@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   validates :email, uniqueness: true
-  validates :user_name, uniqueness: true
+  validates :user_id, uniqueness: true
 
   has_many :organizations, through: :organization_memberships
   has_many :organization_memberships

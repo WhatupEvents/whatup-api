@@ -10,7 +10,7 @@ class Api::V1::UsersController < Api::V1::ApiController
   end
 
   def authenticate
-    @current_user = User.where(user_name: user_params[:user_name], encrypted_password: user_params[:encrypted_password]).first
+    @current_user = User.where(user_id: user_params[:user_name] || user_params[:user_id], encrypted_password: user_params[:encrypted_password]).first
     if @current_user
       render_me :ok
     else
@@ -19,7 +19,7 @@ class Api::V1::UsersController < Api::V1::ApiController
   end
 
   def create
-    @current_user = User.where('user_name = ?', user_params['user_name']).first || User.new
+    @current_user = User.where('user_id = ?', user_params['user_name'] || user_params['user_id']).first || User.new
     if @current_user.new_record?
       @current_user.role = 'User'
       @current_user.accepted_terms = false
@@ -53,7 +53,7 @@ class Api::V1::UsersController < Api::V1::ApiController
   end
 
   def add_friend
-    friend = User.find_by_user_name(params[:new_friend_username])
+    friend = User.find_by_user_id(params[:new_friend_username])
     if friend
       FriendRelationship.find_or_create_by(person_id: current_user.id, friend_id: friend.id)
       FriendRelationship.find_or_create_by(person_id: friend.id, friend_id: current_user.id)
@@ -65,8 +65,7 @@ class Api::V1::UsersController < Api::V1::ApiController
 
   def friends
     if (params['friends_fb_ids'])
-      # using user_name since fb_id is saved here for fb users
-      User.where('user_name in (?)',JSON.parse(params['friends_fb_ids'])).each do |friend|
+      User.where('user_id in (?)',JSON.parse(params['friends_fb_ids'])).each do |friend|
         FriendRelationship.find_or_create_by(person_id: current_user.id, friend_id: friend.id)
 	FriendRelationship.find_or_create_by(person_id: friend.id, friend_id: current_user.id)
       end
@@ -130,7 +129,8 @@ class Api::V1::UsersController < Api::V1::ApiController
 
   def user_params
     params.require(:user).permit(
-      :user_name, 
+      :user_name,
+      :user_id,
       :email, 
       :first_name, 
       :last_name, 
