@@ -1,5 +1,5 @@
 class Api::V1::UsersController < Api::V1::ApiController
-  doorkeeper_for :all, except: [:create, :authenticate, :get_email, :check_uniqueness]
+  doorkeeper_for :all, except: [:create, :authenticate, :check_uniqueness]
 
   def check_uniqueness
     if User.where(params[:unique_field] => params[:unique_value]).empty?
@@ -10,8 +10,9 @@ class Api::V1::UsersController < Api::V1::ApiController
   end
 
   def authenticate
-    @current_user = User.where(user_id: user_params[:user_name] || user_params[:user_id], encrypted_password: user_params[:encrypted_password]).first ||
-      User.where(email: user_params[:user_id], encrypted_password: user_params[:encrypted_password]).first
+    # firebase check email with encrypted_password
+    @current_user = User.where(email: user_params[:email]).first
+
     if @current_user
       render_me :ok
     else
@@ -21,8 +22,8 @@ class Api::V1::UsersController < Api::V1::ApiController
 
   def create
     @current_user = User.where(user_id: user_params['user_name'] || user_params['user_id']).first || User.new
-    if @current_user.new_record?
 
+    if @current_user.new_record?
       if user_params['fb_token'] || user_params['firebase_token']
         @current_user.role = 'User'
       else
@@ -122,6 +123,7 @@ class Api::V1::UsersController < Api::V1::ApiController
     device = Device.find_or_initialize_by(user_id: @current_user.id, os: device_params[:os])
     device.registration_id = device_params[:registration_id]
     device.uuid = device_params[:uuid]
+    device.version = device_params[:version]
     device.save
 
     # include:  ['user', 'user.status', 'access_token'],
@@ -135,7 +137,7 @@ class Api::V1::UsersController < Api::V1::ApiController
   end
 
   def device_params
-    params.require(:device).permit(:uuid, :registration_id, :os)
+    params.require(:device).permit(:uuid, :registration_id, :os, :version)
   end
 
   def user_image_params
@@ -144,8 +146,6 @@ class Api::V1::UsersController < Api::V1::ApiController
 
   def user_params
     params.require(:user).permit(
-      :user_name,
-      :user_id,
       :email, 
       :first_name, 
       :last_name, 

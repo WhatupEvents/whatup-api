@@ -51,6 +51,8 @@ gem 'resque-scheduler-web'
 gem 'doorkeeper', '~> 1.4.0'
 gem "paperclip", "~> 5.0.0"
 gem 'aws-sdk', '~> 2.3.0'
+gem 'firebase-auth', '~> 0.1.4'
+
 
 # To use debugger
 gem 'pry-byebug'
