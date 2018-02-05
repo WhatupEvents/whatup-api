@@ -326,6 +326,7 @@ DEPENDENCIES
   sass-rails (~> 4.0.3)
   therubyracer
   uglifier (>= 1.3.0)
+  unf_ext
   unicorn
 
 BUNDLED WITH
