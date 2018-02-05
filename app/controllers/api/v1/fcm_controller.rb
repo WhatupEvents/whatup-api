@@ -4,10 +4,6 @@ class Api::V1::FcmController < Api::V1::ApiController
   doorkeeper_for :all
 
   def message
-    if current_user.role == 'Unverified'
-      head :bad_request
-    end
-
     sender = {sender_id: current_user.id}
     message = Message.create(sender.merge(message_params))
     if Rails.env != "development"

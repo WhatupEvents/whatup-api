@@ -10,7 +10,7 @@ class Api::V1::UsersController < Api::V1::ApiController
   end
 
   def authenticate
-    # firebase check email with encrypted_password
+    # TODO: firebase check email with encrypted_password
     @current_user = User.where(email: user_params[:email]).first
 
     if @current_user
@@ -24,20 +24,21 @@ class Api::V1::UsersController < Api::V1::ApiController
     @current_user = User.where(user_id: user_params['user_name'] || user_params['user_id']).first || User.new
 
     if @current_user.new_record?
+      @current_user.accepted_terms = false
+      @current_user.update(user_params)
+      @current_user.save
+      render_me :created
+    else
       if user_params['fb_token'] || user_params['firebase_token']
         @current_user.role = 'User'
       else
         @current_user.role = 'Unverified'
       end
       
-      @current_user.accepted_terms = false
-      @current_user.update(user_params)
-      @current_user.save
-      render_me :created
-    else
       if user_params.has_key? 'accepted_terms'
         @current_user.update_attribute('accepted_terms', user_params['accepted_terms'])
       end
+
       # TODO: review this, seems like it is for later adding fb account to existing account
       if user_params['fb_id']
         if User.find_by_fb_id(user_params['fb_id'])
@@ -47,6 +48,8 @@ class Api::V1::UsersController < Api::V1::ApiController
           render_me :ok
         end
       else
+
+        # is this on an else because we would only update email and password for not fb users?
         if user_params['email']
           @current_user.update_attribute('email', user_params['email'])
         end
@@ -61,11 +64,11 @@ class Api::V1::UsersController < Api::V1::ApiController
   def update
     if current_user.role == 'Unverified'
       head :bad_request
+    else 
+      @current_user = User.find(params[:id])
+      @current_user.update_attributes(user_image_params)
+      head :ok
     end
-
-    @current_user = User.find(params[:id])
-    @current_user.update_attributes(user_image_params)
-    head :ok
   end
 
   def add_friend

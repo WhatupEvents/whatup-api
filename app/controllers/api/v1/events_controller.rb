@@ -30,6 +30,7 @@ class Api::V1::EventsController < Api::V1::ApiController
   def create
     if current_user.role == 'Unverified'
       head :bad_request
+      return
     end
 
     event = Event.create! create_event_params

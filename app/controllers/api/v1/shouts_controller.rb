@@ -8,6 +8,7 @@ class Api::V1::ShoutsController < Api::V1::ApiController
   def create
     if current_user.role == 'Unverified'
       head :bad_request
+      return
     end
 
     @shout = Shout.create! shout_params
@@ -21,15 +22,16 @@ class Api::V1::ShoutsController < Api::V1::ApiController
   def update
     if current_user.role == 'Unverified'
       head :bad_request
-    end
+    else
 
-    @shout = Shout.find(params[:id])
-    @shout.update_attributes! shout_params
-    update_image
-    render json: @shout,
-       serializer: Api::V1::ShoutSerializer,
-       status: :ok,
-       current_user: current_user.id
+      @shout = Shout.find(params[:id])
+      @shout.update_attributes! shout_params
+      update_image
+      render json: @shout,
+         serializer: Api::V1::ShoutSerializer,
+         status: :ok,
+         current_user: current_user.id
+    end
   end
 
   def destroy

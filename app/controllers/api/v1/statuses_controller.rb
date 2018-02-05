@@ -11,10 +11,6 @@ class Api::V1::StatusesController < Api::V1::ApiController
   end
 
   def create
-    if current_user.role == 'Unverified'
-      head :bad_request
-    end
-
     status = Status.create! status_params
     status.update_attribute(:text, status.text.capitalize)
     if Rails.env != "development"
