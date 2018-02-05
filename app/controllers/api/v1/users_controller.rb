@@ -146,6 +146,8 @@ class Api::V1::UsersController < Api::V1::ApiController
 
   def user_params
     params.require(:user).permit(
+      :user_name,
+      :user_id,
       :email, 
       :first_name, 
       :last_name, 
