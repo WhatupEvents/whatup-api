@@ -108,7 +108,7 @@ class Api::V1::ShoutsController < Api::V1::ApiController
       .where(event_id: in_range_event_ids)
       .where('user_id NOT IN (?)', invalid_user_ids.present? ? invalid_user_ids : '')
       .where('event_id NOT IN (?)', invalid_event_ids.present? ? invalid_event_ids : '')
-      .limit(15).order(created_at: :desc)
+      .limit(7).order(created_at: :desc)
       .not_flagged_for(current_user.id)
 
     tutorial_shouts = Shout.where(event_id: Event.where(latitude: '200.0', longitude: '200.0'))
