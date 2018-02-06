@@ -30,13 +30,13 @@ class Api::V1::UsersController < Api::V1::ApiController
       @current_user.save
       render_me :created
     else
-      if user_params['fb_token'] || user_params['firebase_token'] || params[:fb_token]
-        if @current_user.role == 'Unverified'
-          @current_user.role = 'User'
-        end
-      else
-        @current_user.role = 'Unverified'
-      end
+      # if user_params['fb_token'] || user_params['firebase_token'] || params[:fb_token]
+      #   if @current_user.role == 'Unverified'
+      #     @current_user.role = 'User'
+      #   end
+      # else
+      #   @current_user.role = 'Unverified'
+      # end
       
       if user_params.has_key? 'accepted_terms'
         @current_user.update_attribute('accepted_terms', user_params['accepted_terms'])
