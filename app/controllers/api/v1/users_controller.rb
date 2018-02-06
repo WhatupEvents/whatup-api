@@ -26,6 +26,7 @@ class Api::V1::UsersController < Api::V1::ApiController
     if @current_user.new_record?
       @current_user.accepted_terms = false
       @current_user.update(user_params)
+      @current_user.role = 'User'
       @current_user.save
       render_me :created
     else
