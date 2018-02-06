@@ -29,7 +29,7 @@ class Api::V1::UsersController < Api::V1::ApiController
       @current_user.save
       render_me :created
     else
-      if user_params['fb_token'] || user_params['firebase_token'] || params[:firebase_token]
+      if user_params['fb_token'] || user_params['firebase_token'] || params[:fb_token]
         @current_user.role = 'User'
       else
         @current_user.role = 'Unverified'
