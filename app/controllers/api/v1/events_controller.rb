@@ -33,7 +33,7 @@ class Api::V1::EventsController < Api::V1::ApiController
       return
     end
 
-    event = Event.create! create_event_params
+    event = Event.create! event_params
 
     event.participants = [current_user]
     render json: event,
@@ -50,7 +50,7 @@ class Api::V1::EventsController < Api::V1::ApiController
     
     # only event creator or Admins can update events, User role cannot make events public
     if (event.created_by_id != current_user.id && current_user.role != 'Admin') ||
-      (create_event_params[:public] == 'true' && (current_user.role == 'User' || current_user.role == 'Unverified'))
+      (event_params[:public] == 'true' && (current_user.role == 'User' || current_user.role == 'Unverified'))
       head :bad_request
       return
 
@@ -58,7 +58,7 @@ class Api::V1::EventsController < Api::V1::ApiController
       creator = User.where(id: event.created_by_id).first
       # if event is being made public send notifications to followers
       if (Rails.env != "development" && creator && creator.followers.count > 0 && 
-          !event.public && create_event_params[:public] == 'true')
+          !event.public && event_params[:public] == 'true')
         creator.followers.each do |follower|
           Resque.enqueue(
             FcmMessageJob, {
@@ -70,7 +70,7 @@ class Api::V1::EventsController < Api::V1::ApiController
       end
 
       # clear participants when going from private to public or viceversa
-      if event.public != (create_event_params[:public] == "true")
+      if event.public != (event_params[:public] == "true")
         event.participants = []
       end
 
@@ -78,8 +78,8 @@ class Api::V1::EventsController < Api::V1::ApiController
       # when they've been removed from an event?
       before_update = event.participant_relationships.all.map(&:attributes)
 
-      if create_event_params[:friend_ids]
-        friend_ids = JSON.parse(create_event_params[:friend_ids])
+      if event_params[:friend_ids]
+        friend_ids = JSON.parse(event_params[:friend_ids])
         participants = User.where(id: friend_ids + [event.created_by_id])
         event.participants = participants
         params.delete("friend_ids")
@@ -88,7 +88,7 @@ class Api::V1::EventsController < Api::V1::ApiController
       after_update = event.participant_relationships.all.map(&:attributes)
 
       # update attributes
-      event.update_attributes! create_event_params
+      event.update_attributes! event_params
 
       # messages go out to participants that have notifications on
       if Rails.env != "development"
@@ -195,12 +195,12 @@ class Api::V1::EventsController < Api::V1::ApiController
 
   private
 
-  def create_event_params
+  def event_params
     params.except(:format, :id).permit(event_param_keys)
   end
   
   def event_param_keys
-    [:name, :details, :created_by_id, :start_time, :end_at, :symbol_id, :category_id,
+    [:name, :details, :created_by_id, :created_by_type, :start_time, :end_at, :symbol_id, :category_id,
      :location, :latitude, :longitude, :public, :source, :image, :friend_ids]
   end
 end
