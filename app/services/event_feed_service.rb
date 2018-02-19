@@ -44,6 +44,7 @@ class EventFeedService
         start_time: Time.parse(ev["starts"]),
         end_at: Time.parse(ev["ends"]),
         created_by_id: 1,
+        created_by_type: "Organization",
         public: true,
         location: ev["location"],
         symbol_id: get_category_id(ev["category"]),
