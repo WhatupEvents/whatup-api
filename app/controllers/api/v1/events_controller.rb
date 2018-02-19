@@ -52,6 +52,7 @@ class Api::V1::EventsController < Api::V1::ApiController
     if (event.created_by_id != current_user.id && current_user.role != 'Admin') ||
       (create_event_params[:public] == 'true' && (current_user.role == 'User' || current_user.role == 'Unverified'))
       head :bad_request
+      return
 
     else
       creator = User.where(id: event.created_by_id).first
