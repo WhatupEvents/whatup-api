@@ -153,7 +153,7 @@ class Api::V1::EventsController < Api::V1::ApiController
     }
 
     if already_following 
-      event.created_by.followers = event_creator.followers - [current_user]
+      event.created_by.followers = event.created_by.followers - [current_user]
     else
       event.created_by.followers |= [current_user]
     end
