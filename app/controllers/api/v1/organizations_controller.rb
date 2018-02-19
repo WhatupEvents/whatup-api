@@ -2,7 +2,7 @@ class Api::V1::OrganizationsController < Api::V1::ApiController
   doorkeeper_for :all
 
   def index
-    if current_user.role != 'Promoter'
+    if current_user.role != 'Promoter' || current_user.role != 'Admin'
       head :bad_request
       return
     end
