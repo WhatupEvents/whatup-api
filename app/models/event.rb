@@ -1,7 +1,7 @@
 class Event < ActiveRecord::Base
   validates :name, presence: true
 
-  belongs_to :created_by, class_name: 'User'
+  belongs_to :created_by, polymorphic: true
 
   # TODO: dependent destroy?
   has_many :messages

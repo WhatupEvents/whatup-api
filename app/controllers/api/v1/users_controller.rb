@@ -30,6 +30,10 @@ class Api::V1::UsersController < Api::V1::ApiController
       @current_user.save
       render_me :created
     else
+      # fb_token will fail in the update(user_params) bc they're not user model attributes
+      # firebase_token will probably be fine, because user is created before email verification,
+      # and so firebase_token never goes into the update(user_params) call on line 28
+      #
       # if user_params['fb_token'] || user_params['firebase_token'] || params[:fb_token]
       #   if @current_user.role == 'Unverified'
       #     @current_user.role = 'User'

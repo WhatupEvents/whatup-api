@@ -40,7 +40,7 @@ class User < ActiveRecord::Base
 
   has_many :friend_groups
 
-  has_many :events, foreign_key: :created_by_id, dependent: :destroy
+  has_many :events, as: :created_by
 
   after_create :default_friend_groups
 

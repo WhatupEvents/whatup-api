@@ -50,15 +50,15 @@ class Api::V1::EventsController < Api::V1::ApiController
     
     # only event creator or Admins can update events, User role cannot make events public
     if (event.created_by_id != current_user.id && current_user.role != 'Admin') ||
-      (create_event_params[:public] == 'true' && current_user.role == 'User' ||
-      current_user.role == 'Unverified')
+      (create_event_params[:public] == 'true' && (current_user.role == 'User' || current_user.role == 'Unverified'))
       head :bad_request
 
     else
+      creator = User.where(id: event.created_by_id).first
       # if event is being made public send notifications to followers
-      if (Rails.env != "development" && event.created_by && event.created_by.followers.count > 0 && 
+      if (Rails.env != "development" && creator && creator.followers.count > 0 && 
           !event.public && create_event_params[:public] == 'true')
-        event.created_by.followers.each do |follower|
+        creator.followers.each do |follower|
           Resque.enqueue(
             FcmMessageJob, {
               followed_name: current_user.name,
@@ -144,7 +144,7 @@ class Api::V1::EventsController < Api::V1::ApiController
 
   def follow_creator
     event = Event.find(params[:event_id])
-    event_creator = event.created_by
+    event_creator = User.where(id: event.created_by_id).first
 
     already_following = event_creator.followers.include? current_user
     json_result = {
@@ -179,10 +179,12 @@ class Api::V1::EventsController < Api::V1::ApiController
 
   def check_action
     event = Event.find(params[:event_id])
+    creator = User.where(id: event.created_by_id).first
+
     participant_relationship = event.participant_relationships.select{|p| p.participant_id == current_user.id}[0]
     json = {
       rsvp: event.participants.include?(current_user).to_s,
-      follow: event.created_by ? event.created_by.followers.include?(current_user).to_s : '',
+      follow: creator ? creator.followers.include?(current_user).to_s : '',
       notify: participant_relationship ? participant_relationship.notify.to_s : ''
     }
 
