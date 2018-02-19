@@ -5,5 +5,5 @@ class Organization < ActiveRecord::Base
   has_many :events, as: :created_by
 
   has_many :followers, through: :follow_relationships
-  has_many :follow_relationships
+  has_many :follow_relationships, foreign_key: :followed_id
 end
