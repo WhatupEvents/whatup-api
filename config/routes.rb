@@ -24,6 +24,7 @@ Whatsup::Application.routes.draw do
         put 'flag', to: 'shouts#flag', as: 'shouts_flag'
         put 'up', to: 'shouts#up', as: 'shouts_up'
       end
+      resources :organizations, only: [:index]
       resources :categories, only: [:index]
       resources :statuses, only: [:create]
       put :statuses, to: 'statuses#up', as: 'up_status'
