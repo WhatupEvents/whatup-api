@@ -34,7 +34,7 @@ class Api::V1::EventsController < Api::V1::ApiController
     end
 
     event = Event.create! event_params
-    if event_params[:created_by_type] != 'Organization'
+    if event.created_by_type.nil?
       event.created_by_type = 'User'
     end
     event.participants = [current_user]
