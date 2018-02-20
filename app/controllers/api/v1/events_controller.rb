@@ -34,6 +34,9 @@ class Api::V1::EventsController < Api::V1::ApiController
     end
 
     event = Event.create! event_params
+    if event_params[:created_by_type].nil?
+      event.created_by_type = "User"
+    end
     event.participants = [current_user]
 
     notify_followers event
@@ -180,10 +183,16 @@ class Api::V1::EventsController < Api::V1::ApiController
   def check_action
     event = Event.find(params[:event_id])
 
+    if event.created_by_type == "Organization"
+      creator = event.created_by
+    else
+      creator = event.created_by.organizations.first
+    end
+
     participant_relationship = event.participant_relationships.select{|p| p.participant_id == current_user.id}[0]
     json = {
       rsvp: event.participants.include?(current_user).to_s,
-      follow: event.created_by ? event.created_by.followers.include?(current_user).to_s : '',
+      follow: creator ? creator.followers.include?(current_user).to_s : '',
       notify: participant_relationship ? participant_relationship.notify.to_s : ''
     }
 
