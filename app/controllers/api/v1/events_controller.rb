@@ -215,7 +215,7 @@ class Api::V1::EventsController < Api::V1::ApiController
       creator = event.created_by.organizations.first
     end
 
-    if (Rails.env != "development" && event.created_by && creator.followers.count > 0 && 
+    if (Rails.env != "development" && creator && creator.followers.count > 0 && 
         !event.public && event_params[:public] == 'true')
       creator.followers.each do |follower|
         Resque.enqueue(
