@@ -149,16 +149,22 @@ class Api::V1::EventsController < Api::V1::ApiController
   def follow_creator
     event = Event.find(params[:event_id])
 
-    already_following = event.created_by.followers.include? current_user
+    if event.created_by_type == "Organization"
+      creator = event.created_by
+    else
+      creator = event.created_by.organizations.first
+    end
+
+    already_following = creator.followers.include? current_user
     json_result = {
       creator_name: event.created_by.name,
       followed: !already_following
     }
 
     if already_following 
-      event.created_by.followers = event.created_by.followers - [current_user]
+      creator.followers = creator.followers - [current_user]
     else
-      event.created_by.followers |= [current_user]
+      creator.followers |= [current_user]
     end
 
     render json: json_result,
@@ -203,9 +209,15 @@ class Api::V1::EventsController < Api::V1::ApiController
   private
 
   def notify_followers(event)
-    if (Rails.env != "development" && event.created_by && event.created_by.followers.count > 0 && 
+    if event.created_by_type == "Organization"
+      creator = event.created_by
+    else
+      creator = event.created_by.organizations.first
+    end
+
+    if (Rails.env != "development" && event.created_by && creator.followers.count > 0 && 
         !event.public && event_params[:public] == 'true')
-      event.created_by.followers.each do |follower|
+      creator.followers.each do |follower|
         Resque.enqueue(
           FcmMessageJob, {
             followed_name: event.created_by.name,
