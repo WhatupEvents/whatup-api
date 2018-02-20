@@ -122,7 +122,7 @@ class Api::V1::EventsController < Api::V1::ApiController
       creator_ids = Organization.find(event.created_by_id).members.map(&:id)
     end
     
-    if !creator_ids.include?(current_user.id) || current_user.role == 'Admin'
+    if creator_ids.include?(current_user.id) || current_user.role == 'Admin'
       event.destroy
       render json: {},
              status: :ok
