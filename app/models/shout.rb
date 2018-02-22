@@ -2,6 +2,8 @@ class Shout < ActiveRecord::Base
   belongs_to :user
   belongs_to :event
 
+  has_one :shout_video
+
   has_many :shout_uppings
   has_many :upped_by, class_name: 'User', through: :shout_uppings
 

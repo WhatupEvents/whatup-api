@@ -47,6 +47,10 @@ class Api::V1::ShoutSerializer < ActiveModel::Serializer
     end
   end
 
+  def video_url
+    object.shout_video.present? ? object.shout_video.url : ''
+  end
+
   def upped_by
     object.upped_by.include? User.find(serialization_options[:current_user])
   end

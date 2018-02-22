@@ -75,6 +75,12 @@ class Api::V1::ShoutsController < Api::V1::ApiController
        current_user: current_user.id
   end
 
+  def video_upload
+    @shout = Shout.find(params[:shout_id])
+    ShoutVideo.create(shout_id: @shout.id, source: params[:source], video: params[:video])
+    head :created
+  end
+
   private
 
   def update_image

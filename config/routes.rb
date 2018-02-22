@@ -20,6 +20,7 @@ Whatsup::Application.routes.draw do
       post 'add_friend', to: 'users#add_friend', as: 'users_add_friend'
       resources :friend_groups, only: [:index, :create, :update, :destroy]
       resources :shouts, only: [:create, :index, :update, :destroy] do
+        post 'video', to: 'shouts#video_upload', as: 'shouts_video'
         put 'block', to: 'shouts#block', as: 'shouts_block'
         put 'flag', to: 'shouts#flag', as: 'shouts_flag'
         put 'up', to: 'shouts#up', as: 'shouts_up'

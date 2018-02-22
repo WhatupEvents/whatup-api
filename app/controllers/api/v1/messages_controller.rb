@@ -16,7 +16,13 @@ class Api::V1::MessagesController < Api::V1::ApiController
   end
 
   def download
-    object_key = params[:image_url].gsub('-','/').gsub('_','.')
+    url = params[:image_url]
+
+    if params[:image_url].include? 'Amz'
+      url = url.split('whatupevents-images/')[1].split('?')[0]
+    end
+
+    object_key = url.gsub('-','/').gsub('_','.')
 
     obj = Aws::S3::Object.new(
       bucket_name: 'whatupevents-images',
@@ -27,7 +33,6 @@ class Api::V1::MessagesController < Api::V1::ApiController
     )
 
     signed_url = obj.presigned_url(:get, expires_in: 60*60*24*3)
-    Rails.logger.info signed_url
     redirect_to signed_url
   end
 
