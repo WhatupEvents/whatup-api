@@ -55,7 +55,7 @@ class Api::V1::EventsController < Api::V1::ApiController
     
     creator_ids = [event.created_by_id]
     if event_params[:created_by_type] && event_params[:created_by_type] == "Organization"
-      creator_ids = Organization.find(event.created_by_id).members.map(&:id)
+      creator_ids = Organization.find(event_params[:created_by_id]).members.map(&:id)
     end
     
     # Only the event creator or Admins can update events
