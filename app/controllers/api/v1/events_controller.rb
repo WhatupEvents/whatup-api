@@ -3,7 +3,7 @@ class Api::V1::EventsController < Api::V1::ApiController
 
   def mine
     events = current_user.events
-    events |= current_user.organizations.map(&:events).flatten
+    events |= current_user.organizations.reject{|o| o.id == 1}.map(&:events).flatten
 
     Rails.logger.info events.to_s
     render json: events.sort{|x,y| x.start_time.to_i <=> y.start_time.to_i},
