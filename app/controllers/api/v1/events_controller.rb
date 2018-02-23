@@ -5,7 +5,8 @@ class Api::V1::EventsController < Api::V1::ApiController
     events = current_user.events
     events |= current_user.organizations.map(&:events).flatten
 
-    render json: events.sort{|x,y| x.start_time <=> y.start_time},
+    Rails.logger.info events.to_s
+    render json: events.sort{|x,y| x.start_time.to_i <=> y.start_time.to_i},
            each_serializer: Api::V1::EventSerializer,
            status: :ok,
            current_user: current_user.id
