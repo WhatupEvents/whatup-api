@@ -2,7 +2,10 @@ class Api::V1::EventsController < Api::V1::ApiController
   doorkeeper_for :all
 
   def mine
-    render json: current_user.events.sort{|x,y| x.start_time <=> y.start_time},
+    events = current_user.events
+    events |= current_user.organizations.map(&:events).flatten
+
+    render json: events.sort{|x,y| x.start_time <=> y.start_time},
            each_serializer: Api::V1::EventSerializer,
            status: :ok,
            current_user: current_user.id
