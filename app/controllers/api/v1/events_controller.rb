@@ -58,7 +58,7 @@ class Api::V1::EventsController < Api::V1::ApiController
     event = Event.find(params[:id])
  
     creator_ids = [event.created_by_id]
-    if event.created_by_type == "Organization"
+    if event_params[:created_by_type] == "Organization"
       creator_ids = Organization.find(event_params[:created_by_id]).members.map(&:id)
     end
     Rails.logger.info current_user.id
@@ -220,6 +220,7 @@ class Api::V1::EventsController < Api::V1::ApiController
     if event.created_by_type == "Organization"
       creator = event.created_by
     else
+      # can get rid of this or add a bad request if getting a follow from non org event?
       creator = event.created_by.organizations.first
     end
 
