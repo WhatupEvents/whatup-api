@@ -13,7 +13,10 @@ class Api::V1::ShoutsController < Api::V1::ApiController
 
     @shout = Shout.create! shout_params
     update_image
-    render_shouts
+    render json: @shout,
+         serializer: Api::V1::ShoutSerializer,
+         status: :ok,
+         current_user: current_user.id
   rescue Exception => e
     Rails.logger.info e.to_s
     head :bad_request
