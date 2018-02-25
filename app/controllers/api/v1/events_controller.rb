@@ -5,7 +5,7 @@ class Api::V1::EventsController < Api::V1::ApiController
     events = current_user.events
     events |= current_user.organizations.reject{|o| o.id == 1}.map(&:events).flatten
 
-    Rails.logger.info events.to_s
+    Rails.logger.info events.map(&:id)
     render json: events.sort{|x,y| x.start_time.to_i <=> y.start_time.to_i},
            each_serializer: Api::V1::EventSerializer,
            status: :ok,
@@ -33,7 +33,7 @@ class Api::V1::EventsController < Api::V1::ApiController
 
   def create
     if current_user.role == 'Unverified'
-      head :bad_request
+      head :forbidden
       return
     end
 
@@ -56,17 +56,19 @@ class Api::V1::EventsController < Api::V1::ApiController
 
   def update
     event = Event.find(params[:id])
-    
+ 
     creator_ids = [event.created_by_id]
     if event.created_by_type == "Organization"
       creator_ids = Organization.find(event_params[:created_by_id]).members.map(&:id)
     end
-    
+    Rails.logger.info current_user.id
+    Rails.logger.info creator_ids
+
     # Only the event creator or Admins can update events
     # Regular users cannot make events public
     if (!creator_ids.include?(current_user.id) && current_user.role != 'Admin') ||
       (event_params[:public] == 'true' && (current_user.role == 'User' || current_user.role == 'Unverified'))
-      head :bad_request
+      head :forbidden
       return
     end
 
@@ -131,7 +133,7 @@ class Api::V1::EventsController < Api::V1::ApiController
       render json: {},
              status: :ok
     else
-      head :bad_request
+      head :forbidden
     end
   end
 
