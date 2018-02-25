@@ -48,7 +48,7 @@ class Api::V1::ShoutSerializer < ActiveModel::Serializer
   end
 
   def video_url
-    object.shout_video.present? ? object.shout_video.url : ''
+    object.shout_video.present? ? object.shout_video.video.url : ''
   end
 
   def upped_by
