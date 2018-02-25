@@ -56,11 +56,13 @@ class Api::V1::EventsController < Api::V1::ApiController
 
   def update
     event = Event.find(params[:id])
- 
+
     creator_ids = [event.created_by_id]
-    if event_params[:created_by_type] == "Organization"
-      creator_ids = Organization.find(event_params[:created_by_id]).members.map(&:id)
+    if event.created_by_type == "Organization"
+      # if event is from an organization, need to look at creating organization members
+      creator_ids = event.created_by.members.map(&:id)
     end
+
     Rails.logger.info current_user.id
     Rails.logger.info creator_ids
 
