@@ -15,11 +15,21 @@ class Api::V1::EventsController < Api::V1::ApiController
   def index
     distance = params[:distance] || 10.0
     events = current_user.current_events
+
     if get_geo
       long, lat = get_geo.split(':')
-      events |= Event.current.near_user(lat, long, distance).pub
+
+      public_events = Event.current.near_user(lat, long, distance).pub
         .not_flagged_for(current_user.id)
+
+      if current_user.id == 95
+        public_events = Event.jon_current.near_user(lat, long, distance).pub
+          .not_flagged_for(current_user.id)
+      end
+
+      events |= public_events
     end
+
     events.sort!{|x,y| x.start_time <=> y.start_time}
       
     # this adds the tutorial event, so info can be pulled for shouts 
