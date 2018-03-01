@@ -6,7 +6,6 @@ class ShoutVideo < ActiveRecord::Base
     :bucket => 'whatupevents-videos',
     :s3_region => 'us-east-1',
     :s3_host_name => 's3.us-east-1.amazonaws.com',
-    :s3_permissions => :public,
     :path => ':class/:attachment/:id/:filename',
     :s3_credentials => Proc.new{|p| p.instance.s3_credentials}
   do_not_validate_attachment_file_type :video
