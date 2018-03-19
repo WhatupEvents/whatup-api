@@ -44,7 +44,7 @@ class Event < ActiveRecord::Base
   scope :not_far_off, -> { where('start_time < ?', Time.now+4.days) }
   scope :current, -> { not_old.not_far_off }
   scope :jon_old, -> { where('end_at > ?', Time.now-2.days) }
-  scope :jon_far_off, -> { where('start_time < ?', Time.now+2.days) }
+  scope :jon_far_off, -> { where('start_time < ?', Time.now+4.days) }
   scope :jon_current, -> { jon_old.jon_far_off }
 
   scope :not_too_old, -> { where('end_at > ?', Time.now-10.days) }
