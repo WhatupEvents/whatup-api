@@ -53,7 +53,7 @@ class Api::V1::EventsController < Api::V1::ApiController
     end
     event.participants = [current_user]
 
-    notify_followers event
+    notify_followers(event) if event.public
 
     render json: event,
            serializer: Api::V1::EventSerializer,
@@ -83,8 +83,6 @@ class Api::V1::EventsController < Api::V1::ApiController
       head :forbidden
       return
     end
-
-    notify_followers event
 
     # clear participants when going from private to public or viceversa
     if event.public != (event_params[:public] == "true")
@@ -121,6 +119,8 @@ class Api::V1::EventsController < Api::V1::ApiController
         end
       end
     end
+
+    notify_followers(event) if event.public
 
     render json: event,
            serializer: Api::V1::EventSerializer,
@@ -229,15 +229,9 @@ class Api::V1::EventsController < Api::V1::ApiController
   private
 
   def notify_followers(event)
-    if event.created_by_type == "Organization"
-      creator = event.created_by
-    else
-      # can get rid of this or add a bad request if getting a follow from non org event?
-      creator = event.created_by.organizations.first
-    end
+    creator = event.created_by
 
-    if (Rails.env != "development" && creator && creator.followers.count > 0 && 
-        !event.public && event_params[:public] == 'true')
+    if (Rails.env != "development" && creator && creator.followers.count > 0)
       creator.followers.each do |follower|
         Resque.enqueue(
           FcmMessageJob, {
