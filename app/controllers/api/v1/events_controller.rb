@@ -120,8 +120,6 @@ class Api::V1::EventsController < Api::V1::ApiController
       end
     end
 
-    notify_followers(event) if event.public
-
     render json: event,
            serializer: Api::V1::EventSerializer,
            status: :ok,
