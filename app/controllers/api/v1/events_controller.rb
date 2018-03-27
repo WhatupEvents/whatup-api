@@ -105,8 +105,6 @@ class Api::V1::EventsController < Api::V1::ApiController
     # messages go out to participants that have notifications on
     if Rails.env != "development"
       (before_update+after_update).uniq.each do |participant|
-        Rails.logger.info participant
-
         if participant['notify'] && (participant['participant_id'] != current_user.id)
           Resque.enqueue(
             FcmMessageJob, {

@@ -5,13 +5,13 @@ class FcmMessageJob
     fcm = FCM.new(ENV['FCM_LEGACY_SERVER_KEY'])
     fcm = FCM.new(ENV['FCM_SERVER_KEY'])
 
-    whatuppop = 'whatuppop'
-    if os == 'iOS'
-      whatuppop += '.wav'
-    end
-
     device = Device.where(user_id: recipient_id)
     device.map{|d| [d.registration_id, d.os]}.uniq.each do |reg_id, os|
+      whatuppop = 'whatuppop'
+      if os == 'iOS'
+        whatuppop += '.wav'
+      end
+
       if data.has_key? 'event_name'
         ##### EVENTS JOBS #####
         if data.has_key? 'updated_at'
