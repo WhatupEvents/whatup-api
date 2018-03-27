@@ -4,14 +4,15 @@ class FcmMessageJob
   def self.perform(data, recipient_id)
     fcm = FCM.new(ENV['FCM_LEGACY_SERVER_KEY'])
     fcm = FCM.new(ENV['FCM_SERVER_KEY'])
+
+    whatuppop = 'whatuppop'
+    if os == 'iOS'
+      whatuppop += '.wav'
+    end
+
     device = Device.where(user_id: recipient_id)
     device.map{|d| [d.registration_id, d.os]}.uniq.each do |reg_id, os|
       if data.has_key? 'event_name'
-        whatuppop = 'whatuppop'
-        if os == 'iOS'
-          whatuppop += '.wav'
-        end
-
         ##### EVENTS JOBS #####
         if data.has_key? 'updated_at'
           # event updated job
@@ -32,14 +33,15 @@ class FcmMessageJob
         end
       else
         if data.has_key? 'followed_name'
-            ##### FOLLOW JOBS #####
-            # followed creator new event job
-            resp = fcm.send_with_notification_key(reg_id, {
-              notification: {title: 'New Public Event!', body: "#{data['followed_name']} has posted a new event. ", tag: 'followed'},
-              data: data,
-              content_available: true,
-              priority: "high"
-            })
+          # followed creator new event job
+          resp = fcm.send_with_notification_key(reg_id, {
+            notification: {title: 'New Public Event!', body: "#{data['followed_name']} has posted a new event. ", tag: 'followed', sound: whatupop},
+            data: data,
+            content_available: true,
+            priority: "high"
+          })
+
+
         else
           ##### STATUS JOBS #####
           if data.has_key? 'status_id'

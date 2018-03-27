@@ -67,17 +67,11 @@ class Api::V1::EventsController < Api::V1::ApiController
   def update
     event = Event.find(params[:id])
 
-    Rails.logger.info "start of update"
-    Rails.logger.info event.participants.map(&:name)
-
     creator_ids = [event.created_by_id]
     if event.created_by_type == "Organization"
       # if event is from an organization, need to look at creating organization members
       creator_ids = event.created_by.members.map(&:id)
     end
-
-    Rails.logger.info "update creator ids"
-    Rails.logger.info event.participants.map(&:name)
 
     # Only the event creator or Admins can update events
     # Regular users cannot make events public
@@ -87,14 +81,6 @@ class Api::V1::EventsController < Api::V1::ApiController
       return
     end
 
-    Rails.logger.info "update forbid check"
-    Rails.logger.info event.participants.map(&:name)
-
-    # clear participants when going from private to public or viceversa
-    if event.public != (event_params[:public] == "true")
-      event.participants = []
-    end
-
     Rails.logger.info "before participants"
     Rails.logger.info event.participants.map(&:name)
 
@@ -102,10 +88,16 @@ class Api::V1::EventsController < Api::V1::ApiController
     # when they've been removed from an event?
     before_update = event.participant_relationships.all.map(&:attributes)
 
-    if event_params[:friend_ids]
-      friend_ids = JSON.parse(event_params[:friend_ids])
-      event.participants = User.where(id: friend_ids + [current_user.id])
-      params.delete("friend_ids")
+    if event.public != (event_params[:public] == "true")
+      # clear participants when going from private to public or viceversa
+      event.participants = []
+    else
+      if event_params[:friend_ids] && !event.public
+        # only update friend_ids through event update when event is private
+        friend_ids = JSON.parse(event_params[:friend_ids])
+        event.participants = User.where(id: friend_ids + [current_user.id])
+        params.delete("friend_ids")
+      end
     end
 
     after_update = event.participant_relationships.all.map(&:attributes)
@@ -115,9 +107,6 @@ class Api::V1::EventsController < Api::V1::ApiController
 
     # update attributes
     event.update_attributes! event_params
-
-    Rails.logger.info "event attributes then notify"
-    Rails.logger.info event.participants.map(&:name)
 
     # messages go out to participants that have notifications on
     if Rails.env != "development"
@@ -133,9 +122,6 @@ class Api::V1::EventsController < Api::V1::ApiController
         end
       end
     end
-
-    Rails.logger.info "end of update"
-    Rails.logger.info event.participants.map(&:name)
 
     render json: event,
            serializer: Api::V1::EventSerializer,
