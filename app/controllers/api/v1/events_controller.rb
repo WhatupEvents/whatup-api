@@ -81,9 +81,6 @@ class Api::V1::EventsController < Api::V1::ApiController
       return
     end
 
-    Rails.logger.info "before participants"
-    Rails.logger.info event.participants.map(&:name)
-
     # saves participants before change so that they can be notified
     # when they've been removed from an event?
     before_update = event.participant_relationships.all.map(&:attributes)
@@ -102,15 +99,14 @@ class Api::V1::EventsController < Api::V1::ApiController
 
     after_update = event.participant_relationships.all.map(&:attributes)
 
-    Rails.logger.info "after participants"
-    Rails.logger.info event.participants.map(&:name)
-
     # update attributes
     event.update_attributes! event_params
 
     # messages go out to participants that have notifications on
     if Rails.env != "development"
       (before_update+after_update).uniq.each do |participant|
+        Rails.logger.info participant
+
         if participant['notify'] && (participant['participant_id'] != current_user.id)
           Resque.enqueue(
             FcmMessageJob, {
