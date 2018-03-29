@@ -32,8 +32,8 @@ class Api::V1::EventsController < Api::V1::ApiController
 
     events.sort!{|x,y| x.start_time <=> y.start_time}
       
-    # this adds the tutorial event, so info can be pulled for shouts 
-    events |= Event.where(latitude: '200.0', longitude: '200.0')
+    # this adds top of the list events, at the moment we don't want tutorial
+    events |= Event.where("latitude = '200.0' AND longitude = '200.0' AND name != 'tutorial'")
 
     render json: events,
            each_serializer: Api::V1::EventSerializer,
