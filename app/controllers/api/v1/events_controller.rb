@@ -93,9 +93,9 @@ class Api::V1::EventsController < Api::V1::ApiController
         # only update friend_ids through event update when event is private
         friend_ids = JSON.parse(event_params[:friend_ids])
         event.participants = User.where(id: friend_ids + [current_user.id])
-        params.delete("friend_ids")
       end
     end
+    params.delete("friend_ids")
 
     after_update = event.participant_relationships.all.map(&:attributes)
 
