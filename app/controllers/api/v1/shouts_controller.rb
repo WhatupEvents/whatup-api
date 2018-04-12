@@ -120,7 +120,7 @@ class Api::V1::ShoutsController < Api::V1::ApiController
       .limit(7).order(created_at: :desc)
       .not_flagged_for(current_user.id)
 
-    tutorial_shouts = Shout.where(event_id: Event.where(latitude: '200.0', longitude: '200.0'))
+    tutorial_shouts = Shout.where(event_id: Event.where("latitude = '200.0' AND longitude = '200.0' AND name != 'tutorial'"))
       .not_flagged_for(current_user.id)
 
     shouts = tutorial_shouts + shouts
