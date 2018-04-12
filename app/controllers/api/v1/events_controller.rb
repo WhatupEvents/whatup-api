@@ -231,6 +231,7 @@ class Api::V1::EventsController < Api::V1::ApiController
         Resque.enqueue(
           FcmMessageJob, {
             followed_name: event.created_by.name,
+            event_name: event.name,
             created_at: event.created_at
           }, follower.id
         )
