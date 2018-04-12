@@ -33,6 +33,7 @@ class Api::V1::EventsController < Api::V1::ApiController
     events.sort!{|x,y| x.start_time <=> y.start_time}
       
     # this adds top of the list events, at the moment we don't want tutorial
+    # I think this can go away because I pull shouts by this same query too
     events |= Event.where("latitude = '200.0' AND longitude = '200.0' AND name != 'tutorial'")
 
     render json: events,
@@ -138,13 +139,13 @@ class Api::V1::EventsController < Api::V1::ApiController
     # messages go out to participants that have notifications on
     if Rails.env != "development"
       event.participants.uniq.each do |participant|
-        if participant['participant_id'] != current_user.id
+        if participant.id != current_user.id
           Resque.enqueue(
             FcmMessageJob, {
               event_id: event.id,
               event_name: event.name,
               deleted_at: Time.now
-            }, participant['participant_id']
+            }, participant.id
           )
         end
       end
