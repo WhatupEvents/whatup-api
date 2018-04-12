@@ -31,6 +31,13 @@ class FcmMessageJob
               content_available: true,
               priority: "high"
             })
+          elsif data.has_key? 'deleted_at'
+            # event dleted job
+            resp = fcm.send_with_notification_key(reg_id, {
+              data: data,
+              content_available: true,
+              priority: "high"
+            })
           else
             # event chat message job
             resp = fcm.send_with_notification_key(reg_id, {

@@ -134,7 +134,22 @@ class Api::V1::EventsController < Api::V1::ApiController
     if event.created_by_type == "Organization"
       creator_ids = Organization.find(event.created_by_id).members.map(&:id)
     end
-    
+
+    # messages go out to participants that have notifications on
+    if Rails.env != "development"
+      event.participants.uniq.each do |participant|
+        if participant['participant_id'] != current_user.id
+          Resque.enqueue(
+            FcmMessageJob, {
+              event_id: event.id,
+              event_name: event.name,
+              deleted_at: Time.now
+            }, participant['participant_id']
+          )
+        end
+      end
+    end
+
     if creator_ids.include?(current_user.id) || current_user.role == 'Admin'
       event.destroy
       render json: {},
