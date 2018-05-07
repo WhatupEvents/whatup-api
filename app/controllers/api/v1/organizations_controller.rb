@@ -8,9 +8,9 @@ class Api::V1::OrganizationsController < Api::V1::ApiController
       return
     end
 
-    if current_user.role == 'Admin'
-      organizations = Organization.all
-    end
+    # if current_user.role == 'Admin'
+    #   organizations = Organization.all
+    # end
 
     render json: organizations,
            each_serializer: Api::V1::OrganizationSerializer,
