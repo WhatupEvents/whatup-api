@@ -1,5 +1,5 @@
 class Shout < ActiveRecord::Base
-  belongs_to :user
+  belongs_to :shouter, polymorphic: true
   belongs_to :event
 
   has_one :shout_video

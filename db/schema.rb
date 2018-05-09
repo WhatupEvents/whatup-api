@@ -11,13 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170825213712) do
+ActiveRecord::Schema.define(version: 20180508232129) do
 
   create_table "devices", force: :cascade do |t|
     t.integer "user_id",         limit: 4
     t.string  "registration_id", limit: 191
     t.string  "uuid",            limit: 191
     t.string  "os",              limit: 191
+    t.string  "version",         limit: 191
+    t.string  "model",           limit: 191
   end
 
   add_index "devices", ["user_id"], name: "index_devices_on_user_id", using: :btree
@@ -42,7 +44,10 @@ ActiveRecord::Schema.define(version: 20170825213712) do
     t.string   "source",             limit: 191,   default: ""
     t.datetime "end_at"
     t.integer  "feed_id",            limit: 4
+    t.string   "created_by_type",    limit: 191
   end
+
+  add_index "events", ["created_by_type", "created_by_id"], name: "index_events_on_created_by_type_and_created_by_id", using: :btree
 
   create_table "flags", force: :cascade do |t|
     t.integer "user_id",   limit: 4
@@ -146,6 +151,22 @@ ActiveRecord::Schema.define(version: 20170825213712) do
 
   add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
 
+  create_table "organization_memberships", force: :cascade do |t|
+    t.integer  "user_id",         limit: 4
+    t.integer  "organization_id", limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "organization_memberships", ["organization_id"], name: "index_organization_memberships_on_organization_id", using: :btree
+  add_index "organization_memberships", ["user_id"], name: "index_organization_memberships_on_user_id", using: :btree
+
+  create_table "organizations", force: :cascade do |t|
+    t.string   "name",       limit: 191
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "participant_relationships", force: :cascade do |t|
     t.integer  "event_id",       limit: 4
     t.integer  "participant_id", limit: 4
@@ -178,8 +199,21 @@ ActiveRecord::Schema.define(version: 20170825213712) do
   add_index "shout_uppings", ["shout_id"], name: "index_shout_uppings_on_shout_id", using: :btree
   add_index "shout_uppings", ["upped_by_id"], name: "index_shout_uppings_on_upped_by_id", using: :btree
 
+  create_table "shout_videos", force: :cascade do |t|
+    t.integer  "shout_id",           limit: 4
+    t.string   "source",             limit: 191, default: ""
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "video_file_name",    limit: 191
+    t.string   "video_content_type", limit: 191
+    t.integer  "video_file_size",    limit: 4
+    t.datetime "video_updated_at"
+  end
+
+  add_index "shout_videos", ["shout_id"], name: "index_shout_videos_on_shout_id", using: :btree
+
   create_table "shouts", force: :cascade do |t|
-    t.integer  "user_id",            limit: 4
+    t.integer  "shouter_id",         limit: 4
     t.string   "text",               limit: 191
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -192,15 +226,17 @@ ActiveRecord::Schema.define(version: 20170825213712) do
     t.text     "url",                limit: 65535
     t.integer  "flag",               limit: 4
     t.integer  "ups",                limit: 4
+    t.string   "shouter_type",       limit: 191,   default: "User"
   end
 
   create_table "statuses", force: :cascade do |t|
-    t.string   "text",       limit: 191
-    t.integer  "user_id",    limit: 4
-    t.integer  "symbol_id",  limit: 4
+    t.string   "text",        limit: 191
+    t.integer  "user_id",     limit: 4
+    t.integer  "symbol_id",   limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "ups",        limit: 4
+    t.integer  "ups",         limit: 4
+    t.datetime "valid_until"
   end
 
   add_index "statuses", ["symbol_id"], name: "index_statuses_on_symbol_id", using: :btree
@@ -211,6 +247,15 @@ ActiveRecord::Schema.define(version: 20170825213712) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "topics", force: :cascade do |t|
+    t.string   "name",       limit: 191
+    t.integer  "symbol_id",  limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "topics", ["symbol_id"], name: "index_topics_on_symbol_id", using: :btree
 
   create_table "uppings", force: :cascade do |t|
     t.integer  "status_id",   limit: 4
@@ -223,11 +268,10 @@ ActiveRecord::Schema.define(version: 20170825213712) do
   add_index "uppings", ["upped_by_id"], name: "index_uppings_on_upped_by_id", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "user_name",          limit: 191
+    t.string   "user_id",            limit: 191
     t.string   "first_name",         limit: 191
     t.string   "last_name",          limit: 191
     t.string   "email",              limit: 191
-    t.string   "fb_id",              limit: 191
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "role",               limit: 191
@@ -239,6 +283,7 @@ ActiveRecord::Schema.define(version: 20170825213712) do
     t.datetime "image_updated_at"
     t.string   "source",             limit: 191, default: ""
     t.boolean  "accepted_terms",     limit: 1
+    t.boolean  "verified",           limit: 1
   end
 
 end

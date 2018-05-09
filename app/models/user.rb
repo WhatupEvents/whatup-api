@@ -21,7 +21,7 @@ class User < ActiveRecord::Base
 
   has_many :messages, foreign_key: :sender_id, dependent: :destroy
 
-  has_many :shouts, dependent: :destroy
+  has_many :shouts, foreign_key: :shouter_id, dependent: :destroy
 
   has_many :friend_relationships_in,
            class_name: 'FriendRelationship',

@@ -115,7 +115,7 @@ class Api::V1::ShoutsController < Api::V1::ApiController
       .where('created_at <= ?', last.created_at)
       .where('flag < 8')
       .where(event_id: in_range_event_ids)
-      .where('user_id NOT IN (?)', invalid_user_ids.present? ? invalid_user_ids : '')
+      .where('shouter_id NOT IN (?)', invalid_user_ids.present? ? invalid_user_ids : '')
       .where('event_id NOT IN (?)', invalid_event_ids.present? ? invalid_event_ids : '')
       .limit(7).order(created_at: :desc)
       .not_flagged_for(current_user.id)
@@ -135,6 +135,10 @@ class Api::V1::ShoutsController < Api::V1::ApiController
   end
 
   def shout_params
-    params.except(:format, :id).permit(:user_id, :text, :source, :image, :event_id, :last_id, :ups, :flag)
+    # Remove this after app updates are out
+    if params.has_key?(:user_id)
+      params[:shouter_id] = params[:user_id]
+    end
+    params.except(:format, :id).permit(:shouter_id, :shouter_type, :text, :source, :image, :event_id, :last_id, :ups, :flag)
   end
 end

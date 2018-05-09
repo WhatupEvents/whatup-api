@@ -27,6 +27,7 @@ Whatsup::Application.routes.draw do
       end
       resources :organizations, only: [:index]
       resources :categories, only: [:index]
+      resources :topics, only: [:index]
       resources :statuses, only: [:create]
       put :statuses, to: 'statuses#up', as: 'up_status'
       get :most_upped, to: 'statuses#most_upped', as: 'most_upped'
