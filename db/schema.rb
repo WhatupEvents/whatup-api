@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180511045113) do
+ActiveRecord::Schema.define(version: 20180511164831) do
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string   "namespace",     limit: 191
@@ -65,7 +65,7 @@ ActiveRecord::Schema.define(version: 20180511045113) do
     t.integer  "created_by_id",      limit: 4
     t.text     "details",            limit: 65535
     t.string   "location",           limit: 191
-    t.integer  "symbol_id",          limit: 4,                  null: false
+    t.integer  "topic_id",           limit: 4,                  null: false
     t.datetime "start_time"
     t.boolean  "public",             limit: 1
     t.integer  "category_id",        limit: 4
@@ -270,14 +270,14 @@ ActiveRecord::Schema.define(version: 20180511045113) do
   create_table "statuses", force: :cascade do |t|
     t.string   "text",        limit: 191
     t.integer  "user_id",     limit: 4
-    t.integer  "symbol_id",   limit: 4
+    t.integer  "topic_id",    limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "ups",         limit: 4
     t.datetime "valid_until"
   end
 
-  add_index "statuses", ["symbol_id"], name: "index_statuses_on_symbol_id", using: :btree
+  add_index "statuses", ["topic_id"], name: "index_statuses_on_topic_id", using: :btree
   add_index "statuses", ["user_id"], name: "index_statuses_on_user_id", using: :btree
 
   create_table "symbols", force: :cascade do |t|
@@ -287,13 +287,13 @@ ActiveRecord::Schema.define(version: 20180511045113) do
   end
 
   create_table "topics", force: :cascade do |t|
-    t.string   "name",       limit: 191
-    t.integer  "symbol_id",  limit: 4
+    t.string   "name",        limit: 191
+    t.integer  "category_id", limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "topics", ["symbol_id"], name: "index_topics_on_symbol_id", using: :btree
+  add_index "topics", ["category_id"], name: "index_topics_on_category_id", using: :btree
 
   create_table "uppings", force: :cascade do |t|
     t.integer  "status_id",   limit: 4

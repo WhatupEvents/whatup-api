@@ -12,7 +12,7 @@ class Api::V1::UserSerializer < ActiveModel::Serializer
   def status
     current_status = object.statuses.current.last
     return current_status || 
-      Status.new(user_id: object.id, symbol_id: 1, text: "", ups: 0)
+      Status.new(user_id: object.id, topic_id: 1, text: "", ups: 0)
   end
 
   def fb_id

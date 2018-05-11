@@ -2,7 +2,7 @@ class Api::V1::StatusesController < Api::V1::ApiController
   doorkeeper_for :all
 
   def most_upped
-    most = Status.where(symbol_id: params[:cat_id]).sort_by(&:ups)
+    most = Status.where(topic_id: params[:cat_id]).sort_by(&:ups)
     most = Status.all.sort_by(&:ups) unless most.present?
 
     render json: most.last,
@@ -57,6 +57,11 @@ class Api::V1::StatusesController < Api::V1::ApiController
   end
 
   def status_params
-    params.require(:status).permit(:user_id, :symbol_id, :text, :ups, :valid_until)
+    # Remove this after app updates are out
+    # Also update serializer
+    if params.has_key? :symbol_id
+      params[:topic_id] = params[:symbol_id]
+    end
+    params.require(:status).permit(:user_id, :topic_id, :text, :ups, :valid_until)
   end
 end

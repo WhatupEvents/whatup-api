@@ -1,5 +1,5 @@
 class Api::V1::ShoutSerializer < ActiveModel::Serializer
-  attributes :id, :text, :created_at, :shouter, :shouter_url, :user_id, :event_id, :source, :url, :ups, :upped_by, :flag, :flagged_by, :event_name, :latitude, :longitude, :symbol_id, :video_url
+  attributes :id, :text, :created_at, :shouter, :shouter_url, :user_id, :shouter_id, :event_id, :source, :url, :ups, :upped_by, :flag, :flagged_by, :event_name, :latitude, :longitude, :symbol_id, :category_id, :video_url
 
   def text
     text = object.text
@@ -36,10 +36,6 @@ class Api::V1::ShoutSerializer < ActiveModel::Serializer
     return text
   end
 
-  def user_id
-    object.shouter_id
-  end
-
   def shouter
     if object.shouter_type == "User"
       User.find(object.shouter_id).first_name
@@ -73,15 +69,24 @@ class Api::V1::ShoutSerializer < ActiveModel::Serializer
     Event.find(object.event_id).name
   end
 
-  def symbol_id
-    Event.find(object.event_id).symbol_id
-  end
-
   def latitude
     Event.find(object.event_id).latitude
   end
 
   def longitude
     Event.find(object.event_id).longitude
+  end
+
+
+  def user_id
+    object.shouter_id
+  end
+
+  def symbol_id
+    Event.find(object.event_id).category_id
+  end
+
+  def category_id
+    Event.find(object.event_id).category_id
   end
 end

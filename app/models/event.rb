@@ -4,7 +4,7 @@ class Event < ActiveRecord::Base
   belongs_to :created_by, polymorphic: true
 
   belongs_to :category
-  belongs_to :topic, foreign_key: :symbol_id
+  belongs_to :topic
 
   # TODO: dependent destroy?
   has_many :messages

@@ -234,11 +234,16 @@ class Api::V1::EventsController < Api::V1::ApiController
   end
 
   def event_params
+    # Remove this after app updates are out
+    # Also update serializer
+    if params.has_key? :symbol_id
+      params[:topic_id] = params[:symbol_id]
+    end
     params.except(:format, :id).permit(event_param_keys)
   end
   
   def event_param_keys
-    [:name, :details, :created_by_id, :created_by_type, :start_time, :end_at, :symbol_id, :category_id,
+    [:name, :details, :created_by_id, :created_by_type, :start_time, :end_at, :topic_id, :category_id,
      :location, :latitude, :longitude, :public, :source, :image, :friend_ids]
   end
 end

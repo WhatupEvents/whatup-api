@@ -133,7 +133,8 @@ class Api::V1::ShoutsController < Api::V1::ApiController
 
   def shout_params
     # Remove this after app updates are out
-    if params.has_key?(:user_id)
+    # Also update serializer
+    if params.has_key? :user_id
       params[:shouter_id] = params[:user_id]
     end
     params.except(:format, :id).permit(:shouter_id, :shouter_type, :text, :source, :image, :event_id, :last_id, :ups, :flag)

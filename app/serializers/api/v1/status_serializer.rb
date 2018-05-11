@@ -1,5 +1,5 @@
 class Api::V1::StatusSerializer < ActiveModel::Serializer
-  attributes :id, :text, :created_at, :upped_by, :ups, :symbol_id, :valid_until
+  attributes :id, :text, :created_at, :upped_by, :ups, :symbol_id, :topic_id, :valid_until
 
   def text
     if object.id.nil?
@@ -20,5 +20,9 @@ class Api::V1::StatusSerializer < ActiveModel::Serializer
 
   def valid_until
     object.valid_until || object.created_at
+  end
+
+  def symbol_id
+    object.topic_id
   end
 end
