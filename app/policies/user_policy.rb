@@ -10,4 +10,8 @@ class UserPolicy < ApplicationPolicy
   def update?
     user.verified?
   end
+
+  def destroy?
+    user.admin?
+  end
 end
