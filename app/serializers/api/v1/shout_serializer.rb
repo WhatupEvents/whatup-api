@@ -1,5 +1,5 @@
 class Api::V1::ShoutSerializer < ActiveModel::Serializer
-  attributes :id, :text, :created_at, :shouter, :shouter_url, :shouter_id, :shouter_type, :event_id, :source, :url, :ups, :upped_by, :flag, :flagged_by, :event_name, :latitude, :longitude, :symbol_id, :video_url
+  attributes :id, :text, :created_at, :shouter, :shouter_url, :user_id, :event_id, :source, :url, :ups, :upped_by, :flag, :flagged_by, :event_name, :latitude, :longitude, :symbol_id, :video_url
 
   def text
     text = object.text
@@ -34,6 +34,10 @@ class Api::V1::ShoutSerializer < ActiveModel::Serializer
       end
     end
     return text
+  end
+
+  def user_id
+    object.shouter_id
   end
 
   def shouter

@@ -2,37 +2,33 @@ class User < ActiveRecord::Base
   validates :email, uniqueness: true
   validates :user_id, uniqueness: true
 
-  has_many :organizations, through: :organization_memberships
+  belongs_to :role
+
   has_many :organization_memberships
+  has_many :organizations, through: :organization_memberships
 
   has_many :doorkeeper_access_tokens,
     foreign_key: :resource_owner_id,
     class_name: 'Doorkeeper::AccessToken',
     dependent: :destroy
 
-  has_many :followings, through: :follow_relationships_out
-  has_many :follow_relationships, foreign_key: :follower_id
+  # has_many :follow_relationships, foreign_key: :follower_id
+  # has_many :followings, through: :follow_relationships
 
   has_many :devices
 
   has_many :flags
 
   has_many :statuses
-
   has_many :messages, foreign_key: :sender_id, dependent: :destroy
-
   has_many :shouts, foreign_key: :shouter_id, dependent: :destroy
 
-  has_many :friend_relationships_in,
-           class_name: 'FriendRelationship',
-           foreign_key: :friend_id
+  # has_many :friend_relationships_in,
+  #          class_name: 'FriendRelationship',
+  #          foreign_key: :friend_id
 
-  has_many :friend_relationships_out,
-           class_name: 'FriendRelationship',
-           foreign_key: :person_id
-
-  has_many :friends, through: :friend_relationships_out
-
+  has_many :friend_relationships, foreign_key: :person_id
+  has_many :friends, through: :friend_relationships
   has_many :friend_groups
 
   has_many :events, as: :created_by
@@ -71,6 +67,18 @@ class User < ActiveRecord::Base
   end
 
   def name
-    first_name + " " + last_name
+    first_name + ' ' + last_name
+  end
+
+  def admin?
+    role.name == 'Admin'
+  end
+
+  def promoter?
+    role.name == 'Promoter'
+  end
+
+  def verified?
+    role.name != 'Unverified'
   end
 end

@@ -1,9 +1,13 @@
 require 'resque_web'
 
-Whatsup::Application.routes.draw do
+Whatup::Application.routes.draw do
+  devise_for :admin_users, ActiveAdmin::Devise.config
+  ActiveAdmin.routes(self)
   use_doorkeeper
 
   mount ResqueWeb::Engine => 'resque/web'
+
+  root to: "home#home"
 
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do

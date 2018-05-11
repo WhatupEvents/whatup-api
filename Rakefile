@@ -7,4 +7,4 @@ require File.expand_path('../config/application', __FILE__)
 require 'resque/tasks'
 require 'resque/scheduler/tasks'
 
-Whatsup::Application.load_tasks
+Whatup::Application.load_tasks

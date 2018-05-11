@@ -22,4 +22,8 @@ class Api::V1::UserSerializer < ActiveModel::Serializer
   def user_name
     object.user_id
   end
+
+  def role
+    object.role.name
+  end
 end

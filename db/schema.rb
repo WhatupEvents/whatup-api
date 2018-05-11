@@ -11,7 +11,41 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180508232129) do
+ActiveRecord::Schema.define(version: 20180511045113) do
+
+  create_table "active_admin_comments", force: :cascade do |t|
+    t.string   "namespace",     limit: 191
+    t.text     "body",          limit: 65535
+    t.integer  "resource_id",   limit: 4
+    t.string   "resource_type", limit: 191
+    t.integer  "author_id",     limit: 4
+    t.string   "author_type",   limit: 191
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+  end
+
+  add_index "active_admin_comments", ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id", using: :btree
+  add_index "active_admin_comments", ["namespace"], name: "index_active_admin_comments_on_namespace", using: :btree
+  add_index "active_admin_comments", ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id", using: :btree
+
+  create_table "admin_users", force: :cascade do |t|
+    t.integer  "user_id",                limit: 4
+    t.string   "email",                  limit: 191, default: "", null: false
+    t.string   "encrypted_password",     limit: 191, default: "", null: false
+    t.string   "reset_password_token",   limit: 191
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          limit: 4,   default: 0,  null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip",     limit: 191
+    t.string   "last_sign_in_ip",        limit: 191
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
+  end
+
+  add_index "admin_users", ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
+  add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
 
   create_table "devices", force: :cascade do |t|
     t.integer "user_id",         limit: 4
@@ -35,8 +69,8 @@ ActiveRecord::Schema.define(version: 20180508232129) do
     t.datetime "start_time"
     t.boolean  "public",             limit: 1
     t.integer  "category_id",        limit: 4
-    t.string   "longitude",          limit: 191
-    t.string   "latitude",           limit: 191
+    t.float    "longitude",          limit: 53
+    t.float    "latitude",           limit: 53
     t.string   "image_file_name",    limit: 191
     t.string   "image_content_type", limit: 191
     t.integer  "image_file_size",    limit: 4
@@ -179,6 +213,10 @@ ActiveRecord::Schema.define(version: 20180508232129) do
   add_index "participant_relationships", ["event_id"], name: "index_participant_relationships_on_event_id", using: :btree
   add_index "participant_relationships", ["participant_id"], name: "index_participant_relationships_on_participant_id", using: :btree
 
+  create_table "roles", force: :cascade do |t|
+    t.string "name", limit: 191
+  end
+
   create_table "shout_flaggings", force: :cascade do |t|
     t.integer  "shout_id",      limit: 4
     t.integer  "flagged_by_id", limit: 4
@@ -274,7 +312,6 @@ ActiveRecord::Schema.define(version: 20180508232129) do
     t.string   "email",              limit: 191
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "role",               limit: 191
     t.string   "latitude",           limit: 191
     t.string   "longitude",          limit: 191
     t.string   "image_file_name",    limit: 191
@@ -284,6 +321,9 @@ ActiveRecord::Schema.define(version: 20180508232129) do
     t.string   "source",             limit: 191, default: ""
     t.boolean  "accepted_terms",     limit: 1
     t.boolean  "verified",           limit: 1
+    t.integer  "role_id",            limit: 4,   default: 1
   end
+
+  add_index "users", ["role_id"], name: "index_users_on_role_id", using: :btree
 
 end

@@ -2,6 +2,10 @@ source 'http://rubygems.org'
 
 gem 'rails', '4.2.2'
 
+gem 'activeadmin'
+gem 'devise'
+gem 'pundit'
+
 gem 'responders', '~> 2.0'
 
 # Bundle edge Rails instead:

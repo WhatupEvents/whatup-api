@@ -26,7 +26,7 @@ class Api::V1::UsersController < Api::V1::ApiController
     if @current_user.new_record?
       @current_user.accepted_terms = false
       @current_user.update(user_params)
-      @current_user.role = 'User'
+      @current_user.role_id = 1 # User
       @current_user.save
       render_me :created
     else
@@ -69,13 +69,9 @@ class Api::V1::UsersController < Api::V1::ApiController
   end
 
   def update
-    if current_user.role == 'Unverified'
-      head :bad_request
-    else 
-      @current_user = User.find(params[:id])
-      @current_user.update_attributes(user_image_params)
-      head :ok
-    end
+    authorize User
+    current_user.update_attributes(user_image_params)
+    head :ok
   end
 
   def add_friend

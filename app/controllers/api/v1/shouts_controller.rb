@@ -6,12 +6,9 @@ class Api::V1::ShoutsController < Api::V1::ApiController
   end
 
   def create
-    if current_user.role == 'Unverified'
-      head :bad_request
-      return
-    end
-
     @shout = Shout.create! shout_params
+    authorize @shout
+
     update_image
     render json: @shout,
          serializer: Api::V1::ShoutSerializer,
@@ -23,22 +20,22 @@ class Api::V1::ShoutsController < Api::V1::ApiController
   end
 
   def update
-    if current_user.role == 'Unverified'
-      head :bad_request
-    else
+    @shout = Shout.find(params[:id])
+    authorize @shout
 
-      @shout = Shout.find(params[:id])
-      @shout.update_attributes! shout_params
-      update_image
-      render json: @shout,
-         serializer: Api::V1::ShoutSerializer,
-         status: :ok,
-         current_user: current_user.id
-    end
+    @shout.update_attributes! shout_params
+    update_image
+    render json: @shout,
+       serializer: Api::V1::ShoutSerializer,
+       status: :ok,
+       current_user: current_user.id
   end
 
   def destroy
-    Shout.find(params[:id]).destroy
+    @shout = Shout.find(params[:id])
+    authorize @shout
+
+    @shout.destroy
     render json: {},
            status: :ok
   end
@@ -48,7 +45,7 @@ class Api::V1::ShoutsController < Api::V1::ApiController
     unless @shout.flagged_by.include? current_user
       Flag.create(user_id: current_user.id, obj_class: 'Shout', obj_id: @shout.id)
       flag_update = 1
-      if current_user.role == "Admin"
+      if current_user.admin?
         flag_update = 10
       end
       @shout.update_attributes flag: @shout.flag+flag_update

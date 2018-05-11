@@ -43,20 +43,17 @@ class Api::V1::EventsController < Api::V1::ApiController
   end
 
   def create
-    if current_user.role == 'Unverified'
-      head :forbidden
-      return
+    @event = Event.create! event_params
+    authorize @event
+
+    if @event.created_by_type.nil?
+      @event.update_attributes(created_by_type: 'User')
     end
+    @event.participants = [current_user]
 
-    event = Event.create! event_params
-    if event.created_by_type.nil?
-      event.update_attributes(created_by_type: 'User')
-    end
-    event.participants = [current_user]
+    notify_followers(@event) if @event.public
 
-    notify_followers(event) if event.public
-
-    render json: event,
+    render json: @event,
            serializer: Api::V1::EventSerializer,
            status: :created,
            current_user: current_user.id
@@ -66,42 +63,31 @@ class Api::V1::EventsController < Api::V1::ApiController
   end
 
   def update
-    event = Event.find(params[:id])
-
-    creator_ids = [event.created_by_id]
-    if event.created_by_type == "Organization"
-      # if event is from an organization, need to look at creating organization members
-      creator_ids = event.created_by.members.map(&:id)
-    end
-
-    # Only the event creator or Admins can update events
-    # Regular users cannot make events public
-    if (!creator_ids.include?(current_user.id) && current_user.role != 'Admin') ||
-      (event_params[:public] == 'true' && (current_user.role == 'User' || current_user.role == 'Unverified'))
-      head :forbidden
-      return
-    end
+    @event = Event.find(params[:id])
+    # need event public attribute to be updated for authorization to work
+    @event.public = event_params[:public] == 'true'
+    authorize @event
 
     # saves participants before change so that they can be notified
     # when they've been removed from an event?
-    before_update = event.participant_relationships.all.map(&:attributes)
+    before_update = @event.participant_relationships.all.map(&:attributes)
 
-    if event.public != (event_params[:public] == "true")
+    if @event.public != (event_params[:public] == "true")
       # clear participants when going from private to public or viceversa
-      event.participants = []
+      @event.participants = []
     else
-      if event_params[:friend_ids] && !event.public
+      if event_params[:friend_ids] && !@event.public
         # only update friend_ids through event update when event is private
         friend_ids = JSON.parse(event_params[:friend_ids])
-        event.participants = User.where(id: friend_ids + [current_user.id])
+        @event.participants = User.where(id: friend_ids + [current_user.id])
       end
     end
     params.delete("friend_ids")
 
-    after_update = event.participant_relationships.all.map(&:attributes)
+    after_update = @event.participant_relationships.all.map(&:attributes)
 
     # update attributes
-    event.update_attributes! event_params
+    @event.update_attributes! event_params
 
     # messages go out to participants that have notifications on
     if Rails.env != "development"
@@ -109,16 +95,16 @@ class Api::V1::EventsController < Api::V1::ApiController
         if participant['notify'] && (participant['participant_id'] != current_user.id)
           Resque.enqueue(
             FcmMessageJob, {
-              event_id: event.id,
-              event_name: event.name,
-              updated_at: event.updated_at
+              event_id: @event.id,
+              event_name: @event.name,
+              updated_at: @event.updated_at
             }, participant['participant_id']
           )
         end
       end
     end
 
-    render json: event,
+    render json: @event,
            serializer: Api::V1::EventSerializer,
            status: :ok,
            current_user: current_user.id
@@ -129,21 +115,17 @@ class Api::V1::EventsController < Api::V1::ApiController
   end
 
   def destroy
-    event = Event.find(params[:id])
-    
-    creator_ids = [event.created_by_id]
-    if event.created_by_type == "Organization"
-      creator_ids = Organization.find(event.created_by_id).members.map(&:id)
-    end
-
+    @event = Event.find(params[:id])
+    authorize @event
+   
     # messages go out to participants that have notifications on
     if Rails.env != "development"
-      event.participants.uniq.each do |participant|
+      @event.participants.uniq.each do |participant|
         if participant.id != current_user.id
           Resque.enqueue(
             FcmMessageJob, {
-              event_id: event.id,
-              event_name: event.name,
+              event_id: @event.id,
+              event_name: @event.name,
               deleted_at: Time.now
             }, participant.id
           )
@@ -151,13 +133,9 @@ class Api::V1::EventsController < Api::V1::ApiController
       end
     end
 
-    if creator_ids.include?(current_user.id) || current_user.role == 'Admin'
-      event.destroy
-      render json: {},
-             status: :ok
-    else
-      head :forbidden
-    end
+    @event.destroy
+    render json: {},
+           status: :ok
   end
 
   def leave
