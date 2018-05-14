@@ -12,6 +12,19 @@ ActiveAdmin.register User do
 #   permitted
 # end
 
+  form do |f|
+    f.semantic_errors
+    f.inputs do
+      f.input :role
+      f.input :first_name
+      f.input :last_name
+      f.input :email
+      f.input :accepted_terms
+      f.input :verified
+    end
+    f.actions
+  end
+
   index do
     id_column
     column :first_name
@@ -34,4 +47,5 @@ ActiveAdmin.register User do
   filter :events
   filter :created_at, as: :date_range
 
+  permit_params :first_name, :last_name, :email, :accepted_terms, :verified, :role_id
 end
