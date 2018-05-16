@@ -59,8 +59,8 @@ class Api::V1::StatusesController < Api::V1::ApiController
   def status_params
     # Remove this after app updates are out
     # Also update serializer
-    if params.has_key? :symbol_id
-      params[:topic_id] = params[:symbol_id]
+    if params[:status].has_key? :symbol_id
+      params[:status][:topic_id] = params[:status][:symbol_id]
     end
     params.require(:status).permit(:user_id, :topic_id, :text, :ups, :valid_until)
   end
