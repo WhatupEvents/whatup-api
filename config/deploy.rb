@@ -8,7 +8,7 @@ set :resque_environment_task, true
 set :workers, { messages: 3, low: 1 }
 
 set :rvm1_ruby_version, '2.2.2@global'
-# set :default_shell, '/bin/bash -l'
+set :default_shell, '/bin/bash -l'
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
