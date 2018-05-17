@@ -46,8 +46,8 @@ end
 namespace :assets do
   task :compile do
     on roles(:app) do
-      execute "cd #{why_here}/current && "\
-      "bundle exec rake assets:precompile"
+      # execute "cd #{why_here}/current && "\
+      # "bundle exec rake assets:precompile"
     end
   end
 end
