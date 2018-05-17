@@ -62,14 +62,6 @@ namespace :deploy do
   end
 end
 
-namespace :assets do
-  task :compile do
-    on roles(:app) do
-      execute "RAILS_ENV=production bundle exec rake assets:precompile"
-    end
-  end
-end
-
 after "deploy", "assets:compile"
 # after "deploy", "resque:restart"
 # after "resque:restart", "resque:scheduler:restart"

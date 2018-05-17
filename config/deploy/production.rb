@@ -43,6 +43,16 @@ namespace :deploy do
   end
 end
 
+namespace :assets do
+  task :compile do
+    on roles(:app) do
+      execute "cd #{why_here}/current && "\
+      "RAILS_ENV=production bundle exec rake assets:precompile"
+    end
+  end
+end
+
+
 # Extended Server Syntax
 # ======================
 # This can be used to drop a more detailed server definition into the
