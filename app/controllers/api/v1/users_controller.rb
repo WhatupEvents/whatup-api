@@ -115,8 +115,9 @@ class Api::V1::UsersController < Api::V1::ApiController
       Resque.enqueue(
         FcmMessageJob,{ 
           status_text: status.text,
-          friend_name: current_user.name
-        }, user.id
+          friend_name: current_user.name,
+          recipient_id: user.id
+        }
       )
     end
     head :ok

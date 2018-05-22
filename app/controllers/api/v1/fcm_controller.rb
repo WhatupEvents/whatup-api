@@ -15,8 +15,9 @@ class Api::V1::FcmController < Api::V1::ApiController
           Resque.enqueue(
             FcmMessageJob,{ 
               event_id: message.event_id,
-              event_name: message.event.name
-            },participant.participant_id
+              event_name: message.event.name,
+              recipient_id: participant.participant_id
+            }
           )
         end
       end

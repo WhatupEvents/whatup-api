@@ -1,11 +1,11 @@
 class FcmMessageJob
   @queue = :messages
 
-  def self.perform(data, recipient_id)
+  def self.perform(data)
     fcm = FCM.new(ENV['FCM_LEGACY_SERVER_KEY'])
     fcm = FCM.new(ENV['FCM_SERVER_KEY'])
 
-    device = Device.where(user_id: recipient_id)
+    device = Device.where(user_id: data['recipient_id'])
     device.map{|d| [d.registration_id, d.os]}.uniq.each do |reg_id, os|
       whatuppop = 'whatuppop'
       if os == 'iOS'
@@ -32,8 +32,16 @@ class FcmMessageJob
               priority: "high"
             })
           elsif data.has_key? 'deleted_at'
-            # event dleted job
+            # event deleted job
             resp = fcm.send_with_notification_key(reg_id, {
+              data: data,
+              content_available: true,
+              priority: "high"
+            })
+          elsif data.has_key? 'start_time'
+            # event starts soon job
+            resp = fcm.send_with_notification_key(reg_id, {
+              notification: {title: data['event_name'], body: 'Event will be starting at '+data['start_time'].strftime("%H:%M"), tag: "#{data['event_id']}_msg", sound: whatupop},
               data: data,
               content_available: true,
               priority: "high"

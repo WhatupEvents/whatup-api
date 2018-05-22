@@ -48,6 +48,7 @@ gem 'rvm1-capistrano3', require: false
 
 gem "capistrano-resque", "~> 0.2.2", require: false
 gem 'resque'
+gem 'resque-scheduler'
 gem 'resque-web', require: 'resque_web'
 gem 'resque-scheduler-web'
 

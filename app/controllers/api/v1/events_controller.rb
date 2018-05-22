@@ -52,6 +52,7 @@ class Api::V1::EventsController < Api::V1::ApiController
     @event.participants = [current_user]
 
     notify_followers(@event) if @event.public
+    notify_start(@event)
 
     render json: @event,
            serializer: Api::V1::EventSerializer,
@@ -64,6 +65,11 @@ class Api::V1::EventsController < Api::V1::ApiController
 
   def update
     @event = Event.find(params[:id])
+
+    Resque.remove_delayed_selection do |args|
+      args.event_id == event.id && args.event_name == event.name && args.end_at == event.end_at
+    end
+
     # need event public attribute to be updated for authorization to work
     @event.public = event_params[:public] == 'true'
     authorize @event
@@ -97,12 +103,14 @@ class Api::V1::EventsController < Api::V1::ApiController
             FcmMessageJob, {
               event_id: @event.id,
               event_name: @event.name,
-              updated_at: @event.updated_at
-            }, participant['participant_id']
+              updated_at: @event.updated_at,
+              recipient_id: participant['participant_id']
+            }
           )
         end
       end
     end
+    notify_start(@event)
 
     render json: @event,
            serializer: Api::V1::EventSerializer,
@@ -126,8 +134,9 @@ class Api::V1::EventsController < Api::V1::ApiController
             FcmMessageJob, {
               event_id: @event.id,
               event_name: @event.name,
-              deleted_at: Time.now
-            }, participant.id
+              deleted_at: Time.now,
+              recipient_id: participant.id
+            }
           )
         end
       end
@@ -226,10 +235,39 @@ class Api::V1::EventsController < Api::V1::ApiController
           FcmMessageJob, {
             followed_name: event.created_by.name,
             event_name: event.name,
-            created_at: event.created_at
-          }, follower.id
+            created_at: event.created_at,
+            recipient_id: follower.id
+          }
         )
       end
+    end
+  end
+
+  def notify_start(event)
+    diff = 15.minutes
+    if event.start_time-diff < Time.now
+      diff = 10.minutes
+      if event.start_time-diff < Time.now
+        diff = 5.minutes
+        if event.start_time-diff < Time.now
+          diff = 3.minutes
+          if event.start_time-diff < Time.now
+            diff = 1.minutes
+          end
+        end
+      end
+    end
+
+    event.participants.uniq.each do |participant|
+      Resque.enqueue_at(
+        event.start_time-diff,
+        FcmMessageJob, {
+          event_id: event.id,
+          event_name: event.name,
+          start_time: event.start_time,
+          recipient_id: participant.id
+        }
+      )
     end
   end
 

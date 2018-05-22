@@ -15,12 +15,15 @@ class Api::V1::StatusesController < Api::V1::ApiController
     status.update_attribute(:text, status.text.capitalize)
     if Rails.env != "development"
       current_user.friends.each do |friend|
-        Resque.enqueue(FcmMessageJob,{ 
-          status_id: status.id,
-          status_text: status.text,
-          user_id: current_user.id,
-          user_name: current_user.name
-        }, friend.id)
+        Resque.enqueue(
+          FcmMessageJob,{ 
+            status_id: status.id,
+            status_text: status.text,
+            user_id: current_user.id,
+            user_name: current_user.name,
+            recipient_id: friend.id
+          }
+        )
       end
     end
     render json: status,
@@ -44,7 +47,8 @@ class Api::V1::StatusesController < Api::V1::ApiController
           FcmMessageJob, {
             ups: status.ups,
             status_id: status.id,
-          }, upping_friend.id
+            recipient_id: upping_friend.id
+          }
         )
       end 
 
