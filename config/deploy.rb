@@ -63,5 +63,5 @@ namespace :deploy do
 end
 
 after "deploy", "assets:compile"
-# after "deploy", "resque:restart"
-# after "resque:restart", "resque:scheduler:restart"
+after "assets:compile", "resque:restart"
+after "resque:restart", "resque:scheduler:restart"
