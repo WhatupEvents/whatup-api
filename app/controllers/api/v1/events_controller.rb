@@ -49,7 +49,9 @@ class Api::V1::EventsController < Api::V1::ApiController
     if @event.created_by_type.nil?
       @event.update_attributes(created_by_type: 'User')
     end
-    @event.participants = [current_user]
+    unless @event.public
+      @event.participants = [current_user] 
+    end
 
     notify_followers(@event) if @event.public
     notify_start(@event)
