@@ -33,6 +33,8 @@ class User < ActiveRecord::Base
 
   has_many :events, as: :created_by
 
+  has_many :notifications
+
   after_create :default_friend_groups
 
   has_attached_file :image,

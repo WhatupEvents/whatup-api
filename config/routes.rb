@@ -44,6 +44,7 @@ Whatup::Application.routes.draw do
         put :follow_creator, to: 'events#follow_creator', as: 'events_follow_creator'
         put :check_action, to: 'events#check_action', as: 'events_check_action'
       end
+      resources :notifications, only: [:index]
       get :my_events, to: 'events#mine', as: 'events_mine'
       put 'events', to: 'events#index'
       post 'fcm_message', to: 'fcm#message'

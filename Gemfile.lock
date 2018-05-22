@@ -369,6 +369,7 @@ DEPENDENCIES
   rails-api (~> 0.2.1)
   responders (~> 2.0)
   resque
+  resque-scheduler
   resque-scheduler-web
   resque-web
   rvm1-capistrano3
