@@ -41,7 +41,7 @@ class FcmMessageJob
           elsif data.has_key? 'start_time'
             # event starts soon job
             resp = fcm.send_with_notification_key(reg_id, {
-              notification: {title: data['event_name'], body: 'Event will be starting at '+Time.parse(data['start_time']).strftime("%H:%M"), tag: "#{data['event_id']}_msg", sound: whatupop},
+              notification: {title: data['event_name'], body: 'Event will be starting at '+Time.parse(data['start_time']).strftime("%H:%M"), tag: "#{data['event_id']}_msg", sound: whatuppop},
               data: data,
               content_available: true,
               priority: "high"
