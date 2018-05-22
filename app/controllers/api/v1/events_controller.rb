@@ -246,27 +246,25 @@ class Api::V1::EventsController < Api::V1::ApiController
   end
 
   def notify_start(event)
-    diff = 15.minutes
+    diff = 15
     if event.start_time-diff < Time.now
-      diff = 10.minutes
+      diff = 10
       if event.start_time-diff < Time.now
-        diff = 5.minutes
+        diff = 5
         if event.start_time-diff < Time.now
-          diff = 3.minutes
-          if event.start_time-diff < Time.now
-            diff = 1.minutes
-          end
+          diff = 3
         end
       end
     end
 
     event.participants.uniq.each do |participant|
       Resque.enqueue_at(
-        event.start_time-diff,
+        event.start_time-diff.minutes,
         FcmMessageJob, {
           event_id: event.id,
           event_name: event.name,
           start_time: event.start_time,
+          diff: diff.to_s,
           recipient_id: participant.id
         }
       )

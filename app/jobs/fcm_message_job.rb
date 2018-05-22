@@ -1,3 +1,5 @@
+require 'json'
+
 class FcmMessageJob
   @queue = :messages
 
@@ -17,11 +19,12 @@ class FcmMessageJob
         if data.has_key? 'followed_name'
           # followed creator new event job
           resp = fcm.send_with_notification_key(reg_id, {
-            notification: {title: 'New Public Event!', body: "#{data['followed_name']} has posted a new event. ", tag: 'followed', sound: whatuppop},
+            notification: {title: 'New Public Event!', body: "#{data['followed_name']} has posted a new event", tag: 'followed', sound: whatuppop},
             data: data,
             content_available: true,
             priority: "high"
           })
+          Notification.create(text: data['followed_name']+" has posted a new event", data: data.to_json, user_id: data['recipient_id'])
         else
           if data.has_key? 'updated_at'
             # event updated job
@@ -31,6 +34,7 @@ class FcmMessageJob
               content_available: true,
               priority: "high"
             })
+            Notification.create(text: data['event_name']+" has been updated", data: data.to_json, user_id: data['recipient_id'])
           elsif data.has_key? 'deleted_at'
             # event deleted job
             resp = fcm.send_with_notification_key(reg_id, {
@@ -41,11 +45,12 @@ class FcmMessageJob
           elsif data.has_key? 'start_time'
             # event starts soon job
             resp = fcm.send_with_notification_key(reg_id, {
-              notification: {title: data['event_name'], body: 'Event will be starting soon, check the start time in the app', tag: "#{data['event_id']}_msg", sound: whatuppop},
+              notification: {title: data['event_name'], body: "will be starting in #{data['diff']} minutes", tag: "#{data['event_id']}_msg", sound: whatuppop},
               data: data,
               content_available: true,
               priority: "high"
             })
+            Notification.create(text: "#{data['event_name']} will be starting in #{data['diff']} minutes", data: data.to_json, user_id: data['recipient_id'])
           else
             # event chat message job
             resp = fcm.send_with_notification_key(reg_id, {
@@ -54,6 +59,7 @@ class FcmMessageJob
               content_available: true,
               priority: "high"
             })
+            Notification.create(text: "#{data['event_name']} has a new message, check out what your friends are up to", data: data.to_json, user_id: data['recipient_id'])
           end
         end
       else
@@ -80,6 +86,7 @@ class FcmMessageJob
             content_available: true,
             priority: "high"
           })
+          Notification.create(text: "#{data['friend_name']} is interested in status: '#{data['status_text']}'", data: data.to_json, user_id: data['recipient_id'])
         else
           # set a status job
           resp = fcm.send_with_notification_key(reg_id, {
