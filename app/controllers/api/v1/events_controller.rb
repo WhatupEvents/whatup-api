@@ -67,7 +67,8 @@ class Api::V1::EventsController < Api::V1::ApiController
     @event = Event.find(params[:id])
 
     Resque.remove_delayed_selection do |args|
-      args.event_id == event.id && args.event_name == event.name && args.end_at == event.end_at
+      Rails.logger.info args
+      args[0].event_id == event.id && args[0].event_name == event.name && args[0].end_at == event.end_at
     end
 
     # need event public attribute to be updated for authorization to work
