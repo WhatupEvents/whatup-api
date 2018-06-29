@@ -12,6 +12,15 @@ ActiveAdmin.register Category do
 #   permitted
 # end
 
-  permit_params :name
+  show do
+    panel "Topics" do
+      table_for category.topics do
+        column :id do |topic|
+          link_to(topic.id.to_s, '/admin/topics/'+topic.id.to_s)
+        end
+        column :name
+      end
+    end
+  end
 
 end

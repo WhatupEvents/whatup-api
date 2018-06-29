@@ -48,10 +48,19 @@ ActiveAdmin.register Event do
       f.input :latitude
       f.input :longitude
       f.input :public
-      f.input :category
-      f.input :topic
+
       f.input :start_time
       f.input :end_at
+
+      f.inputs "Categories" do
+        f.input :category
+        # f.input :product, :as => :select, :collection => Product.all.collect {|product| [product.name, product.id] }
+        f.input :topic, :as => :select, :input_html => {
+          'data-option-dependent' => true,
+          'data-option-url' => '/api/v1/categories/:category_id/topics',
+          'data-option-observed' => 'event_category_id'
+        }, :collection => (resource.category ? resource.category.topics.collect {|topic| [topic.name, topic.id]} : []) 
+      end
     end
     f.actions
   end

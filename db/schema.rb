@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180511164831) do
+ActiveRecord::Schema.define(version: 20180522222044) do
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string   "namespace",     limit: 191
@@ -145,6 +145,16 @@ ActiveRecord::Schema.define(version: 20180511164831) do
     t.integer  "image_file_size",    limit: 4
     t.datetime "image_updated_at"
   end
+
+  create_table "notifications", force: :cascade do |t|
+    t.integer  "user_id",    limit: 4
+    t.string   "text",       limit: 191
+    t.string   "data",       limit: 191
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "notifications", ["user_id"], name: "index_notifications_on_user_id", using: :btree
 
   create_table "oauth_access_grants", force: :cascade do |t|
     t.integer  "resource_owner_id", limit: 4,     null: false

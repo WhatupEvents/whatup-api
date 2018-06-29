@@ -30,7 +30,9 @@ Whatup::Application.routes.draw do
         put 'up', to: 'shouts#up', as: 'shouts_up'
       end
       resources :organizations, only: [:index]
-      resources :categories, only: [:index]
+      resources :categories, only: [:index] do
+        resources :topics
+      end
       resources :topics, only: [:index]
       resources :statuses, only: [:create]
       put :statuses, to: 'statuses#up', as: 'up_status'
