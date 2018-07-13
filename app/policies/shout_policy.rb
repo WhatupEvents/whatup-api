@@ -5,6 +5,10 @@ class ShoutPolicy < ApplicationPolicy
 #   return
 # end
 
+  def index?
+    user.verified?
+  end
+
   def create?
     user.verified?
   end
