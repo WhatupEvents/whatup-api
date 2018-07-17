@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180522222044) do
+ActiveRecord::Schema.define(version: 20180717043015) do
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string   "namespace",     limit: 191
@@ -79,6 +79,7 @@ ActiveRecord::Schema.define(version: 20180522222044) do
     t.datetime "end_at"
     t.integer  "feed_id",            limit: 4
     t.string   "created_by_type",    limit: 191
+    t.string   "url",                limit: 191
   end
 
   add_index "events", ["created_by_type", "created_by_id"], name: "index_events_on_created_by_type_and_created_by_id", using: :btree
