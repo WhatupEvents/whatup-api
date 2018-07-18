@@ -19,12 +19,12 @@ class FcmMessageJob
         if data.has_key? 'followed_name'
           # followed creator new event job
           resp = fcm.send_with_notification_key(reg_id, {
-            notification: {title: 'New Public Event!', body: "#{data['followed_name']} has posted a new event", tag: 'followed', sound: whatuppop},
+            notification: {title: 'New Public Event!', body: "#{data['followed_name']} has posted a new event: #{data['event_name']}", tag: 'followed', sound: whatuppop},
             data: data,
             content_available: true,
             priority: "high"
           })
-          Notification.create(text: data['followed_name']+" has posted a new event", data: data.to_json, user_id: data['recipient_id'])
+          Notification.create(text: data['followed_name']+" has posted a new event: #{data['event_name']}", data: data.to_json, user_id: data['recipient_id'])
         else
           if data.has_key? 'updated_at'
             # event updated job
