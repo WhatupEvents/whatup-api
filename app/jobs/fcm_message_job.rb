@@ -63,38 +63,47 @@ class FcmMessageJob
           end
         end
       else
-        ##### STATUS JOBS #####
-        if data.has_key? 'status_id'
-          # friend status update job
+        if !data.has_key? 'shout_id'
+          ##### SHOUT JOBS #####
           resp = fcm.send_with_notification_key(reg_id, {
             data: data,
             content_available: true,
             priority: "high"
           })
-        elsif data.has_key? 'ups'
-          # upped status for user job
-          resp = fcm.send_with_notification_key(reg_id, {
-            data: data,
-            content_available: true,
-            priority: "high"
-          })   
-        elsif data.has_key? 'status_text'
-          # interested friend in status job
-          resp = fcm.send_with_notification_key(reg_id, {
-            notification: {title: 'Status was pinged!', body: "#{data['friend_name']} is interested in: '#{data['status_text']}'"},
-            data: data,
-            content_available: true,
-            priority: "high"
-          })
-          Notification.create(text: "#{data['friend_name']} is interested in status: '#{data['status_text']}'", data: data.to_json, user_id: data['recipient_id'])
         else
-          # set a status job
-          resp = fcm.send_with_notification_key(reg_id, {
-            notification: {title: 'Set a status!', body: "you haven't updated in a while", tag: 'status'},
-            data: data,
-            content_available: true,
-            priority: "high"
-          })
+          ##### STATUS JOBS #####
+          if data.has_key? 'status_id'
+            # friend status update job
+            resp = fcm.send_with_notification_key(reg_id, {
+              data: data,
+              content_available: true,
+              priority: "high"
+            })
+          elsif data.has_key? 'ups'
+            # upped status for user job
+            resp = fcm.send_with_notification_key(reg_id, {
+              data: data,
+              content_available: true,
+              priority: "high"
+            })   
+          elsif data.has_key? 'status_text'
+            # interested friend in status job
+            resp = fcm.send_with_notification_key(reg_id, {
+              notification: {title: 'Status was pinged!', body: "#{data['friend_name']} is interested in: '#{data['status_text']}'"},
+              data: data,
+              content_available: true,
+              priority: "high"
+            })
+            Notification.create(text: "#{data['friend_name']} is interested in status: '#{data['status_text']}'", data: data.to_json, user_id: data['recipient_id'])
+          else
+              # set a status job
+              resp = fcm.send_with_notification_key(reg_id, {
+                notification: {title: 'Set a status!', body: "you haven't updated in a while", tag: 'status'},
+                data: data,
+                content_available: true,
+                priority: "high"
+              })
+          end
         end
       end
       Rails.logger.info resp.to_s

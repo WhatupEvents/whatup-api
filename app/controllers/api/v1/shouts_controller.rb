@@ -35,6 +35,8 @@ class Api::V1::ShoutsController < Api::V1::ApiController
     @shout = Shout.find(params[:id])
     authorize @shout
 
+    remove_shout
+    
     @shout.destroy
     render json: {},
            status: :ok
@@ -47,6 +49,7 @@ class Api::V1::ShoutsController < Api::V1::ApiController
       flag_update = 1
       if current_user.admin?
         flag_update = 10
+        remove_shout
       end
       @shout.update_attributes flag: @shout.flag+flag_update
       @shout.flagged_by << current_user
@@ -82,6 +85,15 @@ class Api::V1::ShoutsController < Api::V1::ApiController
   end
 
   private
+
+  def remove_shout
+    Resque.enqueue(
+      FcmMessageJob, {
+        shout_id: @shout.id,
+        deleted_at: Time.now,
+      }
+    )
+  end
 
   def update_image
     # @shout.update_attribute(:url, @shout.image.url)
