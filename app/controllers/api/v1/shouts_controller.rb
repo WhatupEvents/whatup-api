@@ -87,6 +87,8 @@ class Api::V1::ShoutsController < Api::V1::ApiController
   private
 
   def remove_shout
+    # need to add loop iterating over viewed_by
+    # add viewed_by relationship to users on shout model
     Resque.enqueue(
       FcmMessageJob, {
         shout_id: @shout.id,

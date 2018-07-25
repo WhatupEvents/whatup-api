@@ -89,7 +89,7 @@ class FcmMessageJob
           elsif data.has_key? 'status_text'
             # interested friend in status job
             resp = fcm.send_with_notification_key(reg_id, {
-              notification: {title: 'Status was pinged!', body: "#{data['friend_name']} is interested in: '#{data['status_text']}'"},
+              notification: {title: 'Status was pinged!', body: "#{data['friend_name']} is interested in: '#{data['status_text']}'", tag: "interest"},
               data: data,
               content_available: true,
               priority: "high"
