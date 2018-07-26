@@ -4,11 +4,16 @@ class FcmMessageJob
   @queue = :messages
 
   def self.perform(data)
+    Rails.logger.info data.to_s
+
     fcm = FCM.new(ENV['FCM_LEGACY_SERVER_KEY'])
     fcm = FCM.new(ENV['FCM_SERVER_KEY'])
 
-    device = Device.where(user_id: data['recipient_id'])
-    device.map{|d| [d.registration_id, d.os]}.uniq.each do |reg_id, os|
+    devices = Device.where(user_id: data['recipient_id'])
+    Rails.logger.info devices.to_s
+
+
+    devices.map{|d| [d.registration_id, d.os]}.uniq.each do |reg_id, os|
       whatuppop = 'whatuppop'
       if os == 'iOS'
         whatuppop += '.wav'
