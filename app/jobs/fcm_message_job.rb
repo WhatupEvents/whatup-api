@@ -69,7 +69,7 @@ class FcmMessageJob
       else
         Rails.logger.info "Not event job"
 
-        if !data.has_key? 'shout_id'
+        if data.has_key? 'shout_id'
           ##### SHOUT JOBS #####
           resp = fcm.send_with_notification_key(reg_id, {
             data: data,
