@@ -98,7 +98,7 @@ class FcmMessageJob
               content_available: true,
               priority: "high"
             })
-            Notification.create(text: text, data: json, user_id: uid)
+            Notification.create(text: "#{data['friend_name']} is interested in status: '#{data['status_text']}'", data: data.to_json, user_id: data['recipient_id'])
           else
             # set a status job
             resp = fcm.send_with_notification_key(reg_id, {
