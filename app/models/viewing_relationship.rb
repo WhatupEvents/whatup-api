@@ -1,4 +1,4 @@
-class Viewing < ActiveRecord::Base
+class ViewingRelationship < ActiveRecord::Base
   belongs_to :shout
   belongs_to :viewer, class_name: 'User'
 
