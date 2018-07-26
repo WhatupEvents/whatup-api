@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180717043015) do
+ActiveRecord::Schema.define(version: 20180726010831) do
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string   "namespace",     limit: 191
@@ -336,5 +336,12 @@ ActiveRecord::Schema.define(version: 20180717043015) do
   end
 
   add_index "users", ["role_id"], name: "index_users_on_role_id", using: :btree
+
+  create_table "viewing_relationships", force: :cascade do |t|
+    t.integer  "user_id",    limit: 4
+    t.integer  "shout_id",   limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
 end
