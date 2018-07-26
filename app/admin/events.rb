@@ -48,6 +48,7 @@ ActiveAdmin.register Event do
       f.input :latitude
       f.input :longitude
       f.input :public
+      f.input :url
 
       f.input :start_time
       f.input :end_at

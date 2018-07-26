@@ -4,6 +4,9 @@ class Shout < ActiveRecord::Base
 
   has_one :shout_video
 
+  has_many :viewings
+  has_many :viewers, class_name: 'User', through: :viewings
+
   has_many :shout_uppings
   has_many :upped_by, class_name: 'User', through: :shout_uppings
 

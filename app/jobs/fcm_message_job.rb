@@ -67,8 +67,6 @@ class FcmMessageJob
           end
         end
       else
-        Rails.logger.info "Not event job"
-
         if data.has_key? 'shout_id'
           ##### SHOUT JOBS #####
           resp = fcm.send_with_notification_key(reg_id, {
@@ -77,13 +75,9 @@ class FcmMessageJob
             priority: "high"
           })
         else
-          Rails.logger.info "Not shout job"
-
           ##### STATUS JOBS #####
           if data.has_key? 'status_id'
             # friend status update job
-            Rails.logger.info "Doing status update"
-
             resp = fcm.send_with_notification_key(reg_id, {
               data: data,
               content_available: true,
@@ -91,8 +85,6 @@ class FcmMessageJob
             })
           elsif data.has_key? 'ups'
             # upped status for user job
-            Rails.logger.info "Doing ups"
-
             resp = fcm.send_with_notification_key(reg_id, {
               data: data,
               content_available: true,
@@ -100,31 +92,15 @@ class FcmMessageJob
             })   
           elsif data.has_key? 'status_text'
             # interested friend in status job
-            Rails.logger.info "Doing interest:"
-
             resp = fcm.send_with_notification_key(reg_id, {
               notification: {title: 'Status was pinged!', body: "#{data['friend_name']} is interested in: '#{data['status_text']}'", tag: "interest", sound: whatuppop},
               data: data,
               content_available: true,
               priority: "high"
             })
-            Rails.logger.info resp.to_s
-
-            Rails.logger.info "Notification data for interest:"
-
-            text = "#{data['friend_name']} is interested in status: '#{data['status_text']}'"
-            uid = data['recipient_id']
-            json = data.to_json
-
-            Rails.logger.info text
-            Rails.logger.info uid
-            Rails.logger.info json
-
             Notification.create(text: text, data: json, user_id: uid)
           else
             # set a status job
-            Rails.logger.info "Doing set status"
-
             resp = fcm.send_with_notification_key(reg_id, {
               notification: {title: 'Set a status!', body: "you haven't updated in a while", tag: 'status'},
               data: data,
@@ -134,7 +110,6 @@ class FcmMessageJob
           end
         end
       end
-      Rails.logger.info "FCM response:"
       Rails.logger.info resp.to_s
     end
   end

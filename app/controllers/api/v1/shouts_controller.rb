@@ -87,14 +87,15 @@ class Api::V1::ShoutsController < Api::V1::ApiController
   private
 
   def remove_shout
-    # need to add loop iterating over viewed_by
-    # add viewed_by relationship to users on shout model
-    Resque.enqueue(
-      FcmMessageJob, {
-        shout_id: @shout.id,
-        deleted_at: Time.now,
-      }
-    )
+    @shout.viewers.each do |v|
+      Resque.enqueue(
+        FcmMessageJob, {
+          shout_id: @shout.id,
+          deleted_at: Time.now,
+          recipient_id: v.id
+        }
+      )
+    end
   end
 
   def update_image
@@ -133,6 +134,10 @@ class Api::V1::ShoutsController < Api::V1::ApiController
 
     tutorial_shouts = Shout.where(event_id: Event.where("latitude = '200.0' AND longitude = '200.0' AND name != 'tutorial'"))
       .not_flagged_for(current_user.id)
+
+    shouts.each do |s|
+      s.viewers |= [current_user]
+    end
 
     shouts = tutorial_shouts + shouts
     if shouts.present?
