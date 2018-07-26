@@ -12,7 +12,6 @@ class FcmMessageJob
     devices = Device.where(user_id: data['recipient_id'])
     Rails.logger.info devices.to_s
 
-
     devices.map{|d| [d.registration_id, d.os]}.uniq.each do |reg_id, os|
       whatuppop = 'whatuppop'
       if os == 'iOS'
@@ -94,11 +93,14 @@ class FcmMessageJob
           elsif data.has_key? 'status_text'
             # interested friend in status job
             resp = fcm.send_with_notification_key(reg_id, {
-              notification: {title: 'Status was pinged!', body: "#{data['friend_name']} is interested in: '#{data['status_text']}'"},
+              notification: {title: 'Status was pinged!', body: "#{data['friend_name']} is interested in: '#{data['status_text']}'", tag: "interest", sound: whatuppop},
               data: data,
               content_available: true,
               priority: "high"
             })
+
+            Rails.logger.info "Notification data for interest:"
+
             text = "#{data['friend_name']} is interested in status: '#{data['status_text']}'"
             uid = data['recipient_id']
             json = data.to_json
@@ -119,6 +121,7 @@ class FcmMessageJob
           end
         end
       end
+      Rails.logger.info "FCM response:"
       Rails.logger.info resp.to_s
     end
   end
