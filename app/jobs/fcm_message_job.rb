@@ -94,7 +94,15 @@ class FcmMessageJob
               content_available: true,
               priority: "high"
             })
-            Notification.create(text: "#{data['friend_name']} is interested in status: '#{data['status_text']}'", data: data.to_json, user_id: data['recipient_id'])
+            text = "#{data['friend_name']} is interested in status: '#{data['status_text']}'"
+            uid = data['recipient_id']
+            json = data.to_json
+
+            Rails.logger.info text
+            Rails.logger.info uid
+            Rails.logger.info json
+
+            Notification.create(text: text, data: json, user_id: uid)
           else
               # set a status job
               resp = fcm.send_with_notification_key(reg_id, {
