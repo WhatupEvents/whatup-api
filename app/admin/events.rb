@@ -66,5 +66,5 @@ ActiveAdmin.register Event do
     f.actions
   end
 
-  permit_params :name, :details, :created_by_type, :created_by_id, :location, :longitude, :latitude, :public, :category_id, :topic_id, :start_time, :end_at
+  permit_params :name, :details, :created_by_type, :created_by_id, :location, :longitude, :latitude, :public, :category_id, :topic_id, :start_time, :end_at, :url
 end
