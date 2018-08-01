@@ -5,7 +5,7 @@ class Api::V1::EventSerializer < ActiveModel::Serializer
 
   def url
     url = object.url
-    if url.nil?
+    if url.nil? || url.empty?
       unless object.image.url.include? "missing.png"
         url = object.image.url
       else
