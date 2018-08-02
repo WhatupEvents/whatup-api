@@ -48,10 +48,12 @@ class Api::V1::ShoutsController < Api::V1::ApiController
       Flag.create(user_id: current_user.id, obj_class: 'Shout', obj_id: @shout.id)
       flag_update = 1
       if current_user.admin?
-        flag_update = 10
-        remove_shout
+        flag_update = 8
       end
       @shout.update_attributes flag: @shout.flag+flag_update
+      if @shout.flag >= 8
+        remove_shout
+      end
       @shout.flagged_by << current_user
     end
     render json: @shout,
