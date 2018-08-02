@@ -6,12 +6,13 @@ class Api::V1::EventSerializer < ActiveModel::Serializer
   def url
     url = object.url
     if url.nil? || url.empty?
-      unless object.image.url.include? "missing.png"
-        url = object.image.url
-      else
-        return nil
-      end
+      url = object.image.url
     end
+
+    if url.include? "missing.png"
+      return nil
+    end
+
     url.split('whatupevents-images/')[1].split('?')[0].gsub('/', '-').gsub('.','_')
   end
 
