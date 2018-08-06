@@ -141,7 +141,7 @@ class Api::V1::ShoutsController < Api::V1::ApiController
       s.viewers |= [current_user]
     end
 
-    shouts = tutorial_shouts + shouts
+    shouts = shouts + tutorial_shouts
     if shouts.present?
       render json: shouts,
              each_serializer: Api::V1::ShoutSerializer,
