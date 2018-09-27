@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180726010831) do
+ActiveRecord::Schema.define(version: 20180927023919) do
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string   "namespace",     limit: 191
@@ -210,6 +210,7 @@ ActiveRecord::Schema.define(version: 20180726010831) do
     t.string   "name",       limit: 191
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "location",   limit: 191
   end
 
   create_table "participant_relationships", force: :cascade do |t|

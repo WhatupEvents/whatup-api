@@ -25,6 +25,10 @@ class Api::V1::EventSerializer < ActiveModel::Serializer
     object.created_by_type == "Organization" ? object.created_by.name : ""
   end
 
+  def organization_location
+    object.created_by_type == "Organization" ? object.created_by.location : ""
+  end
+
   def symbol_id
     object.topic_id
   end
