@@ -1,4 +1,4 @@
-host = '34.199.61.186'
+host = 'ec2-18-224-34-179.us-east-2.compute.amazonaws.com'
 environment = 'production'
 
 role :app, [host]
@@ -16,7 +16,7 @@ set :default_environment, 'RAILS_ENV' => environment
 set :application, host
 
 set :use_sudo, true
-set :ssh_options, keys: ['~/.ssh/whatup.pem'], forward_agent: true, user: 'ubuntu'
+set :ssh_options, keys: ['~/.ssh/whatupnewsandevents.pem'], forward_agent: true, user: 'ec2-user'
 
 why_here = "/var/www/#{host}"
 unicorn_pid = "#{why_here}/current/tmp/pids/unicorn.pid"

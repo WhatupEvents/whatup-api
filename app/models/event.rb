@@ -15,9 +15,9 @@ class Event < ActiveRecord::Base
 
   has_attached_file :image,
     :storage => :s3,
-    :bucket => 'whatupevents-images',
-    :s3_region => 'us-east-2',
-    :s3_host_name => 's3.us-east-2.amazonaws.com',
+    :bucket => 'whatupnewsandevents-images',
+    :s3_region => 'us-east-1',
+    :s3_host_name => 's3.us-east-1.amazonaws.com',
     :s3_permissions => :private,
     :path => ':class/:attachment/:id/:filename',
     :s3_credentials => Proc.new{|p| p.instance.s3_credentials}
