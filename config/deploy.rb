@@ -7,7 +7,7 @@ set :repo_url, 'git@github.com:fellou89/whatup-api.git'
 set :resque_environment_task, true
 set :workers, { messages: 3, low: 1 }
 
-set :rvm1_ruby_version, '2.2.2@global'
+set :rvm1_ruby_version, '2.3.0@global'
 set :default_shell, '/bin/bash -l'
 
 # Default branch is :master
