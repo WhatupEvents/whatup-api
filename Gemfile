@@ -68,7 +68,7 @@ group :development, :staging do
 end
 
 if ENV["RAILS_ENV"] == "production"
-  gem 'mysql2', '< 0.5'
+  gem 'mysql2', '0.5.3'
 else
   gem 'mysql2'
 end
