@@ -11,9 +11,6 @@ gem 'responders', '~> 2.0'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-# gem 'sshkit', '1.3.0'
-gem 'mysql2'
-
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -57,6 +54,7 @@ gem 'doorkeeper', '~> 1.4.0'
 gem "paperclip", "~> 5.0.0"
 gem 'aws-sdk', '~> 2.3.0'
 
+# gem 'sshkit', '1.3.0'
 
 # To use debugger
 gem 'pry-byebug'
@@ -67,4 +65,10 @@ gem 'dotenv-rails'
 
 group :development, :staging do
   gem 'faker', '~> 1.4.3'
+end
+
+if ENV["RAILS_ENV"] == "production"
+  gem 'mysql2', '< 0.5'
+else
+  gem 'mysql2'
 end
