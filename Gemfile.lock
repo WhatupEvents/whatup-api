@@ -356,7 +356,7 @@ DEPENDENCIES
   fcm
   foreman
   jquery-rails
-  mysql2
+  mysql2 (~> 0.5.3)
   nokogiri (= 1.7.2)
   paperclip (~> 5.0.0)
   pry-byebug
