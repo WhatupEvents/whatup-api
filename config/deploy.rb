@@ -2,7 +2,7 @@
 lock '3.7.2'
 
 set :application, 'whatup'
-set :repo_url, 'git@github.com:fellou89/whatup-api.git'
+set :repo_url, 'git@github.com:WhatupEvents/whatup-api.git'
 
 set :resque_environment_task, true
 set :workers, { messages: 3, low: 1 }
