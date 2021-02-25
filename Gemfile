@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '4.2.2'
+gem 'rails', '5.0.7'
 
 gem 'activeadmin'
 gem 'devise'
@@ -14,7 +14,7 @@ gem 'responders', '~> 2.0'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails',   '~> 4.0.3'
+  gem 'sass-rails',   '~> 5.0'
   gem 'coffee-rails'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
