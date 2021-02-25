@@ -67,8 +67,4 @@ group :development, :staging do
   gem 'faker', '~> 1.4.3'
 end
 
-if ENV["RAILS_ENV"] == "production"
-  gem 'mysql2', '0.3.13'
-else
-  gem 'mysql2'
-end
+gem 'mysql2'
