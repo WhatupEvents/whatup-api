@@ -49,7 +49,7 @@ gem 'resque-web', require: 'resque_web'
 gem 'resque-scheduler-web'
 
 # Oauth api authentication
-gem 'doorkeeper', '~> 5.0.3'
+gem 'doorkeeper', '~> 4.4.3'
 gem "paperclip", "~> 5.0.0"
 gem 'aws-sdk', '~> 2.3.0'
 
