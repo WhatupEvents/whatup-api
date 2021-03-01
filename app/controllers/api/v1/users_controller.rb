@@ -1,5 +1,5 @@
 class Api::V1::UsersController < Api::V1::ApiController
-  doorkeeper_for :all, except: [:create, :authenticate, :check_uniqueness]
+  before_action :doorkeeper_authorize!, except: [:create, :authenticate, :check_uniqueness]
 
   def check_uniqueness
     if User.where(params[:unique_field] => params[:unique_value]).empty?

@@ -1,5 +1,5 @@
 class Api::V1::StatusesController < Api::V1::ApiController
-  doorkeeper_for :all
+  before_action :doorkeeper_authorize!
 
   def most_upped
     most = Status.where(topic_id: params[:cat_id]).sort_by(&:ups)

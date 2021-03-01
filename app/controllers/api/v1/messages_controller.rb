@@ -1,5 +1,5 @@
 class Api::V1::MessagesController < Api::V1::ApiController
-  doorkeeper_for :all, except: [:download]
+  before_action :doorkeeper_authorize!, except: [:download]
 
   def index
     last = message_params.has_key?(:last_id) ? Message.find(message_params.delete(:last_id)) : Message.last

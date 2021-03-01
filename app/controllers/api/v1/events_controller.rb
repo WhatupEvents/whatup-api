@@ -1,5 +1,5 @@
 class Api::V1::EventsController < Api::V1::ApiController
-  doorkeeper_for :all
+  before_action :doorkeeper_authorize!
 
   def mine
     events = current_user.events

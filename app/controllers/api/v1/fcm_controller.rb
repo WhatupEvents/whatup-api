@@ -1,7 +1,7 @@
 require 'fcm'
 
 class Api::V1::FcmController < Api::V1::ApiController
-  doorkeeper_for :all
+  before_action :doorkeeper_authorize!
 
   def message
     sender = {sender_id: current_user.id}

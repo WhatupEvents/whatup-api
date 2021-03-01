@@ -1,5 +1,5 @@
 class Api::V1::FriendGroupsController < Api::V1::ApiController
-  doorkeeper_for :all
+  before_action :doorkeeper_authorize!
   before_action :find_friend_group, only: [:update, :destroy]
 
   def index
