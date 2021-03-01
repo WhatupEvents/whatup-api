@@ -1,5 +1,5 @@
 class Api::V1::ApiController < ActionController::API
-  include ActionController::Serialization
+  #include ActionController::Serialization
   include Pundit
 
   before_action :geo_update
