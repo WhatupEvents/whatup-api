@@ -9,8 +9,8 @@ set :branch, 'master'
 set :rails_env, environment
 set :stage, environment
 
-role :resque_worker, [ host ]
-role :resque_scheduler, [ host ]
+#role :resque_worker, [ host ]
+#role :resque_scheduler, [ host ]
 
 set :default_environment, 'RAILS_ENV' => environment
 set :application, host
