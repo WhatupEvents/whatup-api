@@ -6,7 +6,7 @@ require 'capistrano/deploy'
 require 'capistrano/safe_deploy_to'
 require 'capistrano/unicorn_nginx'
 
-require "capistrano-resque"
+#require "capistrano-resque"
 
 require "capistrano/scm/git"
 install_plugin Capistrano::SCM::Git

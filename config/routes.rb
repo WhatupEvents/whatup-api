@@ -1,11 +1,11 @@
-require 'resque_web'
+#require 'resque_web'
 
 Whatup::Application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   use_doorkeeper
 
-  mount ResqueWeb::Engine => 'resque/web'
+  #mount ResqueWeb::Engine => 'resque/web'
 
   root to: "home#home"
 
