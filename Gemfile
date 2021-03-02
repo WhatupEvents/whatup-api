@@ -3,6 +3,8 @@ source 'http://rubygems.org'
 gem 'rails', '5.0.7'
 
 gem 'activeadmin'
+gem 'active_model_serializers', '~> 0.10.0'
+
 gem 'devise'
 gem 'pundit'
 
