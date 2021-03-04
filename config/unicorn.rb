@@ -1,5 +1,5 @@
 # Set your full path to application.
-app_path = "/srv/www/ec2-18-224-34-179.us-east-2.compute.amazonaws.com"
+app_path = "/srv/www/18.224.34.179"
 
 # Set unicorn options
 worker_processes 1

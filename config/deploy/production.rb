@@ -1,4 +1,4 @@
-host = 'ec2-18-224-34-179.us-east-2.compute.amazonaws.com'
+host = '18.224.34.179'
 environment = 'production'
 
 role :app, [host]
