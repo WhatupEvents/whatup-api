@@ -1,5 +1,5 @@
 # Set your full path to application.
-app_path = "/srv/www/staging.whatup.com"
+app_path = "/srv/www/ec2-18-224-34-179.us-east-2.compute.amazonaws.com"
 
 # Set unicorn options
 worker_processes 1
