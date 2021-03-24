@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'rails', '5.0.7'
+gem 'concise_logging'
 
 gem 'activeadmin'
 gem 'active_model_serializers', '~> 0.10.0'

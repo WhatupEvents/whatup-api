@@ -35,7 +35,7 @@ Whatup::Application.configure do
 
   # See everything in the log (default is :info)
   config.log_level = :debug
-  RAILS_DEFAULT_LOGGER = Logger.new('log/production.log')
+  config.logger = ActiveSupport::TaggedLogging.new(ActiveSupport::Logger.new(File.join(Rails.root, "log", "#{Rails.env}.log")))
 
   # Prepend all log lines with the following tags
   # config.log_tags = [ :subdomain, :uuid ]
