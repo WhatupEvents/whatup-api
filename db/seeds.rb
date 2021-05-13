@@ -47,4 +47,4 @@ Role.create(name: 'Unverified')
 Role.create(name: 'Promoter')
 Role.create(name: 'Admin')
 
-# AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?
+#AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?

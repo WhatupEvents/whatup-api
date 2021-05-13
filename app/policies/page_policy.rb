@@ -1,4 +1,4 @@
-class ActiveAdmin::PagePolicy < ApplicationPolicy
+class PagePolicy < ApplicationPolicy
   class Scope < Struct.new(:user, :scope)
     def resolve
       scope
