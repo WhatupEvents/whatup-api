@@ -105,9 +105,6 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.12.2)
-    concise_logging (1.1.0)
-      activesupport (>= 4.2)
-      railties (>= 4.2)
     concurrent-ruby (1.1.8)
     crass (1.0.6)
     debug_inspector (1.0.0)
@@ -311,7 +308,6 @@ DEPENDENCIES
   capistrano-safe-deploy-to (~> 1.1.1)
   capistrano-unicorn-nginx (~> 3.4.0)
   coffee-rails
-  concise_logging
   devise
   doorkeeper (~> 4.4.3)
   dotenv-rails
