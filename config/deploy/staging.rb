@@ -1,4 +1,4 @@
-host = '52.11.163.139'
+host = '18.224.34.179'
 environment = 'staging'
 
 role :app, [host]
@@ -9,13 +9,14 @@ set :branch, environment
 set :rails_env, environment
 set :stage, environment
 
-role :resque_worker, [ host ]
-role :resque_scheduler, [ host ]
+#role :resque_worker, [ host ]
+#role :resque_scheduler, [ host ]
 
 set :default_environment, 'RAILS_ENV' => environment
 set :application, host
 
-set :ssh_options, keys: ['~/.ssh/whatup_staging.pem'], forward_agent: true, user: 'ubuntu'
+set :use_sudo, true
+set :ssh_options, keys: ['~/.ssh/whatupnewsandevents.pem'], forward_agent: true, user: 'ec2-user'
 
 why_here = "/var/www/#{host}"
 unicorn_pid = "#{why_here}/current/tmp/pids/unicorn.pid"
@@ -24,7 +25,6 @@ unicorn_conf = "#{why_here}/shared/config/unicorn.rb"
 namespace :deploy do
   task :start do               
     on roles(:app) do          
-      # execute "cd #{deploy_to}/current && "\
       execute "cd #{why_here}/current && "\
       "bundle exec unicorn_rails -E #{environment} -c #{unicorn_conf} -D"
     end
@@ -42,6 +42,16 @@ namespace :deploy do
     end
   end
 end
+
+namespace :assets do
+  task :compile do
+    on roles(:app) do
+      # execute "cd #{why_here}/current && "\
+      # "bundle exec rake assets:precompile"
+    end
+  end
+end
+
 
 # server 'example.com', user: 'deploy', roles: %w{web app}, my_property: :my_value
 
