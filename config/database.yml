@@ -23,7 +23,8 @@ test:
 staging:
   adapter: mysql2
   encoding: utf8mb4
-  database: whatup_staging
+  #database: whatup_staging
+  database: whatup
   username: root
   password: Unodos3!
   pool: 5
