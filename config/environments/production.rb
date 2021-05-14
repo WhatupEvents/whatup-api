@@ -35,7 +35,7 @@ Whatup::Application.configure do
 
   # See everything in the log (default is :info)
   config.log_level = :debug
-  config.logger = ActiveSupport::TaggedLogging.new(ActiveSupport::Logger.new(File.join(Rails.root, "log", "debug-#{Rails.env}.log")))
+  config.logger = ActiveSupport::Logger.new(File.join(Rails.root, "log", "debug-#{Rails.env}.log"))
 
   # Prepend all log lines with the following tags
   # config.log_tags = [ :subdomain, :uuid ]
@@ -69,3 +69,5 @@ Whatup::Application.configure do
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
 end
+
+Rails.logger.debug 'testing'
