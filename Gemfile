@@ -32,7 +32,7 @@ gem 'jquery-rails'
 
 #gem 'rails-api', '~> 0.2.1'
 gem 'fcm'
-gem "nokogiri", '1.7.2', :require => "nokogiri"
+gem "nokogiri", '1.13.6', :require => "nokogiri"
 
 # Use unicorn as the app server
 gem 'unicorn'
